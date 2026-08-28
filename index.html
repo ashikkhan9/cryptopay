@@ -3,9 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Crypto Pay - Growth Edition</title>
+    <title>Crypto Pay - Live Firebase Edition</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
         
@@ -19,17 +23,23 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
         body { background: var(--bg-color); color: var(--text-main); overflow: hidden; user-select: none; -webkit-tap-highlight-color: transparent; }
         
+        /* Loader */
+        #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-color); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .spinner { width: 50px; height: 50px; border: 5px solid rgba(157, 78, 221, 0.3); border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
         .glow-1 { position: absolute; top: -10%; left: -10%; width: 300px; height: 300px; background: rgba(157, 78, 221, 0.15); filter: blur(100px); z-index: -1; }
         .glow-2 { position: absolute; bottom: 0; right: -10%; width: 250px; height: 250px; background: rgba(0, 245, 212, 0.1); filter: blur(90px); z-index: -1; }
 
-        /* Dynamic Live Payout Ticker */
-        .ticker-wrap { width: 100%; background: rgba(0, 245, 212, 0.05); border-bottom: 1px solid rgba(0, 245, 212, 0.2); padding: 5px 0; overflow: hidden; display: flex; }
-        .ticker-content { display: flex; white-space: nowrap; animation: ticker 25s linear infinite; font-size: 11px; color: var(--secondary); font-weight: 600; }
-        .ticker-item { padding: 0 25px; display: flex; align-items: center; gap: 5px; }
-        @keyframes ticker { 0% { transform: translateX(10vw); } 100% { transform: translateX(-100%); } }
+        /* ==========================================
+           SUPERFAST DYNAMIC LIVE PAYOUT POPUP 
+           ========================================== */
+        .popup-ticker-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 9999; pointer-events: none; display: flex; justify-content: center; width: 90%; }
+        .popup-ticker { background: rgba(0, 245, 212, 0.15); border: 1px solid rgba(0, 245, 212, 0.3); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); padding: 10px 20px; border-radius: 30px; font-size: 12px; color: var(--secondary); font-weight: 600; display: flex; align-items: center; gap: 8px; opacity: 0; transform: translateY(20px); transition: all 0.3s ease-out; box-shadow: 0 5px 20px rgba(0, 245, 212, 0.15); }
+        .popup-ticker.show { opacity: 1; transform: translateY(0); }
+        .popup-ticker.hide { opacity: 0; transform: translateY(-20px); }
 
-        /* Header */
-        .header-top { padding: 15px 20px; background: linear-gradient(180deg, rgba(11,10,21,0.9) 0%, transparent 100%); display: flex; justify-content: space-between; align-items: center; }
+        .header-top { padding: 45px 20px 15px; background: linear-gradient(180deg, rgba(11,10,21,0.9) 0%, transparent 100%); display: flex; justify-content: space-between; align-items: center; }
         .balance-amount { font-size: 32px; font-weight: 800; color: #fff; line-height: 1; }
         .balance-usdt { font-size: 12px; color: var(--secondary); background: rgba(0, 245, 212, 0.1); padding: 4px 10px; border-radius: 12px; border: 1px solid rgba(0, 245, 212, 0.2); margin-top: 5px; display: inline-block; }
         .user-mini-pic { width: 40px; height: 40px; border-radius: 12px; border: 2px solid var(--primary); }
@@ -42,16 +52,13 @@
 
         .glass-card { background: var(--card-bg); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); margin-bottom: 20px; }
         .section-title { font-size: 16px; font-weight: 800; margin: 0 0 12px 5px; display: flex; align-items: center; gap: 8px; }
-        
         .banner-ad { width: 100%; height: 60px; background: rgba(255,255,255,0.05); border: 1px dashed rgba(255,255,255,0.2); border-radius: 12px; display: flex; justify-content: center; align-items: center; color: var(--text-muted); font-size: 12px; margin-bottom: 20px; }
 
-        /* 30-Day Streak Progress */
         .streak-header { display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; margin-bottom: 8px; }
         .progress-bg { width: 100%; height: 8px; background: rgba(255,255,255,0.05); border-radius: 10px; overflow: hidden; margin-bottom: 10px; }
         .progress-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary)); border-radius: 10px; width: 0%; transition: 0.5s; }
         .streak-reward-box { background: rgba(0,0,0,0.3); padding: 12px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(0, 245, 212, 0.1); }
 
-        /* Tasks */
         .task-item { display: flex; align-items: center; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 14px; margin-bottom: 10px; border: 1px solid rgba(255,255,255,0.02); }
         .task-icon { width: 45px; height: 45px; border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 20px; background: rgba(157, 78, 221, 0.1); color: var(--secondary); }
         .task-info { flex: 1; margin-left: 12px; }
@@ -83,9 +90,13 @@
 </head>
 <body>
 
-    <div class="ticker-wrap">
-        <div class="ticker-content" id="ticker-content">
-            </div>
+    <div id="loader">
+        <div class="spinner"></div>
+        <div style="font-weight: 800; color: var(--primary);">Connecting to Server...</div>
+    </div>
+
+    <div class="popup-ticker-container">
+        <div id="live-ticker" class="popup-ticker hide"></div>
     </div>
 
     <div class="glow-1"></div>
@@ -100,16 +111,13 @@
     </div>
 
     <div class="main-content">
-        
         <div id="tab-home" class="tab-section active">
-            
             <div class="glass-card">
                 <div class="streak-header">
                     <span>🔥 30-Day Check-In Tracker</span>
                     <span id="streak-days" style="color: var(--secondary);">Day 0/30</span>
                 </div>
                 <div class="progress-bg"><div class="progress-fill" id="streak-bar"></div></div>
-                
                 <div class="streak-reward-box">
                     <div>
                         <div style="font-size: 11px; color: var(--text-muted);">Today's Reward</div>
@@ -117,7 +125,6 @@
                     </div>
                     <button class="btn-sm" id="btn-claim" onclick="claimDailyWithAd()" style="background: var(--secondary); color: #000;"><i class="fa-solid fa-play" style="font-size: 10px; margin-right: 3px;"></i> Check-In</button>
                 </div>
-                <div style="font-size: 11px; color: var(--text-muted); margin-top: 10px; text-align: center;">Reach Day 30 to unlock 100 CP + Trust Badge!</div>
             </div>
 
             <div class="banner-ad">Your Banner Ad (Adsterra) Space</div>
@@ -132,7 +139,6 @@
                 </div>
                 <button class="btn-sm" id="btn-ad1" onclick="executeTask('btn-ad1', 10)">Watch</button>
             </div>
-
             <div class="task-item">
                 <div class="task-icon"><i class="fa-solid fa-globe"></i></div>
                 <div class="task-info">
@@ -162,14 +168,10 @@
                     <div style="font-size: 28px; font-weight: 800; color: var(--secondary); margin: 5px 0;">$<span id="wallet-usdt">0.0000</span></div>
                     <div style="font-size: 11px; color: #fff; background: rgba(157, 78, 221, 0.2); display: inline-block; padding: 4px 10px; border-radius: 10px;">Min. Payout: 15,000 CP ($1.50)</div>
                 </div>
-
                 <div class="section-title" style="font-size: 14px;"><i class="fa-brands fa-bitcoin"></i> Withdraw via USDT (BEP20)</div>
                 <input type="text" class="input-box" id="wallet-address" placeholder="Enter USDT BEP20 Address...">
-
                 <button id="withdraw-btn" class="btn-primary" disabled onclick="requestWithdraw()">Submit Withdrawal</button>
             </div>
-            
-            <div class="banner-ad">Your Banner Ad (Adsterra) Space</div>
         </div>
 
         <div id="tab-profile" class="tab-section">
@@ -199,46 +201,125 @@
 
     <script>
         // ==========================================
-        // DYNAMIC TICKER GENERATOR (UNLIMITED & RANDOM)
+        // 1. FIREBASE INITIALIZATION 
         // ==========================================
-        const nameList = ["John", "Sarah", "Mike", "Emma", "Ali", "Fatima", "David", "Ayesha", "Vikram", "Nina", "Omar", "Sophia", "Lucas", "Mia", "Zayn", "Chloe", "Liam", "Ava", "Noah", "Isabella", "Hassan", "Kenza", "Diego", "Carmen", "Leo", "Aria", "Kabir", "Neha", "Arjun", "Priya", "Rahul", "Ananya", "Tariq", "Nadia", "Sam", "Olivia"];
-        
-        function populateTicker() {
-            let tickerBox = document.getElementById("ticker-content");
-            let itemsHTML = "";
-            for(let i=0; i<30; i++) {
-                let randomName = nameList[Math.floor(Math.random() * nameList.length)];
-                let randomAmount = (Math.random() * (20.00 - 1.50) + 1.50).toFixed(2);
-                let randomType = Math.floor(Math.random() * 3);
-                let text = "";
-                
-                if(randomType === 0) text = `${randomName} withdrew $${randomAmount} USDT`;
-                else if(randomType === 1) text = `${randomName} unlocked Trust Badge`;
-                else text = `${randomName} earned ${(Math.floor(Math.random()*5)+1)*100} CP from referring`;
-                
-                itemsHTML += `<div class="ticker-item"><i class="fa-solid fa-circle-check"></i> ${text}</div>`;
-            }
-            tickerBox.innerHTML = itemsHTML;
-        }
-        populateTicker(); // Run on load
+        const firebaseConfig = {
+            apiKey: "AIzaSyB-XSDKkEDRs6q6SJoruZjwaI1725Kqo0U",
+            authDomain: "crypto-pay-3ca70.firebaseapp.com",
+            projectId: "crypto-pay-3ca70",
+            storageBucket: "crypto-pay-3ca70.firebasestorage.app",
+            messagingSenderId: "215480352569",
+            appId: "1:215480352569:web:795d6068ec24d568df32e8",
+            measurementId: "G-5JMXYT5L9S"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
 
         // ==========================================
-        // APP LOGIC
+        // 2. FAST DYNAMIC LIVE PAYOUT POPUP 
+        // ==========================================
+        const nameList = ["John", "Sarah", "Mike", "Emma", "Ali", "Fatima", "David", "Ayesha", "Vikram", "Nina", "Omar", "Sophia", "Lucas", "Mia", "Zayn", "Chloe", "Liam", "Ava", "Noah", "Isabella", "Hassan", "Kenza", "Diego"];
+        const tickerElement = document.getElementById("live-ticker");
+
+        function showNextTicker() {
+            let randomName = nameList[Math.floor(Math.random() * nameList.length)];
+            let randomAmount = (Math.random() * (20.00 - 1.50) + 1.50).toFixed(2);
+            let randomType = Math.floor(Math.random() * 3);
+            let text = randomType === 0 ? `${randomName} withdrew $${randomAmount}` : 
+                       randomType === 1 ? `${randomName} unlocked Trust Badge` : 
+                       `${randomName} earned ${(Math.floor(Math.random()*5)+1)*100} CP`;
+            
+            tickerElement.innerHTML = `<i class="fa-solid fa-circle-check"></i> ${text}`;
+            
+            tickerElement.classList.remove("hide");
+            tickerElement.classList.add("show");
+
+            // মাত্র ১ সেকেন্ড স্ক্রিনে থাকবে, তারপর ভ্যানিশ!
+            setTimeout(() => {
+                tickerElement.classList.remove("show");
+                tickerElement.classList.add("hide");
+            }, 1000);
+        }
+
+        // অ্যাপ লোড হওয়ার পর শুরু হবে
+        setTimeout(() => {
+            showNextTicker();
+            // প্রতি ১.৫ সেকেন্ড পর পর নতুন পপ-আপ (১ সেকেন্ড দেখা যাবে + আধা সেকেন্ড গ্যাপ)
+            setInterval(showNextTicker, 1500);
+        }, 1000);
+
+
+        // ==========================================
+        // 3. APP LOGIC & FIREBASE CONNECTION
         // ==========================================
         const tg = window.Telegram.WebApp;
         tg.expand();
         tg.setHeaderColor('#0B0A15'); 
 
+        let tgUser = tg.initDataUnsafe?.user;
+        let userId = tgUser?.id ? tgUser.id.toString() : "demo_user";
+        
         let userData = {
-            cp: 0, referrals: 0, 
-            checkInDays: 0, dailyClaimed: false, hasTrustBadge: false
+            name: tgUser?.first_name || "Guest",
+            cp: 0, 
+            referrals: 0, 
+            checkInDays: 0, 
+            lastCheckInDate: "",
+            hasTrustBadge: false
         };
 
         const MIN_WITHDRAW_CP = 15000;
-        const MIN_REFS_NEEDED = 5; // Hidden condition!
+        const MIN_REFS_NEEDED = 5; 
 
-        let tgUser = tg.initDataUnsafe?.user;
         if(tgUser && tgUser.photo_url) { document.getElementById("user-pic").src = tgUser.photo_url; }
+
+        async function fetchUserData() {
+            if(userId !== "demo_user") {
+                try {
+                    const docRef = db.collection("users").doc(userId);
+                    const docSnap = await docRef.get();
+                    
+                    if (docSnap.exists) {
+                        userData = { ...userData, ...docSnap.data() };
+                    } else {
+                        await saveUserData();
+                        let startParam = tg.initDataUnsafe?.start_param;
+                        if(startParam && startParam !== userId) {
+                            processReferral(startParam);
+                        }
+                    }
+                } catch(e) {
+                    console.error("Firebase Error:", e);
+                }
+            }
+            document.getElementById("loader").style.display = "none";
+            updateUI();
+        }
+
+        async function saveUserData() {
+            if(userId !== "demo_user") {
+                try {
+                    await db.collection("users").doc(userId).set(userData, {merge: true});
+                } catch(e) {
+                    console.error("Save Error:", e);
+                }
+            }
+        }
+
+        async function processReferral(referrerId) {
+            try {
+                const refDoc = db.collection("users").doc(referrerId);
+                const refSnap = await refDoc.get();
+                if(refSnap.exists) {
+                    let refData = refSnap.data();
+                    refData.cp = (refData.cp || 0) + 100;
+                    refData.referrals = (refData.referrals || 0) + 1;
+                    await refDoc.update({ cp: refData.cp, referrals: refData.referrals });
+                }
+            } catch(e) {
+                console.log("Ref error", e);
+            }
+        }
 
         function updateUI() {
             document.getElementById("top-cp").innerText = userData.cp.toLocaleString();
@@ -256,7 +337,8 @@
             else if(userData.checkInDays === 29) nextReward = 100;
             document.getElementById("today-reward").innerText = `${nextReward} CP`;
 
-            if(userData.dailyClaimed) {
+            let today = new Date().toDateString();
+            if(userData.lastCheckInDate === today) {
                 let btn = document.getElementById("btn-claim");
                 btn.innerHTML = `<i class="fa-solid fa-check"></i> Claimed`;
                 btn.classList.add("disabled");
@@ -275,7 +357,8 @@
         }
 
         function claimDailyWithAd() {
-            if(!userData.dailyClaimed) {
+            let today = new Date().toDateString();
+            if(userData.lastCheckInDate !== today) {
                 let btn = document.getElementById("btn-claim");
                 btn.classList.add('loading');
                 btn.innerText = "Loading Ad...";
@@ -290,7 +373,9 @@
 
                     userData.cp += reward;
                     userData.checkInDays = currentDay;
-                    userData.dailyClaimed = true;
+                    userData.lastCheckInDate = today; 
+                    
+                    saveUserData(); 
                     
                     tg.HapticFeedback.notificationOccurred('success');
                     if(currentDay === 30) {
@@ -303,15 +388,25 @@
             }
         }
 
-        function sendSupportMessage() {
+        async function sendSupportMessage() {
             let msgInput = document.getElementById("support-msg");
             if(msgInput.value.length < 10) {
-                tg.showAlert("Please write at least 10 characters to describe your issue.");
+                tg.showAlert("Please write at least 10 characters.");
                 return;
             }
-            tg.showAlert("✅ Your message has been securely sent to the Admin team. We will review it shortly.");
-            msgInput.value = ""; 
-            tg.HapticFeedback.notificationOccurred('success');
+            try {
+                await db.collection("support_tickets").add({
+                    userId: userId,
+                    name: userData.name,
+                    message: msgInput.value,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                tg.showAlert("✅ Your message has been securely sent to the Admin team. We will review it shortly.");
+                msgInput.value = ""; 
+                tg.HapticFeedback.notificationOccurred('success');
+            } catch(e) {
+                tg.showAlert("Error sending message. Try again later.");
+            }
         }
 
         function showBadgeInfo() {
@@ -331,6 +426,7 @@
 
             setTimeout(() => {
                 userData.cp += reward;
+                saveUserData();
                 btn.innerText = "Done";
                 updateUI();
                 tg.HapticFeedback.notificationOccurred('success');
@@ -344,22 +440,29 @@
                 return;
             }
             
-            // ==========================================
-            // THE HIDDEN GROWTH HACK TRICK
-            // ==========================================
             if(userData.referrals < MIN_REFS_NEEDED) {
                 tg.showAlert(`⚠️ Withdrawal Locked\n\nYou need at least ${MIN_REFS_NEEDED} valid referrals to process your first withdrawal. You currently have ${userData.referrals}/${MIN_REFS_NEEDED} referrals.`);
                 return;
             }
 
+            db.collection("withdraw_requests").add({
+                userId: userId,
+                name: userData.name,
+                amountUSDT: (userData.cp / 10000).toFixed(4),
+                walletAddress: address,
+                status: "Pending",
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
             tg.showAlert(`Withdrawal of $${(userData.cp / 10000).toFixed(4)} USDT to [${address.substring(0,6)}...] submitted successfully!`);
             userData.cp = 0;
+            saveUserData();
             updateUI();
         }
 
         function copyRefLink() {
-            let userId = tgUser?.id || "demo";
-            navigator.clipboard.writeText(`https://t.me/YourBot/app?startapp=${userId}`);
+            let refId = tgUser?.id || "demo";
+            navigator.clipboard.writeText(`https://t.me/YourBot/app?startapp=${refId}`);
             tg.HapticFeedback.impactOccurred('medium');
             tg.showAlert("Referral link copied!");
         }
@@ -372,7 +475,7 @@
             tg.HapticFeedback.impactOccurred('light');
         }
 
-        updateUI();
+        fetchUserData();
     </script>
 </body>
 </html>
