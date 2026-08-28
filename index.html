@@ -3,215 +3,361 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Crypto Pay - Task & Earn</title>
+    <title>Crypto Pay - Ultimate Web3 App</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
-        body { background: #070c0a; color: #fff; overflow: hidden; user-select: none; -webkit-tap-highlight-color: transparent; }
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
         
-        .header-top { background: rgba(255, 255, 255, 0.05); padding: 20px; text-align: center; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
-        .balance-amount { font-size: 38px; font-weight: bold; color: #f3ba2f; text-shadow: 0 0 15px rgba(243, 186, 47, 0.4); margin-top: 10px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
         
-        .content-area { height: calc(100vh - 180px); overflow-y: auto; padding: 20px; padding-bottom: 80px; }
-        .tab-content { display: none; text-align: center; animation: fadeIn 0.3s; }
-        .tab-content.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        /* Premium Web3 Dark Theme */
+        body { background: #0b0f19; color: #e2e8f0; overflow: hidden; user-select: none; -webkit-tap-highlight-color: transparent; }
+        
+        /* Background Glows */
+        .glow-circle-1 { position: absolute; top: -50px; left: -50px; width: 200px; height: 200px; background: rgba(16, 185, 129, 0.2); filter: blur(80px); z-index: -1; }
+        .glow-circle-2 { position: absolute; bottom: 100px; right: -50px; width: 250px; height: 250px; background: rgba(245, 158, 11, 0.15); filter: blur(90px); z-index: -1; }
 
-        .card { background: rgba(38, 161, 123, 0.1); border: 1px solid rgba(38, 161, 123, 0.3); border-radius: 15px; padding: 15px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
-        .card-info { text-align: left; width: 65%; }
-        .card-title { font-size: 16px; font-weight: bold; color: #20d49a; }
-        .card-desc { font-size: 12px; color: #a0aab2; margin-top: 5px; }
-        .action-btn { background: #26a17b; color: #fff; border: none; padding: 10px 15px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 30%; font-size: 13px; transition: 0.2s; }
-        .action-btn:active { transform: scale(0.95); }
-        .action-btn:disabled { background: #333; color: #888; cursor: not-allowed; }
+        /* Glassmorphism Cards */
+        .glass-card { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        
+        /* Header Stats */
+        .top-header { display: flex; justify-content: space-between; align-items: center; padding: 20px; background: linear-gradient(180deg, rgba(15,23,42,0.9) 0%, rgba(15,23,42,0) 100%); }
+        .balance-title { font-size: 13px; color: #94a3b8; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+        .balance-cp { font-size: 32px; font-weight: 800; color: #fff; text-shadow: 0 0 20px rgba(255,255,255,0.2); }
+        .balance-usdt { font-size: 14px; color: #10b981; font-weight: 600; background: rgba(16, 185, 129, 0.1); padding: 4px 10px; border-radius: 20px; border: 1px solid rgba(16, 185, 129, 0.3); }
 
-        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: #111a18; border-top: 1px solid rgba(255, 255, 255, 0.05); display: flex; justify-content: space-around; padding: 15px 0; z-index: 100; }
-        /* ৪টি মেনুর জন্য ২৫% সাইজ */
-        .nav-item { color: #6c7a86; text-align: center; font-size: 12px; cursor: pointer; width: 25%; transition: 0.3s; }
-        .nav-item i { font-size: 22px; margin-bottom: 5px; display: block; }
-        .nav-item.active { color: #20d49a; }
+        /* Main Content Scroll Area */
+        .main-content { height: calc(100vh - 170px); overflow-y: auto; padding: 0 20px 90px 20px; scroll-behavior: smooth; }
+        .main-content::-webkit-scrollbar { display: none; }
         
-        .tier-box { background: rgba(243, 186, 47, 0.1); border: 1px solid #f3ba2f; padding: 20px; border-radius: 15px; margin-bottom: 20px; }
+        .tab-section { display: none; animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        .tab-section.active { display: block; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Section Titles */
+        .section-title { font-size: 18px; font-weight: 800; color: #f8fafc; margin: 25px 0 15px 0; display: flex; align-items: center; gap: 8px; }
+        .section-title i { color: #f59e0b; }
+
+        /* Daily Check-in UI */
+        .daily-grid { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 10px; }
+        .daily-grid::-webkit-scrollbar { display: none; }
+        .day-box { min-width: 65px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.05); border-radius: 14px; padding: 12px 5px; text-align: center; opacity: 0.7; transition: 0.3s; }
+        .day-box.active { background: rgba(16, 185, 129, 0.15); border: 1px solid #10b981; opacity: 1; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(16, 185, 129, 0.2); }
+        .day-label { font-size: 11px; color: #94a3b8; font-weight: 600; }
+        .day-coin { font-size: 14px; font-weight: 800; color: #f59e0b; margin-top: 4px; }
+
+        /* Task List UI */
+        .task-item { display: flex; align-items: center; justify-content: space-between; background: rgba(30, 41, 59, 0.5); padding: 16px; border-radius: 16px; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.03); transition: 0.2s; }
+        .task-item:active { transform: scale(0.98); }
+        .task-icon { width: 45px; height: 45px; border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 20px; }
+        .icon-blue { background: rgba(56, 189, 248, 0.1); color: #38bdf8; }
+        .icon-purple { background: rgba(168, 85, 247, 0.1); color: #a855f7; }
+        .icon-green { background: rgba(16, 185, 129, 0.1); color: #10b981; }
         
-        /* প্রোফাইল ইমেজের স্টাইল */
-        .profile-img { width: 80px; height: 80px; border-radius: 50%; border: 2px solid #20d49a; margin-bottom: 10px; object-fit: cover; }
+        .task-details { flex: 1; margin-left: 15px; }
+        .task-title { font-size: 15px; font-weight: 600; color: #f1f5f9; }
+        .task-reward { font-size: 12px; color: #f59e0b; font-weight: 800; margin-top: 4px; display: flex; align-items: center; gap: 4px; }
+        .task-btn { background: #f1f5f9; color: #0f172a; border: none; padding: 8px 18px; border-radius: 20px; font-size: 13px; font-weight: 800; cursor: pointer; transition: 0.2s; }
+        .task-btn:active { background: #cbd5e1; }
+
+        /* Requirements Progress Bar (For Wallet) */
+        .req-box { background: rgba(15, 23, 42, 0.5); padding: 15px; border-radius: 15px; margin-bottom: 12px; }
+        .req-header { display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; color: #cbd5e1; margin-bottom: 8px; }
+        .progress-bg { width: 100%; height: 8px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #10b981, #34d399); border-radius: 10px; transition: width 0.5s ease; }
+
+        /* Big Action Button */
+        .btn-primary { width: 100%; background: linear-gradient(90deg, #10b981, #059669); color: #fff; border: none; padding: 16px; border-radius: 16px; font-size: 16px; font-weight: 800; margin-top: 15px; box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3); transition: 0.2s; }
+        .btn-primary:disabled { background: #334155; color: #94a3b8; box-shadow: none; }
+        .btn-primary:active:not(:disabled) { transform: scale(0.96); }
+
+        /* Profile Area */
+        .profile-card { text-align: center; padding: 30px 20px; }
+        .avatar { width: 90px; height: 90px; border-radius: 50%; border: 3px solid #10b981; padding: 3px; margin-bottom: 15px; object-fit: cover; }
+        .pro-name { font-size: 22px; font-weight: 800; color: #fff; }
+        .pro-id { font-size: 13px; color: #94a3b8; margin-top: 5px; background: rgba(255,255,255,0.05); padding: 5px 12px; border-radius: 15px; display: inline-block; }
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 25px; }
+        .stat-box { background: rgba(15, 23, 42, 0.6); padding: 15px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.03); }
+        .stat-val { font-size: 24px; font-weight: 800; color: #fff; }
+        .stat-label { font-size: 11px; color: #94a3b8; text-transform: uppercase; margin-top: 5px; }
+
+        /* Bottom Navigation */
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-top: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-around; padding: 12px 0 20px 0; z-index: 100; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 6px; color: #64748b; font-size: 11px; font-weight: 600; width: 25%; transition: 0.3s; }
+        .nav-item i { font-size: 22px; transition: 0.3s; }
+        .nav-item.active { color: #10b981; }
+        .nav-item.active i { transform: translateY(-4px); text-shadow: 0 5px 15px rgba(16, 185, 129, 0.4); }
+
     </style>
 </head>
 <body>
 
-    <div class="header-top">
-        <div style="font-size: 14px; color: #a0aab2;">Total Balance</div>
-        <div class="balance-amount">$<span id="balance">0.0000</span></div>
+    <div class="glow-circle-1"></div>
+    <div class="glow-circle-2"></div>
+
+    <div class="top-header">
+        <div>
+            <div class="balance-title">Total Balance</div>
+            <div class="balance-cp"><span id="total-cp">0</span> <span style="font-size: 16px; color: #f59e0b;">CP</span></div>
+        </div>
+        <div class="balance-usdt">≈ $<span id="total-usdt">0.0000</span></div>
     </div>
 
-    <div class="content-area">
+    <div class="main-content">
         
-        <!-- TASKS -->
-        <div id="tasks" class="tab-content active">
-            <h2 style="color: #20d49a; margin-bottom: 20px;">Daily Tasks & Ads</h2>
-            <div class="card">
-                <div class="card-info">
-                    <div class="card-title">Watch Video Ad</div>
-                    <div class="card-desc">Reward: +$0.001 USDT</div>
+        <div id="tab-tasks" class="tab-section active">
+            
+            <div class="glass-card" style="margin-bottom: 25px;">
+                <div style="font-size: 14px; font-weight: 800; color: #fff; margin-bottom: 12px; display: flex; justify-content: space-between;">
+                    <span>🔥 Daily Check-in</span>
+                    <span style="color: #f59e0b;">+50 CP Today</span>
                 </div>
-                <button class="action-btn" onclick="executeTask('adsgram', 0.001)">Watch</button>
+                <div class="daily-grid">
+                    <div class="day-box"><div class="day-label">D1</div><div class="day-coin">✓</div></div>
+                    <div class="day-box active"><div class="day-label">D2</div><div class="day-coin">50</div></div>
+                    <div class="day-box"><div class="day-label">D3</div><div class="day-coin">100</div></div>
+                    <div class="day-box"><div class="day-label">D4</div><div class="day-coin">150</div></div>
+                    <div class="day-box"><div class="day-label">D5</div><div class="day-coin">200</div></div>
+                    <div class="day-box"><div class="day-label">D6</div><div class="day-coin">250</div></div>
+                    <div class="day-box" style="border-color: #f59e0b;"><div class="day-label" style="color: #f59e0b;">D7</div><div class="day-coin">500</div></div>
+                </div>
+                <button class="btn-primary" style="margin-top: 15px; padding: 12px; font-size: 14px;" onclick="claimDaily()">Claim Reward</button>
             </div>
-            <div class="card">
-                <div class="card-info">
-                    <div class="card-title">View Website</div>
-                    <div class="card-desc">Reward: +$0.0005 USDT</div>
+
+            <div class="section-title"><i class="fa-solid fa-bolt"></i> Earn Crypto Points (CP)</div>
+            
+            <div class="task-item">
+                <div class="task-icon icon-blue"><i class="fa-solid fa-play"></i></div>
+                <div class="task-details">
+                    <div class="task-title">Watch Video Ad #1</div>
+                    <div class="task-reward"><i class="fa-solid fa-gem"></i> 100 CP</div>
                 </div>
-                <button class="action-btn" onclick="executeTask('adsterra', 0.0005)">View</button>
+                <button class="task-btn" onclick="executeTask('adsgram', 100, 'ad')">Watch</button>
             </div>
-            <div class="card">
-                <div class="card-info">
-                    <div class="card-title">Join Channel</div>
-                    <div class="card-desc">Reward: +$0.01 USDT</div>
+
+            <div class="task-item">
+                <div class="task-icon icon-purple"><i class="fa-solid fa-globe"></i></div>
+                <div class="task-details">
+                    <div class="task-title">Visit Sponsored Site</div>
+                    <div class="task-reward"><i class="fa-solid fa-gem"></i> 50 CP</div>
                 </div>
-                <button class="action-btn" onclick="executeTask('social', 0.01)">Join</button>
+                <button class="task-btn" onclick="executeTask('adsterra', 50, 'ad')">Visit</button>
+            </div>
+
+            <div class="task-item">
+                <div class="task-icon icon-green"><i class="fa-brands fa-telegram"></i></div>
+                <div class="task-details">
+                    <div class="task-title">Join Official Channel</div>
+                    <div class="task-reward"><i class="fa-solid fa-gem"></i> 500 CP</div>
+                </div>
+                <button class="task-btn" onclick="executeTask('social', 500, 'social')">Join</button>
             </div>
         </div>
 
-        <!-- VIP & REFERRAL -->
-        <div id="vip" class="tab-content">
-            <h2 style="color: #20d49a; margin-bottom: 20px;">VIP & Referrals</h2>
-            <div class="tier-box">
-                <h3 style="color: #f3ba2f;">Status: <span id="vip-status" style="color:#fff;">Normal (50%)</span></h3>
-                <p style="font-size: 13px; color: #a0aab2; margin-top: 10px;">Valid Referrals: <span id="ref-count">0</span> / 20</p>
-                <progress id="vip-progress" value="0" max="20" style="width: 100%; height: 8px; margin-top: 10px;"></progress>
-                <p style="font-size: 11px; color: #888; margin-top: 8px;">Reach 20 valid referrals to unlock VIP tier!</p>
-            </div>
-            <button class="action-btn" style="width: 100%; padding: 15px; font-size: 16px;" onclick="copyRefLink()">Copy Invite Link</button>
-        </div>
-
-        <!-- WALLET -->
-        <div id="wallet" class="tab-content">
-            <h2 style="color: #20d49a; margin-bottom: 20px;">Withdrawal</h2>
-            <div class="card" style="display: block; text-align: center; padding: 30px 15px;">
-                <i class="fa-solid fa-wallet" style="font-size: 40px; color: #6c7a86; margin-bottom: 15px;"></i>
-                <div class="card-title" style="margin-bottom: 10px;">Minimum Payout: $1.50 USDT</div>
-                <div class="card-desc" style="margin-bottom: 20px; color: #f3ba2f;">Current: $<span id="wallet-balance">0.0000</span></div>
-                <button id="withdraw-btn" class="action-btn" style="width: 100%;" disabled onclick="requestWithdraw()">Insufficient Balance</button>
-            </div>
-        </div>
-
-        <!-- PROFILE -->
-        <div id="profile" class="tab-content">
-            <h2 style="color: #20d49a; margin-bottom: 20px;">My Profile</h2>
-            <div class="card" style="display: flex; flex-direction: column; align-items: center; padding: 30px 15px;">
-                <img id="user-pic" src="https://via.placeholder.com/80/111a18/20d49a?text=User" alt="Profile" class="profile-img">
-                <div id="user-name" style="font-size: 20px; font-weight: bold; margin-bottom: 5px;">Guest User</div>
-                <div style="font-size: 13px; color: #a0aab2; margin-bottom: 20px;">ID: <span id="user-id">00000000</span></div>
+        <div id="tab-friends" class="tab-section">
+            <div class="glass-card" style="text-align: center; padding: 30px 20px;">
+                <div style="font-size: 50px; margin-bottom: 10px;">🎁</div>
+                <h2 style="font-size: 22px; font-weight: 800; margin-bottom: 10px;">Invite & Earn</h2>
+                <p style="font-size: 13px; color: #94a3b8; line-height: 1.5; margin-bottom: 20px;">
+                    Get <strong style="color: #f59e0b;">2500 CP</strong> for each successful referral.<br>Unlock VIP status at 20 referrals!
+                </p>
                 
-                <div style="width: 100%; display: flex; justify-content: space-between; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 10px;">
-                    <div style="text-align: center; width: 48%;">
-                        <div style="font-size: 12px; color: #a0aab2;">Role</div>
-                        <div id="profile-role" style="font-size: 15px; font-weight: bold; color: #f3ba2f;">Normal</div>
+                <div class="stats-grid" style="margin-top: 0; margin-bottom: 20px;">
+                    <div class="stat-box">
+                        <div class="stat-val" id="ref-count">0</div>
+                        <div class="stat-label">Total Invites</div>
                     </div>
-                    <div style="text-align: center; width: 48%; border-left: 1px solid rgba(255,255,255,0.1);">
-                        <div style="font-size: 12px; color: #a0aab2;">Referrals</div>
-                        <div id="profile-refs" style="font-size: 15px; font-weight: bold; color: #fff;">0</div>
+                    <div class="stat-box">
+                        <div class="stat-val" style="color: #f59e0b;">0</div>
+                        <div class="stat-label">CP Earned</div>
                     </div>
                 </div>
+
+                <button class="btn-primary" onclick="copyRefLink()"><i class="fa-solid fa-copy"></i> Copy Referral Link</button>
+            </div>
+            
+            <div class="section-title" style="margin-top: 30px;"><i class="fa-solid fa-trophy"></i> Top Leaders (Coming Soon)</div>
+            <div class="glass-card" style="opacity: 0.5; text-align: center; padding: 20px;">
+                Leaderboard will unlock after 1000 users.
+            </div>
+        </div>
+
+        <div id="tab-wallet" class="tab-section">
+            <div class="glass-card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                    <div style="font-weight: 600; color: #94a3b8;">Exchange Rate</div>
+                    <div style="font-weight: 800; color: #10b981;">10,000 CP = $1.00</div>
+                </div>
+
+                <div style="text-align: center; margin-bottom: 25px;">
+                    <div style="font-size: 13px; color: #94a3b8; margin-bottom: 5px;">Minimum Withdrawal</div>
+                    <div style="font-size: 24px; font-weight: 800; color: #fff;">15,000 CP <span style="font-size: 14px; color: #10b981;">≈ $1.50</span></div>
+                </div>
+
+                <div class="section-title" style="font-size: 14px; margin-top: 0;"><i class="fa-solid fa-clipboard-check"></i> Requirements</div>
+                
+                <div class="req-box">
+                    <div class="req-header">
+                        <span>Watch Ads (Minimum 20)</span>
+                        <span id="req-ad-text">0/20</span>
+                    </div>
+                    <div class="progress-bg"><div class="progress-fill" id="req-ad-bar" style="width: 0%;"></div></div>
+                </div>
+
+                <div class="req-box">
+                    <div class="req-header">
+                        <span>Active Referrals (Minimum 2)</span>
+                        <span id="req-ref-text">0/2</span>
+                    </div>
+                    <div class="progress-bg"><div class="progress-fill" id="req-ref-bar" style="width: 0%;"></div></div>
+                </div>
+
+                <button id="withdraw-btn" class="btn-primary" disabled onclick="requestWithdraw()">Withdraw USDT</button>
+            </div>
+        </div>
+
+        <div id="tab-profile" class="tab-section">
+            <div class="glass-card profile-card">
+                <img id="user-pic" src="https://via.placeholder.com/150/1e293b/10b981?text=User" alt="Avatar" class="avatar">
+                <div class="pro-name" id="user-name">Loading...</div>
+                <div class="pro-id">ID: <span id="user-id">000000</span></div>
+
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-val" id="pro-role" style="color: #f1f5f9; font-size: 18px;">Normal</div>
+                        <div class="stat-label">Account Tier</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-val" id="pro-ads" style="color: #38bdf8;">0</div>
+                        <div class="stat-label">Ads Watched</div>
+                    </div>
+                </div>
+                
+                <button class="btn-primary" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; margin-top: 30px; box-shadow: none;" onclick="tg.close()">Close WebApp</button>
             </div>
         </div>
 
     </div>
 
-    <!-- Navigation -->
     <div class="bottom-nav">
-        <div class="nav-item active" onclick="switchTab('tasks', this)"><i class="fa-solid fa-list-check"></i>Tasks</div>
-        <div class="nav-item" onclick="switchTab('vip', this)"><i class="fa-solid fa-crown"></i>VIP</div>
-        <div class="nav-item" onclick="switchTab('wallet', this)"><i class="fa-solid fa-wallet"></i>Wallet</div>
-        <div class="nav-item" onclick="switchTab('profile', this)"><i class="fa-solid fa-user"></i>Profile</div>
+        <div class="nav-item active" onclick="switchTab('tab-tasks', this)"><i class="fa-solid fa-layer-group"></i>Tasks</div>
+        <div class="nav-item" onclick="switchTab('tab-friends', this)"><i class="fa-solid fa-user-group"></i>Friends</div>
+        <div class="nav-item" onclick="switchTab('tab-wallet', this)"><i class="fa-solid fa-wallet"></i>Wallet</div>
+        <div class="nav-item" onclick="switchTab('tab-profile', this)"><i class="fa-solid fa-user-astronaut"></i>Profile</div>
     </div>
 
     <script>
-        const LINKS = {
-            adsgram: "",  
-            adsterra: "", 
-            social: "",   
-            bot_username: "YOUR_BOT_USERNAME" 
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+        tg.setHeaderColor('#0b0f19'); 
+        tg.setBackgroundColor('#0b0f19');
+
+        // State variables
+        let userData = {
+            cp: 0,
+            adsWatched: 0,
+            referrals: 0,
+            isVIP: false,
+            dailyClaimed: false
         };
 
-        let tg = window.Telegram.WebApp;
-        tg.expand();
-        tg.setHeaderColor('#070c0a'); 
+        const MIN_WITHDRAW_CP = 15000;
+        const REQ_ADS = 20;
+        const REQ_REFS = 2;
 
-        let userData = { balance: 0.0000, referrals: 0, isVIP: false };
-        const MIN_WITHDRAW = 1.50;
-
-        // টেলিগ্রাম ইউজার ডাটা ফেচ করা
+        // Fetch TG User
         let tgUser = tg.initDataUnsafe?.user;
         if(tgUser) {
             document.getElementById("user-name").innerText = tgUser.first_name + (tgUser.last_name ? " " + tgUser.last_name : "");
             document.getElementById("user-id").innerText = tgUser.id;
-            if(tgUser.photo_url) {
-                document.getElementById("user-pic").src = tgUser.photo_url;
-            }
+            if(tgUser.photo_url) document.getElementById("user-pic").src = tgUser.photo_url;
+        } else {
+            document.getElementById("user-name").innerText = "Guest User";
         }
 
+        // Core Update UI Function
         function updateUI() {
-            document.getElementById("balance").innerText = userData.balance.toFixed(4);
-            document.getElementById("wallet-balance").innerText = userData.balance.toFixed(4);
-            document.getElementById("ref-count").innerText = userData.referrals;
-            document.getElementById("profile-refs").innerText = userData.referrals;
-            document.getElementById("vip-progress").value = userData.referrals;
-            
-            if(userData.isVIP) {
-                document.getElementById("vip-status").innerText = "VIP (80%)";
-                document.getElementById("vip-status").style.color = "#20d49a";
-                document.getElementById("profile-role").innerText = "VIP";
-                document.getElementById("profile-role").style.color = "#20d49a";
-            }
+            // Header Balance
+            document.getElementById("total-cp").innerText = userData.cp.toLocaleString();
+            let usdt = (userData.cp / 10000).toFixed(4);
+            document.getElementById("total-usdt").innerText = usdt;
 
+            // Profile & Friends Stats
+            document.getElementById("ref-count").innerText = userData.referrals;
+            document.getElementById("pro-ads").innerText = userData.adsWatched;
+            
+            // Wallet Requirements
+            let adPercent = Math.min((userData.adsWatched / REQ_ADS) * 100, 100);
+            document.getElementById("req-ad-bar").style.width = adPercent + "%";
+            document.getElementById("req-ad-text").innerText = `${userData.adsWatched}/${REQ_ADS}`;
+
+            let refPercent = Math.min((userData.referrals / REQ_REFS) * 100, 100);
+            document.getElementById("req-ref-bar").style.width = refPercent + "%";
+            document.getElementById("req-ref-text").innerText = `${userData.referrals}/${REQ_REFS}`;
+
+            // Withdraw Button Logic
             let wBtn = document.getElementById("withdraw-btn");
-            if(userData.balance >= MIN_WITHDRAW) {
+            if (userData.cp >= MIN_WITHDRAW_CP && userData.adsWatched >= REQ_ADS && userData.referrals >= REQ_REFS) {
                 wBtn.disabled = false;
-                wBtn.innerText = "Withdraw USDT";
-                wBtn.style.background = "#26a17b";
-                wBtn.style.color = "#fff";
+                wBtn.innerText = `Withdraw $${usdt} USDT`;
+            } else {
+                wBtn.disabled = true;
+                wBtn.innerText = "Requirements not met";
             }
         }
 
-        function executeTask(type, baseReward) {
-            if(LINKS[type] !== "") {
-                window.open(LINKS[type], "_blank");
-                setTimeout(() => {
-                    userData.balance += userData.isVIP ? (baseReward * 1.6) : baseReward;
-                    updateUI();
-                    tg.HapticFeedback.notificationOccurred('success');
-                }, 3000);
+        function claimDaily() {
+            if(!userData.dailyClaimed) {
+                userData.cp += 50;
+                userData.dailyClaimed = true;
+                updateUI();
+                tg.HapticFeedback.notificationOccurred('success');
+                tg.showAlert("You claimed 50 CP for Daily Check-in!");
             } else {
-                tg.showAlert("Link is not set yet!");
+                tg.showAlert("You already claimed today's reward. Come back tomorrow!");
             }
+        }
+
+        function executeTask(type, reward, category) {
+            // In a real app, this opens the link and waits for a backend callback.
+            // For now, we simulate completion after 3 seconds.
+            let link = "https://google.com"; // Placeholder link
+            window.open(link, "_blank");
+            
+            setTimeout(() => {
+                userData.cp += reward;
+                if(category === 'ad') userData.adsWatched++;
+                updateUI();
+                tg.HapticFeedback.notificationOccurred('success');
+            }, 3000);
         }
 
         function copyRefLink() {
-            let userId = tgUser?.id || "demo_user";
-            let refLink = `https://t.me/${LINKS.bot_username}?start=${userId}`;
+            let userId = tgUser?.id || "demo";
+            let refLink = `https://t.me/YourCryptoPayBot?start=${userId}`;
             navigator.clipboard.writeText(refLink);
-            tg.showAlert("Referral link copied!");
             tg.HapticFeedback.impactOccurred('medium');
+            tg.showAlert("Referral link copied to clipboard!");
         }
 
         function requestWithdraw() {
-            if(userData.balance >= MIN_WITHDRAW) {
-                tg.showAlert("Withdrawal request sent!");
-                userData.balance = 0; 
+            if(userData.cp >= MIN_WITHDRAW_CP) {
+                tg.showAlert("Withdrawal request sent successfully! Admin will process it within 24 hours.");
+                userData.cp = 0;
                 updateUI();
             }
         }
 
         function switchTab(tabId, element) {
-            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-section').forEach(tab => tab.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
             element.classList.add('active');
             tg.HapticFeedback.impactOccurred('light');
         }
 
+        // Init
         updateUI();
     </script>
 </body>
