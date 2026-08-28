@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Crypto Pay - Pro Edition v2</title>
+    <title>Crypto Pay - Growth Edition</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -22,11 +22,11 @@
         .glow-1 { position: absolute; top: -10%; left: -10%; width: 300px; height: 300px; background: rgba(157, 78, 221, 0.15); filter: blur(100px); z-index: -1; }
         .glow-2 { position: absolute; bottom: 0; right: -10%; width: 250px; height: 250px; background: rgba(0, 245, 212, 0.1); filter: blur(90px); z-index: -1; }
 
-        /* Live Payout Ticker */
+        /* Dynamic Live Payout Ticker */
         .ticker-wrap { width: 100%; background: rgba(0, 245, 212, 0.05); border-bottom: 1px solid rgba(0, 245, 212, 0.2); padding: 5px 0; overflow: hidden; display: flex; }
-        .ticker-content { display: flex; white-space: nowrap; animation: ticker 20s linear infinite; font-size: 11px; color: var(--secondary); font-weight: 600; }
-        .ticker-item { padding: 0 30px; display: flex; align-items: center; gap: 5px; }
-        @keyframes ticker { 0% { transform: translateX(100vw); } 100% { transform: translateX(-100%); } }
+        .ticker-content { display: flex; white-space: nowrap; animation: ticker 25s linear infinite; font-size: 11px; color: var(--secondary); font-weight: 600; }
+        .ticker-item { padding: 0 25px; display: flex; align-items: center; gap: 5px; }
+        @keyframes ticker { 0% { transform: translateX(10vw); } 100% { transform: translateX(-100%); } }
 
         /* Header */
         .header-top { padding: 15px 20px; background: linear-gradient(180deg, rgba(11,10,21,0.9) 0%, transparent 100%); display: flex; justify-content: space-between; align-items: center; }
@@ -69,7 +69,6 @@
         .btn-primary:active { transform: scale(0.97); }
         .btn-primary:disabled { background: #2B283A; color: #6C6A7C; }
 
-        /* Profile & Badges */
         .badge-box { width: 60px; height: 60px; background: rgba(255,215,0,0.1); border: 1px solid var(--badge-gold); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 25px; filter: drop-shadow(0 0 10px rgba(255,215,0,0.3)); cursor: pointer; transition: 0.2s; margin: 0 auto; }
         .badge-box:active { transform: scale(0.9); }
         .badge-locked { filter: grayscale(100%); opacity: 0.3; border-color: #555; background: rgba(255,255,255,0.05); }
@@ -85,12 +84,8 @@
 <body>
 
     <div class="ticker-wrap">
-        <div class="ticker-content">
-            <div class="ticker-item"><i class="fa-solid fa-circle-check"></i> John withdrew $1.50 USDT</div>
-            <div class="ticker-item"><i class="fa-solid fa-circle-check"></i> Alex unlocked Trust Badge</div>
-            <div class="ticker-item"><i class="fa-solid fa-circle-check"></i> Sarah withdrew $2.00 USDT</div>
-            <div class="ticker-item"><i class="fa-solid fa-circle-check"></i> Mike earned 500 CP from referring</div>
-        </div>
+        <div class="ticker-content" id="ticker-content">
+            </div>
     </div>
 
     <div class="glow-1"></div>
@@ -178,7 +173,6 @@
         </div>
 
         <div id="tab-profile" class="tab-section">
-            
             <div class="glass-card" style="text-align: center;">
                 <h2 style="font-size: 16px; margin-bottom: 20px; text-align: left;"><i class="fa-solid fa-medal"></i> Trust Badges</h2>
                 <div class="badge-box badge-locked" id="trust-badge" onclick="showBadgeInfo()">🛡️</div>
@@ -189,12 +183,9 @@
             <div class="glass-card">
                 <div class="section-title" style="font-size: 15px; margin-bottom: 15px;"><i class="fa-solid fa-envelope-open-text"></i> Support Mailbox</div>
                 <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 15px;">Have a problem or a suggestion? Write to us, and our admin will reply soon!</p>
-                
                 <textarea id="support-msg" class="input-box" style="height: 90px; resize: none;" placeholder="Describe your issue here..."></textarea>
-                
                 <button class="btn-primary" style="padding: 12px; font-size: 14px;" onclick="sendSupportMessage()"><i class="fa-solid fa-paper-plane"></i> Send Message</button>
             </div>
-
         </div>
 
     </div>
@@ -207,18 +198,44 @@
     </div>
 
     <script>
+        // ==========================================
+        // DYNAMIC TICKER GENERATOR (UNLIMITED & RANDOM)
+        // ==========================================
+        const nameList = ["John", "Sarah", "Mike", "Emma", "Ali", "Fatima", "David", "Ayesha", "Vikram", "Nina", "Omar", "Sophia", "Lucas", "Mia", "Zayn", "Chloe", "Liam", "Ava", "Noah", "Isabella", "Hassan", "Kenza", "Diego", "Carmen", "Leo", "Aria", "Kabir", "Neha", "Arjun", "Priya", "Rahul", "Ananya", "Tariq", "Nadia", "Sam", "Olivia"];
+        
+        function populateTicker() {
+            let tickerBox = document.getElementById("ticker-content");
+            let itemsHTML = "";
+            for(let i=0; i<30; i++) {
+                let randomName = nameList[Math.floor(Math.random() * nameList.length)];
+                let randomAmount = (Math.random() * (20.00 - 1.50) + 1.50).toFixed(2);
+                let randomType = Math.floor(Math.random() * 3);
+                let text = "";
+                
+                if(randomType === 0) text = `${randomName} withdrew $${randomAmount} USDT`;
+                else if(randomType === 1) text = `${randomName} unlocked Trust Badge`;
+                else text = `${randomName} earned ${(Math.floor(Math.random()*5)+1)*100} CP from referring`;
+                
+                itemsHTML += `<div class="ticker-item"><i class="fa-solid fa-circle-check"></i> ${text}</div>`;
+            }
+            tickerBox.innerHTML = itemsHTML;
+        }
+        populateTicker(); // Run on load
+
+        // ==========================================
+        // APP LOGIC
+        // ==========================================
         const tg = window.Telegram.WebApp;
         tg.expand();
         tg.setHeaderColor('#0B0A15'); 
 
         let userData = {
             cp: 0, referrals: 0, 
-            checkInDays: 0, 
-            dailyClaimed: false,
-            hasTrustBadge: false
+            checkInDays: 0, dailyClaimed: false, hasTrustBadge: false
         };
 
         const MIN_WITHDRAW_CP = 15000;
+        const MIN_REFS_NEEDED = 5; // Hidden condition!
 
         let tgUser = tg.initDataUnsafe?.user;
         if(tgUser && tgUser.photo_url) { document.getElementById("user-pic").src = tgUser.photo_url; }
@@ -230,12 +247,10 @@
             document.getElementById("wallet-usdt").innerText = usdt;
             document.getElementById("ref-count").innerText = userData.referrals;
 
-            // Check-in Tracker
             let streakPercent = (userData.checkInDays / 30) * 100;
             document.getElementById("streak-bar").style.width = streakPercent + "%";
             document.getElementById("streak-days").innerText = `Day ${userData.checkInDays}/30`;
             
-            // Calc Next Reward
             let nextReward = 5;
             if(userData.checkInDays === 6 || userData.checkInDays === 13 || userData.checkInDays === 20) nextReward = 20;
             else if(userData.checkInDays === 29) nextReward = 100;
@@ -247,7 +262,6 @@
                 btn.classList.add("disabled");
             }
 
-            // Trust Badge
             if(userData.hasTrustBadge || userData.checkInDays >= 30) {
                 userData.hasTrustBadge = true;
                 let badge = document.getElementById("trust-badge");
@@ -255,29 +269,22 @@
                 document.getElementById("badge-title").innerText = "Trusted Member";
             }
 
-            // Withdraw Button
             let wBtn = document.getElementById("withdraw-btn");
             if (userData.cp >= MIN_WITHDRAW_CP) { wBtn.disabled = false; } 
             else { wBtn.disabled = true; }
         }
 
-        // ==========================================
-        // DAILY CHECK-IN WITH AD VIEW
-        // ==========================================
         function claimDailyWithAd() {
             if(!userData.dailyClaimed) {
                 let btn = document.getElementById("btn-claim");
                 btn.classList.add('loading');
                 btn.innerText = "Loading Ad...";
                 
-                // Open the Direct Ad Link (Adsterra / AdsGram)
-                window.open("https://google.com", "_blank"); // Replace with your Ad link
+                window.open("https://google.com", "_blank"); 
 
-                // Wait 6 seconds before giving the reward
                 setTimeout(() => {
                     let reward = 5;
                     let currentDay = userData.checkInDays + 1;
-                    
                     if(currentDay === 7 || currentDay === 14 || currentDay === 21) reward = 20;
                     else if(currentDay === 30) reward = 100;
 
@@ -286,30 +293,24 @@
                     userData.dailyClaimed = true;
                     
                     tg.HapticFeedback.notificationOccurred('success');
-                    
                     if(currentDay === 30) {
-                        tg.showAlert(`🎉 JACKPOT! You watched the ad, completed 30 Days! You earned 100 CP and unlocked the TRUST BADGE!`);
-                        // Cycle reset logic can be done via DB
+                        tg.showAlert(`🎉 JACKPOT! You watched the ad and completed 30 Days! You earned 100 CP and unlocked the TRUST BADGE!`);
                     } else {
                         tg.showAlert(`Day ${currentDay} Check-in successful! +${reward} CP added.`);
                     }
-                    
                     updateUI();
                 }, 6000); 
             }
         }
 
-        // Support Message Function
         function sendSupportMessage() {
             let msgInput = document.getElementById("support-msg");
             if(msgInput.value.length < 10) {
                 tg.showAlert("Please write at least 10 characters to describe your issue.");
                 return;
             }
-            
-            // In future: send this text via Telegram Bot API or Firebase
             tg.showAlert("✅ Your message has been securely sent to the Admin team. We will review it shortly.");
-            msgInput.value = ""; // clear the box
+            msgInput.value = ""; 
             tg.HapticFeedback.notificationOccurred('success');
         }
 
@@ -318,7 +319,7 @@
             if(userData.hasTrustBadge) {
                 tg.showAlert("🛡️ Trusted Member\n\nCongratulations! You are a Trusted Member. High trust level means more tasks, faster approval, and priority withdrawals!");
             } else {
-                tg.showAlert("🔒 Locked Badge\n\nCheck-in for 30 consecutive days to unlock this badge. Trusted members receive priority support and exclusive high-paying tasks!");
+                tg.showAlert("🔒 Locked Badge\n\nCheck-in for 30 consecutive days to unlock this badge.");
             }
         }
 
@@ -342,7 +343,16 @@
                 tg.showAlert("Please enter a valid USDT BEP20 address!");
                 return;
             }
-            tg.showAlert(`Withdrawal of $${(userData.cp / 10000).toFixed(4)} USDT to [${address.substring(0,6)}...] submitted!`);
+            
+            // ==========================================
+            // THE HIDDEN GROWTH HACK TRICK
+            // ==========================================
+            if(userData.referrals < MIN_REFS_NEEDED) {
+                tg.showAlert(`⚠️ Withdrawal Locked\n\nYou need at least ${MIN_REFS_NEEDED} valid referrals to process your first withdrawal. You currently have ${userData.referrals}/${MIN_REFS_NEEDED} referrals.`);
+                return;
+            }
+
+            tg.showAlert(`Withdrawal of $${(userData.cp / 10000).toFixed(4)} USDT to [${address.substring(0,6)}...] submitted successfully!`);
             userData.cp = 0;
             updateUI();
         }
