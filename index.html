@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Crypto Pay - Live Firebase Edition</title>
+    <title>Crypto Pay - Final Pro Edition</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -32,17 +32,21 @@
         .glow-2 { position: absolute; bottom: 0; right: -10%; width: 250px; height: 250px; background: rgba(0, 245, 212, 0.1); filter: blur(90px); z-index: -1; }
 
         /* ==========================================
-           SUPERFAST DYNAMIC LIVE PAYOUT POPUP 
+           BOTTOM TO TOP POPUP (2 Seconds) 
            ========================================== */
         .popup-ticker-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 9999; pointer-events: none; display: flex; justify-content: center; width: 90%; }
-        .popup-ticker { background: rgba(0, 245, 212, 0.15); border: 1px solid rgba(0, 245, 212, 0.3); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); padding: 10px 20px; border-radius: 30px; font-size: 12px; color: var(--secondary); font-weight: 600; display: flex; align-items: center; gap: 8px; opacity: 0; transform: translateY(20px); transition: all 0.3s ease-out; box-shadow: 0 5px 20px rgba(0, 245, 212, 0.15); }
+        
+        .popup-ticker { background: rgba(0, 245, 212, 0.15); border: 1px solid rgba(0, 245, 212, 0.3); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); padding: 10px 20px; border-radius: 30px; font-size: 12px; color: var(--secondary); font-weight: 600; display: flex; align-items: center; gap: 8px; box-shadow: 0 5px 20px rgba(0, 245, 212, 0.15); opacity: 0; 
+            transform: translateY(30px); 
+            transition: all 0.4s ease-out; 
+        }
         .popup-ticker.show { opacity: 1; transform: translateY(0); }
-        .popup-ticker.hide { opacity: 0; transform: translateY(-20px); }
+        .popup-ticker.hide { opacity: 0; transform: translateY(-30px); }
 
         .header-top { padding: 45px 20px 15px; background: linear-gradient(180deg, rgba(11,10,21,0.9) 0%, transparent 100%); display: flex; justify-content: space-between; align-items: center; }
         .balance-amount { font-size: 32px; font-weight: 800; color: #fff; line-height: 1; }
         .balance-usdt { font-size: 12px; color: var(--secondary); background: rgba(0, 245, 212, 0.1); padding: 4px 10px; border-radius: 12px; border: 1px solid rgba(0, 245, 212, 0.2); margin-top: 5px; display: inline-block; }
-        .user-mini-pic { width: 40px; height: 40px; border-radius: 12px; border: 2px solid var(--primary); }
+        .user-mini-pic { width: 40px; height: 40px; border-radius: 12px; border: 2px solid var(--primary); object-fit: cover; }
 
         .main-content { height: calc(100vh - 140px); overflow-y: auto; padding: 0 20px 100px 20px; }
         .main-content::-webkit-scrollbar { display: none; }
@@ -76,9 +80,31 @@
         .btn-primary:active { transform: scale(0.97); }
         .btn-primary:disabled { background: #2B283A; color: #6C6A7C; }
 
-        .badge-box { width: 60px; height: 60px; background: rgba(255,215,0,0.1); border: 1px solid var(--badge-gold); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 25px; filter: drop-shadow(0 0 10px rgba(255,215,0,0.3)); cursor: pointer; transition: 0.2s; margin: 0 auto; }
+        /* ==========================================
+           PREMIUM VERIFIED BADGE (Facebook Style)
+           ========================================== */
+        .premium-badge {
+            display: none; /* Hidden by default */
+            background: linear-gradient(135deg, #FFDF00, #D4AF37); /* Premium Gold */
+            color: #0B0A15;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 10px;
+            align-items: center;
+            justify-content: center;
+            margin-left: 8px;
+            box-shadow: 0 0 12px rgba(255, 223, 0, 0.5);
+            vertical-align: middle;
+        }
+        .premium-badge.show {
+            display: inline-flex;
+        }
+
+        /* Bottom Badge Section */
+        .badge-box { width: 60px; height: 60px; background: rgba(255,215,0,0.1); border: 1px solid var(--badge-gold); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 25px; filter: drop-shadow(0 0 10px rgba(255,215,0,0.3)); cursor: pointer; transition: 0.2s; margin: 0 auto; color: var(--badge-gold); }
         .badge-box:active { transform: scale(0.9); }
-        .badge-locked { filter: grayscale(100%); opacity: 0.3; border-color: #555; background: rgba(255,255,255,0.05); }
+        .badge-locked { filter: grayscale(100%); opacity: 0.3; border-color: #555; background: rgba(255,255,255,0.05); color: #888; }
 
         .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(11, 10, 21, 0.95); backdrop-filter: blur(20px); border-top: 1px solid rgba(255,255,255,0.03); display: flex; justify-content: space-around; padding: 12px 0 20px; z-index: 100; }
         .nav-item { display: flex; flex-direction: column; align-items: center; gap: 5px; color: #5C5A70; font-size: 11px; font-weight: 600; width: 25%; transition: 0.3s; cursor: pointer; }
@@ -175,17 +201,45 @@
         </div>
 
         <div id="tab-profile" class="tab-section">
+            
             <div class="glass-card" style="text-align: center;">
-                <h2 style="font-size: 16px; margin-bottom: 20px; text-align: left;"><i class="fa-solid fa-medal"></i> Trust Badges</h2>
-                <div class="badge-box badge-locked" id="trust-badge" onclick="showBadgeInfo()">🛡️</div>
-                <div style="font-size: 14px; font-weight: 800; margin-top: 10px; color: var(--badge-gold);" id="badge-title">Locked</div>
-                <div style="font-size: 11px; color: var(--text-muted); margin-top: 5px;">Check-in for 30 days to unlock.</div>
+                <img id="profile-avatar" src="https://via.placeholder.com/100/161324/9D4EDD?text=U" style="width: 80px; height: 80px; border-radius: 50%; border: 3px solid var(--primary); margin-bottom: 10px; object-fit: cover;">
+                
+                <h2 style="font-size: 22px; font-weight: 800; color: #fff; display: flex; align-items: center; justify-content: center;">
+                    <span id="profile-name">Guest User</span>
+                    <span id="premium-name-badge" class="premium-badge" title="Trusted Member"><i class="fa-solid fa-check"></i></span>
+                </h2>
+                
+                <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">ID: <span id="profile-id">00000000</span></div>
+                
+                <div style="display: flex; justify-content: space-between; background: rgba(0,0,0,0.3); border-radius: 15px; padding: 15px;">
+                    <div style="text-align: center; width: 33%;">
+                        <div style="font-size: 16px; font-weight: 800; color: var(--secondary);"><span id="profile-balance">0</span></div>
+                        <div style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; margin-top: 3px;">Total CP</div>
+                    </div>
+                    <div style="text-align: center; width: 33%; border-left: 1px solid rgba(255,255,255,0.05); border-right: 1px solid rgba(255,255,255,0.05);">
+                        <div style="font-size: 16px; font-weight: 800; color: var(--primary);" id="profile-refs">0</div>
+                        <div style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; margin-top: 3px;">Referrals</div>
+                    </div>
+                    <div style="text-align: center; width: 33%;">
+                        <div style="font-size: 16px; font-weight: 800; color: var(--badge-gold);" id="profile-streak">0</div>
+                        <div style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; margin-top: 3px;">Day Streak</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-card" style="text-align: center;">
+                <h2 style="font-size: 16px; margin-bottom: 15px; text-align: left;"><i class="fa-solid fa-medal"></i> Account Status</h2>
+                
+                <div class="badge-box badge-locked" id="trust-badge" onclick="showBadgeInfo()"><i class="fa-solid fa-shield-check"></i></div>
+                <div style="font-size: 14px; font-weight: 800; margin-top: 10px; color: var(--badge-gold);" id="badge-title">Unverified</div>
+                <div style="font-size: 11px; color: var(--text-muted); margin-top: 5px;">Check-in for 30 days to get the Premium Gold Tick next to your name!</div>
             </div>
 
             <div class="glass-card">
                 <div class="section-title" style="font-size: 15px; margin-bottom: 15px;"><i class="fa-solid fa-envelope-open-text"></i> Support Mailbox</div>
-                <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 15px;">Have a problem or a suggestion? Write to us, and our admin will reply soon!</p>
-                <textarea id="support-msg" class="input-box" style="height: 90px; resize: none;" placeholder="Describe your issue here..."></textarea>
+                <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 15px;">Have a problem or suggestion? Contact the admin directly.</p>
+                <textarea id="support-msg" class="input-box" style="height: 80px; resize: none;" placeholder="Describe your issue here..."></textarea>
                 <button class="btn-primary" style="padding: 12px; font-size: 14px;" onclick="sendSupportMessage()"><i class="fa-solid fa-paper-plane"></i> Send Message</button>
             </div>
         </div>
@@ -216,7 +270,7 @@
         const db = firebase.firestore();
 
         // ==========================================
-        // 2. FAST DYNAMIC LIVE PAYOUT POPUP 
+        // 2. BOTTOM TO TOP POPUP (2 Seconds)
         // ==========================================
         const nameList = ["John", "Sarah", "Mike", "Emma", "Ali", "Fatima", "David", "Ayesha", "Vikram", "Nina", "Omar", "Sophia", "Lucas", "Mia", "Zayn", "Chloe", "Liam", "Ava", "Noah", "Isabella", "Hassan", "Kenza", "Diego"];
         const tickerElement = document.getElementById("live-ticker");
@@ -225,8 +279,8 @@
             let randomName = nameList[Math.floor(Math.random() * nameList.length)];
             let randomAmount = (Math.random() * (20.00 - 1.50) + 1.50).toFixed(2);
             let randomType = Math.floor(Math.random() * 3);
-            let text = randomType === 0 ? `${randomName} withdrew $${randomAmount}` : 
-                       randomType === 1 ? `${randomName} unlocked Trust Badge` : 
+            let text = randomType === 0 ? `${randomName} withdrew $${randomAmount} USDT` : 
+                       randomType === 1 ? `${randomName} unlocked Premium Badge` : 
                        `${randomName} earned ${(Math.floor(Math.random()*5)+1)*100} CP`;
             
             tickerElement.innerHTML = `<i class="fa-solid fa-circle-check"></i> ${text}`;
@@ -234,18 +288,15 @@
             tickerElement.classList.remove("hide");
             tickerElement.classList.add("show");
 
-            // মাত্র ১ সেকেন্ড স্ক্রিনে থাকবে, তারপর ভ্যানিশ!
             setTimeout(() => {
                 tickerElement.classList.remove("show");
                 tickerElement.classList.add("hide");
-            }, 1000);
+            }, 2000); 
         }
 
-        // অ্যাপ লোড হওয়ার পর শুরু হবে
         setTimeout(() => {
             showNextTicker();
-            // প্রতি ১.৫ সেকেন্ড পর পর নতুন পপ-আপ (১ সেকেন্ড দেখা যাবে + আধা সেকেন্ড গ্যাপ)
-            setInterval(showNextTicker, 1500);
+            setInterval(showNextTicker, 2500);
         }, 1000);
 
 
@@ -260,7 +311,7 @@
         let userId = tgUser?.id ? tgUser.id.toString() : "demo_user";
         
         let userData = {
-            name: tgUser?.first_name || "Guest",
+            name: tgUser?.first_name || "Guest User",
             cp: 0, 
             referrals: 0, 
             checkInDays: 0, 
@@ -271,7 +322,12 @@
         const MIN_WITHDRAW_CP = 15000;
         const MIN_REFS_NEEDED = 5; 
 
-        if(tgUser && tgUser.photo_url) { document.getElementById("user-pic").src = tgUser.photo_url; }
+        if(tgUser && tgUser.photo_url) { 
+            document.getElementById("user-pic").src = tgUser.photo_url;
+            document.getElementById("profile-avatar").src = tgUser.photo_url; 
+        }
+        document.getElementById("profile-name").innerText = userData.name;
+        document.getElementById("profile-id").innerText = userId;
 
         async function fetchUserData() {
             if(userId !== "demo_user") {
@@ -322,11 +378,17 @@
         }
 
         function updateUI() {
-            document.getElementById("top-cp").innerText = userData.cp.toLocaleString();
+            let formattedCP = userData.cp.toLocaleString();
+            document.getElementById("top-cp").innerHTML = `${formattedCP} <span style="font-size: 16px; color: var(--primary);">CP</span>`;
             let usdt = (userData.cp / 10000).toFixed(4); 
             document.getElementById("top-usdt").innerText = usdt;
             document.getElementById("wallet-usdt").innerText = usdt;
             document.getElementById("ref-count").innerText = userData.referrals;
+
+            document.getElementById("profile-name").innerText = userData.name;
+            document.getElementById("profile-balance").innerText = formattedCP;
+            document.getElementById("profile-refs").innerText = userData.referrals;
+            document.getElementById("profile-streak").innerText = userData.checkInDays;
 
             let streakPercent = (userData.checkInDays / 30) * 100;
             document.getElementById("streak-bar").style.width = streakPercent + "%";
@@ -335,7 +397,7 @@
             let nextReward = 5;
             if(userData.checkInDays === 6 || userData.checkInDays === 13 || userData.checkInDays === 20) nextReward = 20;
             else if(userData.checkInDays === 29) nextReward = 100;
-            document.getElementById("today-reward").innerText = `${nextReward} CP`;
+            document.getElementById("today-reward").innerText = `${nextReward} CP`; 
 
             let today = new Date().toDateString();
             if(userData.lastCheckInDate === today) {
@@ -344,11 +406,20 @@
                 btn.classList.add("disabled");
             }
 
+            // ==========================================
+            // LOGIC: UNLOCK PREMIUM BADGE
+            // ==========================================
             if(userData.hasTrustBadge || userData.checkInDays >= 30) {
-                userData.hasTrustBadge = true;
+                userData.hasTrustBadge = true; // Ensure it stays true
+                
+                // Show badge next to name
+                document.getElementById("premium-name-badge").classList.add("show");
+                
+                // Update Badge Section below
                 let badge = document.getElementById("trust-badge");
                 badge.classList.remove("badge-locked");
-                document.getElementById("badge-title").innerText = "Trusted Member";
+                document.getElementById("badge-title").innerText = "Verified Premium Member";
+                badge.innerHTML = '<i class="fa-solid fa-check"></i>';
             }
 
             let wBtn = document.getElementById("withdraw-btn");
@@ -375,11 +446,16 @@
                     userData.checkInDays = currentDay;
                     userData.lastCheckInDate = today; 
                     
-                    saveUserData(); 
+                    // IF 30 DAYS REACHED: UNLOCK BADGE FOREVER
+                    if(currentDay === 30) {
+                        userData.hasTrustBadge = true;
+                    }
+                    
+                    saveUserData(); // Instantly save to Firebase
                     
                     tg.HapticFeedback.notificationOccurred('success');
                     if(currentDay === 30) {
-                        tg.showAlert(`🎉 JACKPOT! You watched the ad and completed 30 Days! You earned 100 CP and unlocked the TRUST BADGE!`);
+                        tg.showAlert(`🎉 JACKPOT! You completed 30 Days!\nYou earned 100 CP and unlocked the PREMIUM GOLD TICK next to your name!`);
                     } else {
                         tg.showAlert(`Day ${currentDay} Check-in successful! +${reward} CP added.`);
                     }
@@ -412,9 +488,9 @@
         function showBadgeInfo() {
             tg.HapticFeedback.impactOccurred('light');
             if(userData.hasTrustBadge) {
-                tg.showAlert("🛡️ Trusted Member\n\nCongratulations! You are a Trusted Member. High trust level means more tasks, faster approval, and priority withdrawals!");
+                tg.showAlert("🛡️ Premium Verified Member\n\nCongratulations! You have the Gold Tick. High trust level means more tasks, faster approval, and priority withdrawals!");
             } else {
-                tg.showAlert("🔒 Locked Badge\n\nCheck-in for 30 consecutive days to unlock this badge.");
+                tg.showAlert("🔒 Locked Premium Badge\n\nCheck-in for 30 consecutive days to unlock the Facebook-style Premium Gold Tick next to your name!");
             }
         }
 
