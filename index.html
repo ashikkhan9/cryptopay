@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Crypto Pay - Premium</title>
+    <!-- টেলিগ্রাম ওয়েব অ্যাপের অফিশিয়াল স্ক্রিপ্ট -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        /* রিসেট এবং বেসিক সেটআপ */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { 
+            background: #070c0a; 
+            color: #ffffff; 
+            overflow: hidden; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh;
+            user-select: none; /* টেক্সট কপি করা বন্ধ */
+            -webkit-tap-highlight-color: transparent; /* মোবাইলে ক্লিকের নীল রং বন্ধ */
+        }
+
+        /* ব্যাকগ্রাউন্ড গ্লো ইফেক্ট (গ্লাসের ভেতর দিয়ে দেখার জন্য) */
+        .glow-1 { position: absolute; width: 250px; height: 250px; background: #26a17b; border-radius: 50%; top: -50px; left: -50px; filter: blur(90px); opacity: 0.4; animation: float 6s ease-in-out infinite; }
+        .glow-2 { position: absolute; width: 250px; height: 250px; background: #f3ba2f; border-radius: 50%; bottom: -50px; right: -50px; filter: blur(90px); opacity: 0.2; animation: float 8s ease-in-out infinite reverse; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(20px) scale(1.1); }
+        }
+
+        /* প্রিমিয়াম গ্লাসমরফিজম (Glassmorphism) কন্টেইনার */
+        .glass-panel {
+            position: relative;
+            width: 90%;
+            max-width: 400px;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 30px;
+            padding: 40px 20px;
+            box-shadow: 0 25px 45px rgba(0,0,0,0.5), inset 0 0 20px rgba(255,255,255,0.02);
+            text-align: center;
+            z-index: 10;
+        }
+
+        /* টাইপোগ্রাফি ও ব্যালেন্স বক্স */
+        .app-title { font-size: 26px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; background: linear-gradient(90deg, #20d49a, #26a17b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 25px; }
+        .balance-box { background: rgba(0, 0, 0, 0.3); padding: 15px 30px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.03); display: inline-block; margin-bottom: 40px; box-shadow: inset 0 4px 15px rgba(0,0,0,0.4); }
+        .balance-box span { font-size: 42px; font-weight: 900; color: #f3ba2f; text-shadow: 0 0 25px rgba(243, 186, 47, 0.5); }
+        .currency { font-size: 18px; color: #a0aab2; font-weight: normal; margin-left: 5px; }
+
+        /* থ্রিডি কয়েন ও পালস অ্যানিমেশন */
+        .coin-wrapper { position: relative; margin: 0 auto 40px auto; width: 190px; height: 190px; }
+        .coin-wrapper::before { content: ''; position: absolute; top: -15px; left: -15px; right: -15px; bottom: -15px; border-radius: 50%; border: 2px dashed rgba(243, 186, 47, 0.3); animation: spin 8s linear infinite; z-index: -1; }
+        
+        .coin { width: 100%; height: 100%; background: linear-gradient(135deg, #ffd058, #d49a1c); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 40px; font-weight: 900; color: #fff; cursor: pointer; border: 5px solid rgba(255,255,255,0.2); box-shadow: 0 15px 35px rgba(243, 186, 47, 0.4), inset 0 15px 25px rgba(255,255,255,0.4); transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1); text-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        .coin:active { transform: scale(0.92); box-shadow: 0 5px 15px rgba(243, 186, 47, 0.3), inset 0 5px 10px rgba(255,255,255,0.2); }
+
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        /* ভাসমান টেক্সট (ট্যাপ করার সময় পয়েন্ট উড়ে যাবে) */
+        .floating-point { position: absolute; color: #20d49a; font-weight: 900; font-size: 24px; pointer-events: none; animation: floatUp 0.8s ease-out forwards; z-index: 100; text-shadow: 0 0 15px rgba(32, 212, 154, 0.6); }
+        @keyframes floatUp { 0% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(-70px) scale(1.3); } }
+
+        /* গ্লাস বাটন ডিজাইন */
+        .glass-btn { width: 100%; padding: 18px; border-radius: 16px; background: rgba(38, 161, 123, 0.15); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(38, 161, 123, 0.4); color: #20d49a; font-size: 18px; font-weight: bold; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 8px 25px rgba(0,0,0,0.2); position: relative; overflow: hidden; }
+        .glass-btn::before { content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); transform: skewX(-20deg); transition: 0.5s; }
+        .glass-btn:active::before { left: 100%; }
+        .glass-btn:active { background: rgba(38, 161, 123, 0.3); transform: translateY(2px); }
+    </style>
+</head>
+<body>
+
+    <!-- ব্যাকগ্রাউন্ড গ্লো -->
+    <div class="glow-1"></div>
+    <div class="glow-2"></div>
+
+    <!-- মূল গ্লাস প্যানেল -->
+    <div class="glass-panel">
+        <div class="app-title">Crypto Pay</div>
+        
+        <div class="balance-box">
+            $<span id="balance">0.0000</span><span class="currency">USDT</span>
+        </div>
+
+        <div class="coin-wrapper">
+            <div class="coin" id="coinArea" onclick="tapCoin(event)">TAP</div>
+        </div>
+
+        <button class="glass-btn" onclick="watchAd()">Watch Ad (+0.00075)</button>
+    </div>
+
+    <script>
+        // টেলিগ্রাম ফুলস্ক্রিন ও সেটআপ
+        let tg = window.Telegram.WebApp;
+        tg.expand();
+        tg.setHeaderColor('#070c0a'); 
+
+        let balance = 0.0000;
+        let balanceElement = document.getElementById("balance");
+
+        function tapCoin(event) {
+            balance += 0.0001; 
+            updateBalance();
+            
+            // হ্যাপটিক ভাইব্রেশন (টেলিগ্রামের ভেতরে কাজ করবে)
+            tg.HapticFeedback.impactOccurred('medium'); 
+
+            // যেখানে ট্যাপ করা হবে সেখানে ভাসমান +0.0001 তৈরি করা
+            showFloatingPoint(event.clientX, event.clientY);
+        }
+
+        function watchAd() {
+            alert("Premium Ad System Loading..."); 
+            balance += 0.00075; 
+            updateBalance();
+            tg.HapticFeedback.notificationOccurred('success');
+        }
+
+        function updateBalance() {
+            balanceElement.innerText = balance.toFixed(4);
+        }
+
+        // ভাসমান টেক্সট অ্যানিমেশনের ফাংশন
+        function showFloatingPoint(x, y) {
+            let floatingText = document.createElement("div");
+            floatingText.className = "floating-point";
+            floatingText.innerText = "+1";
+            
+            // ট্যাপ করার ঠিক সেই পজিশনে টেক্সট বসানো
+            floatingText.style.left = (x - 15) + "px";
+            floatingText.style.top = (y - 20) + "px";
+            
+            document.body.appendChild(floatingText);
+
+            // অ্যানিমেশন শেষ হলে কোড মুছে ফেলা
+            setTimeout(() => {
+                floatingText.remove();
+            }, 800);
+        }
+    </script>
+</body>
+</html>
