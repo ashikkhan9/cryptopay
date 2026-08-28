@@ -3,350 +3,355 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Crypto Pay - Ultimate Web3 App</title>
+    <title>Crypto Pay - Pro Edition v2</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
         
+        :root {
+            --bg-color: #0B0A15; --card-bg: rgba(22, 19, 36, 0.8);
+            --primary: #9D4EDD; --secondary: #00F5D4; 
+            --text-main: #F8F9FA; --text-muted: #8D99AE;
+            --badge-gold: #FFD700;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
+        body { background: var(--bg-color); color: var(--text-main); overflow: hidden; user-select: none; -webkit-tap-highlight-color: transparent; }
         
-        /* Premium Web3 Dark Theme */
-        body { background: #0b0f19; color: #e2e8f0; overflow: hidden; user-select: none; -webkit-tap-highlight-color: transparent; }
-        
-        /* Background Glows */
-        .glow-circle-1 { position: absolute; top: -50px; left: -50px; width: 200px; height: 200px; background: rgba(16, 185, 129, 0.2); filter: blur(80px); z-index: -1; }
-        .glow-circle-2 { position: absolute; bottom: 100px; right: -50px; width: 250px; height: 250px; background: rgba(245, 158, 11, 0.15); filter: blur(90px); z-index: -1; }
+        .glow-1 { position: absolute; top: -10%; left: -10%; width: 300px; height: 300px; background: rgba(157, 78, 221, 0.15); filter: blur(100px); z-index: -1; }
+        .glow-2 { position: absolute; bottom: 0; right: -10%; width: 250px; height: 250px; background: rgba(0, 245, 212, 0.1); filter: blur(90px); z-index: -1; }
 
-        /* Glassmorphism Cards */
-        .glass-card { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-        
-        /* Header Stats */
-        .top-header { display: flex; justify-content: space-between; align-items: center; padding: 20px; background: linear-gradient(180deg, rgba(15,23,42,0.9) 0%, rgba(15,23,42,0) 100%); }
-        .balance-title { font-size: 13px; color: #94a3b8; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
-        .balance-cp { font-size: 32px; font-weight: 800; color: #fff; text-shadow: 0 0 20px rgba(255,255,255,0.2); }
-        .balance-usdt { font-size: 14px; color: #10b981; font-weight: 600; background: rgba(16, 185, 129, 0.1); padding: 4px 10px; border-radius: 20px; border: 1px solid rgba(16, 185, 129, 0.3); }
+        /* Live Payout Ticker */
+        .ticker-wrap { width: 100%; background: rgba(0, 245, 212, 0.05); border-bottom: 1px solid rgba(0, 245, 212, 0.2); padding: 5px 0; overflow: hidden; display: flex; }
+        .ticker-content { display: flex; white-space: nowrap; animation: ticker 20s linear infinite; font-size: 11px; color: var(--secondary); font-weight: 600; }
+        .ticker-item { padding: 0 30px; display: flex; align-items: center; gap: 5px; }
+        @keyframes ticker { 0% { transform: translateX(100vw); } 100% { transform: translateX(-100%); } }
 
-        /* Main Content Scroll Area */
-        .main-content { height: calc(100vh - 170px); overflow-y: auto; padding: 0 20px 90px 20px; scroll-behavior: smooth; }
+        /* Header */
+        .header-top { padding: 15px 20px; background: linear-gradient(180deg, rgba(11,10,21,0.9) 0%, transparent 100%); display: flex; justify-content: space-between; align-items: center; }
+        .balance-amount { font-size: 32px; font-weight: 800; color: #fff; line-height: 1; }
+        .balance-usdt { font-size: 12px; color: var(--secondary); background: rgba(0, 245, 212, 0.1); padding: 4px 10px; border-radius: 12px; border: 1px solid rgba(0, 245, 212, 0.2); margin-top: 5px; display: inline-block; }
+        .user-mini-pic { width: 40px; height: 40px; border-radius: 12px; border: 2px solid var(--primary); }
+
+        .main-content { height: calc(100vh - 140px); overflow-y: auto; padding: 0 20px 100px 20px; }
         .main-content::-webkit-scrollbar { display: none; }
-        
-        .tab-section { display: none; animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        .tab-section { display: none; animation: fadeUp 0.3s ease-out; }
         .tab-section.active { display: block; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Section Titles */
-        .section-title { font-size: 18px; font-weight: 800; color: #f8fafc; margin: 25px 0 15px 0; display: flex; align-items: center; gap: 8px; }
-        .section-title i { color: #f59e0b; }
-
-        /* Daily Check-in UI */
-        .daily-grid { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 10px; }
-        .daily-grid::-webkit-scrollbar { display: none; }
-        .day-box { min-width: 65px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.05); border-radius: 14px; padding: 12px 5px; text-align: center; opacity: 0.7; transition: 0.3s; }
-        .day-box.active { background: rgba(16, 185, 129, 0.15); border: 1px solid #10b981; opacity: 1; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(16, 185, 129, 0.2); }
-        .day-label { font-size: 11px; color: #94a3b8; font-weight: 600; }
-        .day-coin { font-size: 14px; font-weight: 800; color: #f59e0b; margin-top: 4px; }
-
-        /* Task List UI */
-        .task-item { display: flex; align-items: center; justify-content: space-between; background: rgba(30, 41, 59, 0.5); padding: 16px; border-radius: 16px; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.03); transition: 0.2s; }
-        .task-item:active { transform: scale(0.98); }
-        .task-icon { width: 45px; height: 45px; border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 20px; }
-        .icon-blue { background: rgba(56, 189, 248, 0.1); color: #38bdf8; }
-        .icon-purple { background: rgba(168, 85, 247, 0.1); color: #a855f7; }
-        .icon-green { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+        .glass-card { background: var(--card-bg); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); margin-bottom: 20px; }
+        .section-title { font-size: 16px; font-weight: 800; margin: 0 0 12px 5px; display: flex; align-items: center; gap: 8px; }
         
-        .task-details { flex: 1; margin-left: 15px; }
-        .task-title { font-size: 15px; font-weight: 600; color: #f1f5f9; }
-        .task-reward { font-size: 12px; color: #f59e0b; font-weight: 800; margin-top: 4px; display: flex; align-items: center; gap: 4px; }
-        .task-btn { background: #f1f5f9; color: #0f172a; border: none; padding: 8px 18px; border-radius: 20px; font-size: 13px; font-weight: 800; cursor: pointer; transition: 0.2s; }
-        .task-btn:active { background: #cbd5e1; }
+        .banner-ad { width: 100%; height: 60px; background: rgba(255,255,255,0.05); border: 1px dashed rgba(255,255,255,0.2); border-radius: 12px; display: flex; justify-content: center; align-items: center; color: var(--text-muted); font-size: 12px; margin-bottom: 20px; }
 
-        /* Requirements Progress Bar (For Wallet) */
-        .req-box { background: rgba(15, 23, 42, 0.5); padding: 15px; border-radius: 15px; margin-bottom: 12px; }
-        .req-header { display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; color: #cbd5e1; margin-bottom: 8px; }
-        .progress-bg { width: 100%; height: 8px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; }
-        .progress-fill { height: 100%; background: linear-gradient(90deg, #10b981, #34d399); border-radius: 10px; transition: width 0.5s ease; }
+        /* 30-Day Streak Progress */
+        .streak-header { display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; margin-bottom: 8px; }
+        .progress-bg { width: 100%; height: 8px; background: rgba(255,255,255,0.05); border-radius: 10px; overflow: hidden; margin-bottom: 10px; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary)); border-radius: 10px; width: 0%; transition: 0.5s; }
+        .streak-reward-box { background: rgba(0,0,0,0.3); padding: 12px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(0, 245, 212, 0.1); }
 
-        /* Big Action Button */
-        .btn-primary { width: 100%; background: linear-gradient(90deg, #10b981, #059669); color: #fff; border: none; padding: 16px; border-radius: 16px; font-size: 16px; font-weight: 800; margin-top: 15px; box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3); transition: 0.2s; }
-        .btn-primary:disabled { background: #334155; color: #94a3b8; box-shadow: none; }
-        .btn-primary:active:not(:disabled) { transform: scale(0.96); }
+        /* Tasks */
+        .task-item { display: flex; align-items: center; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 14px; margin-bottom: 10px; border: 1px solid rgba(255,255,255,0.02); }
+        .task-icon { width: 45px; height: 45px; border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 20px; background: rgba(157, 78, 221, 0.1); color: var(--secondary); }
+        .task-info { flex: 1; margin-left: 12px; }
+        .task-title { font-size: 14px; font-weight: 600; }
+        .task-reward { font-size: 12px; color: var(--primary); font-weight: 800; margin-top: 3px; }
+        
+        .btn-sm { background: var(--text-main); color: var(--bg-color); border: none; padding: 6px 15px; border-radius: 15px; font-weight: 800; font-size: 12px; cursor: pointer; transition: 0.2s; }
+        .btn-sm.disabled { background: #333; color: #888; pointer-events: none; }
+        .btn-sm.loading { background: var(--primary); color: #fff; pointer-events: none; }
 
-        /* Profile Area */
-        .profile-card { text-align: center; padding: 30px 20px; }
-        .avatar { width: 90px; height: 90px; border-radius: 50%; border: 3px solid #10b981; padding: 3px; margin-bottom: 15px; object-fit: cover; }
-        .pro-name { font-size: 22px; font-weight: 800; color: #fff; }
-        .pro-id { font-size: 13px; color: #94a3b8; margin-top: 5px; background: rgba(255,255,255,0.05); padding: 5px 12px; border-radius: 15px; display: inline-block; }
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 25px; }
-        .stat-box { background: rgba(15, 23, 42, 0.6); padding: 15px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.03); }
-        .stat-val { font-size: 24px; font-weight: 800; color: #fff; }
-        .stat-label { font-size: 11px; color: #94a3b8; text-transform: uppercase; margin-top: 5px; }
+        .input-box { width: 100%; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); padding: 15px; border-radius: 14px; color: #fff; font-size: 14px; margin-bottom: 15px; outline: none; transition: 0.3s; }
+        .input-box:focus { border-color: var(--primary); box-shadow: 0 0 10px rgba(157, 78, 221, 0.2); }
 
-        /* Bottom Navigation */
-        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-top: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-around; padding: 12px 0 20px 0; z-index: 100; }
-        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 6px; color: #64748b; font-size: 11px; font-weight: 600; width: 25%; transition: 0.3s; }
-        .nav-item i { font-size: 22px; transition: 0.3s; }
-        .nav-item.active { color: #10b981; }
-        .nav-item.active i { transform: translateY(-4px); text-shadow: 0 5px 15px rgba(16, 185, 129, 0.4); }
+        .btn-primary { width: 100%; background: linear-gradient(90deg, var(--primary), #7B2CBF); color: #fff; border: none; padding: 15px; border-radius: 14px; font-size: 15px; font-weight: 800; cursor: pointer; transition: 0.2s; }
+        .btn-primary:active { transform: scale(0.97); }
+        .btn-primary:disabled { background: #2B283A; color: #6C6A7C; }
+
+        /* Profile & Badges */
+        .badge-box { width: 60px; height: 60px; background: rgba(255,215,0,0.1); border: 1px solid var(--badge-gold); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 25px; filter: drop-shadow(0 0 10px rgba(255,215,0,0.3)); cursor: pointer; transition: 0.2s; margin: 0 auto; }
+        .badge-box:active { transform: scale(0.9); }
+        .badge-locked { filter: grayscale(100%); opacity: 0.3; border-color: #555; background: rgba(255,255,255,0.05); }
+
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(11, 10, 21, 0.95); backdrop-filter: blur(20px); border-top: 1px solid rgba(255,255,255,0.03); display: flex; justify-content: space-around; padding: 12px 0 20px; z-index: 100; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 5px; color: #5C5A70; font-size: 11px; font-weight: 600; width: 25%; transition: 0.3s; cursor: pointer; }
+        .nav-item i { font-size: 20px; }
+        .nav-item.active { color: var(--text-main); }
+        .nav-item.active i { color: var(--secondary); transform: translateY(-3px); }
 
     </style>
 </head>
 <body>
 
-    <div class="glow-circle-1"></div>
-    <div class="glow-circle-2"></div>
-
-    <div class="top-header">
-        <div>
-            <div class="balance-title">Total Balance</div>
-            <div class="balance-cp"><span id="total-cp">0</span> <span style="font-size: 16px; color: #f59e0b;">CP</span></div>
+    <div class="ticker-wrap">
+        <div class="ticker-content">
+            <div class="ticker-item"><i class="fa-solid fa-circle-check"></i> John withdrew $1.50 USDT</div>
+            <div class="ticker-item"><i class="fa-solid fa-circle-check"></i> Alex unlocked Trust Badge</div>
+            <div class="ticker-item"><i class="fa-solid fa-circle-check"></i> Sarah withdrew $2.00 USDT</div>
+            <div class="ticker-item"><i class="fa-solid fa-circle-check"></i> Mike earned 500 CP from referring</div>
         </div>
-        <div class="balance-usdt">≈ $<span id="total-usdt">0.0000</span></div>
+    </div>
+
+    <div class="glow-1"></div>
+    <div class="glow-2"></div>
+
+    <div class="header-top">
+        <div>
+            <div class="balance-amount" id="top-cp">0 <span style="font-size: 16px; color: var(--primary);">CP</span></div>
+            <div class="balance-usdt">≈ $<span id="top-usdt">0.0000</span></div>
+        </div>
+        <img id="user-pic" src="https://via.placeholder.com/100/161324/9D4EDD?text=U" class="user-mini-pic">
     </div>
 
     <div class="main-content">
         
-        <div id="tab-tasks" class="tab-section active">
+        <div id="tab-home" class="tab-section active">
             
-            <div class="glass-card" style="margin-bottom: 25px;">
-                <div style="font-size: 14px; font-weight: 800; color: #fff; margin-bottom: 12px; display: flex; justify-content: space-between;">
-                    <span>🔥 Daily Check-in</span>
-                    <span style="color: #f59e0b;">+50 CP Today</span>
+            <div class="glass-card">
+                <div class="streak-header">
+                    <span>🔥 30-Day Check-In Tracker</span>
+                    <span id="streak-days" style="color: var(--secondary);">Day 0/30</span>
                 </div>
-                <div class="daily-grid">
-                    <div class="day-box"><div class="day-label">D1</div><div class="day-coin">✓</div></div>
-                    <div class="day-box active"><div class="day-label">D2</div><div class="day-coin">50</div></div>
-                    <div class="day-box"><div class="day-label">D3</div><div class="day-coin">100</div></div>
-                    <div class="day-box"><div class="day-label">D4</div><div class="day-coin">150</div></div>
-                    <div class="day-box"><div class="day-label">D5</div><div class="day-coin">200</div></div>
-                    <div class="day-box"><div class="day-label">D6</div><div class="day-coin">250</div></div>
-                    <div class="day-box" style="border-color: #f59e0b;"><div class="day-label" style="color: #f59e0b;">D7</div><div class="day-coin">500</div></div>
+                <div class="progress-bg"><div class="progress-fill" id="streak-bar"></div></div>
+                
+                <div class="streak-reward-box">
+                    <div>
+                        <div style="font-size: 11px; color: var(--text-muted);">Today's Reward</div>
+                        <div style="font-size: 16px; font-weight: 800; color: var(--primary);" id="today-reward">5 CP</div>
+                    </div>
+                    <button class="btn-sm" id="btn-claim" onclick="claimDailyWithAd()" style="background: var(--secondary); color: #000;"><i class="fa-solid fa-play" style="font-size: 10px; margin-right: 3px;"></i> Check-In</button>
                 </div>
-                <button class="btn-primary" style="margin-top: 15px; padding: 12px; font-size: 14px;" onclick="claimDaily()">Claim Reward</button>
+                <div style="font-size: 11px; color: var(--text-muted); margin-top: 10px; text-align: center;">Reach Day 30 to unlock 100 CP + Trust Badge!</div>
             </div>
 
-            <div class="section-title"><i class="fa-solid fa-bolt"></i> Earn Crypto Points (CP)</div>
+            <div class="banner-ad">Your Banner Ad (Adsterra) Space</div>
+
+            <div class="section-title"><i class="fa-solid fa-gamepad"></i> Premium Tasks</div>
             
             <div class="task-item">
-                <div class="task-icon icon-blue"><i class="fa-solid fa-play"></i></div>
-                <div class="task-details">
-                    <div class="task-title">Watch Video Ad #1</div>
-                    <div class="task-reward"><i class="fa-solid fa-gem"></i> 100 CP</div>
+                <div class="task-icon"><i class="fa-solid fa-play"></i></div>
+                <div class="task-info">
+                    <div class="task-title">Watch AdsGram Video</div>
+                    <div class="task-reward">10 CP</div>
                 </div>
-                <button class="task-btn" onclick="executeTask('adsgram', 100, 'ad')">Watch</button>
+                <button class="btn-sm" id="btn-ad1" onclick="executeTask('btn-ad1', 10)">Watch</button>
             </div>
 
             <div class="task-item">
-                <div class="task-icon icon-purple"><i class="fa-solid fa-globe"></i></div>
-                <div class="task-details">
+                <div class="task-icon"><i class="fa-solid fa-globe"></i></div>
+                <div class="task-info">
                     <div class="task-title">Visit Sponsored Site</div>
-                    <div class="task-reward"><i class="fa-solid fa-gem"></i> 50 CP</div>
+                    <div class="task-reward">15 CP</div>
                 </div>
-                <button class="task-btn" onclick="executeTask('adsterra', 50, 'ad')">Visit</button>
-            </div>
-
-            <div class="task-item">
-                <div class="task-icon icon-green"><i class="fa-brands fa-telegram"></i></div>
-                <div class="task-details">
-                    <div class="task-title">Join Official Channel</div>
-                    <div class="task-reward"><i class="fa-solid fa-gem"></i> 500 CP</div>
-                </div>
-                <button class="task-btn" onclick="executeTask('social', 500, 'social')">Join</button>
+                <button class="btn-sm" id="btn-web1" onclick="executeTask('btn-web1', 15)">Visit</button>
             </div>
         </div>
 
-        <div id="tab-friends" class="tab-section">
-            <div class="glass-card" style="text-align: center; padding: 30px 20px;">
-                <div style="font-size: 50px; margin-bottom: 10px;">🎁</div>
-                <h2 style="font-size: 22px; font-weight: 800; margin-bottom: 10px;">Invite & Earn</h2>
-                <p style="font-size: 13px; color: #94a3b8; line-height: 1.5; margin-bottom: 20px;">
-                    Get <strong style="color: #f59e0b;">2500 CP</strong> for each successful referral.<br>Unlock VIP status at 20 referrals!
+        <div id="tab-referral" class="tab-section">
+            <div class="glass-card" style="text-align: center;">
+                <div style="font-size: 40px; margin-bottom: 10px;">🎁</div>
+                <h2 style="font-size: 20px; font-weight: 800; margin-bottom: 10px;">Invite & Earn</h2>
+                <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5; margin-bottom: 20px;">
+                    Earn <span style="color: var(--secondary); font-weight: 800;">100 CP</span> per invite + <span style="color: var(--primary); font-weight: 800;">10% lifetime commission</span>!
                 </p>
-                
-                <div class="stats-grid" style="margin-top: 0; margin-bottom: 20px;">
-                    <div class="stat-box">
-                        <div class="stat-val" id="ref-count">0</div>
-                        <div class="stat-label">Total Invites</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-val" style="color: #f59e0b;">0</div>
-                        <div class="stat-label">CP Earned</div>
-                    </div>
-                </div>
-
-                <button class="btn-primary" onclick="copyRefLink()"><i class="fa-solid fa-copy"></i> Copy Referral Link</button>
-            </div>
-            
-            <div class="section-title" style="margin-top: 30px;"><i class="fa-solid fa-trophy"></i> Top Leaders (Coming Soon)</div>
-            <div class="glass-card" style="opacity: 0.5; text-align: center; padding: 20px;">
-                Leaderboard will unlock after 1000 users.
+                <div style="font-size: 24px; font-weight: 800; margin-bottom: 15px;"><span id="ref-count">0</span> <span style="font-size:12px; color:var(--text-muted);">Friends Invited</span></div>
+                <button class="btn-primary" onclick="copyRefLink()">Copy Invite Link</button>
             </div>
         </div>
 
         <div id="tab-wallet" class="tab-section">
             <div class="glass-card">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.05);">
-                    <div style="font-weight: 600; color: #94a3b8;">Exchange Rate</div>
-                    <div style="font-weight: 800; color: #10b981;">10,000 CP = $1.00</div>
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <div style="font-size: 12px; color: var(--text-muted);">Available for Withdrawal</div>
+                    <div style="font-size: 28px; font-weight: 800; color: var(--secondary); margin: 5px 0;">$<span id="wallet-usdt">0.0000</span></div>
+                    <div style="font-size: 11px; color: #fff; background: rgba(157, 78, 221, 0.2); display: inline-block; padding: 4px 10px; border-radius: 10px;">Min. Payout: 15,000 CP ($1.50)</div>
                 </div>
 
-                <div style="text-align: center; margin-bottom: 25px;">
-                    <div style="font-size: 13px; color: #94a3b8; margin-bottom: 5px;">Minimum Withdrawal</div>
-                    <div style="font-size: 24px; font-weight: 800; color: #fff;">15,000 CP <span style="font-size: 14px; color: #10b981;">≈ $1.50</span></div>
-                </div>
+                <div class="section-title" style="font-size: 14px;"><i class="fa-brands fa-bitcoin"></i> Withdraw via USDT (BEP20)</div>
+                <input type="text" class="input-box" id="wallet-address" placeholder="Enter USDT BEP20 Address...">
 
-                <div class="section-title" style="font-size: 14px; margin-top: 0;"><i class="fa-solid fa-clipboard-check"></i> Requirements</div>
-                
-                <div class="req-box">
-                    <div class="req-header">
-                        <span>Watch Ads (Minimum 20)</span>
-                        <span id="req-ad-text">0/20</span>
-                    </div>
-                    <div class="progress-bg"><div class="progress-fill" id="req-ad-bar" style="width: 0%;"></div></div>
-                </div>
-
-                <div class="req-box">
-                    <div class="req-header">
-                        <span>Active Referrals (Minimum 2)</span>
-                        <span id="req-ref-text">0/2</span>
-                    </div>
-                    <div class="progress-bg"><div class="progress-fill" id="req-ref-bar" style="width: 0%;"></div></div>
-                </div>
-
-                <button id="withdraw-btn" class="btn-primary" disabled onclick="requestWithdraw()">Withdraw USDT</button>
+                <button id="withdraw-btn" class="btn-primary" disabled onclick="requestWithdraw()">Submit Withdrawal</button>
             </div>
+            
+            <div class="banner-ad">Your Banner Ad (Adsterra) Space</div>
         </div>
 
         <div id="tab-profile" class="tab-section">
-            <div class="glass-card profile-card">
-                <img id="user-pic" src="https://via.placeholder.com/150/1e293b/10b981?text=User" alt="Avatar" class="avatar">
-                <div class="pro-name" id="user-name">Loading...</div>
-                <div class="pro-id">ID: <span id="user-id">000000</span></div>
-
-                <div class="stats-grid">
-                    <div class="stat-box">
-                        <div class="stat-val" id="pro-role" style="color: #f1f5f9; font-size: 18px;">Normal</div>
-                        <div class="stat-label">Account Tier</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-val" id="pro-ads" style="color: #38bdf8;">0</div>
-                        <div class="stat-label">Ads Watched</div>
-                    </div>
-                </div>
-                
-                <button class="btn-primary" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; margin-top: 30px; box-shadow: none;" onclick="tg.close()">Close WebApp</button>
+            
+            <div class="glass-card" style="text-align: center;">
+                <h2 style="font-size: 16px; margin-bottom: 20px; text-align: left;"><i class="fa-solid fa-medal"></i> Trust Badges</h2>
+                <div class="badge-box badge-locked" id="trust-badge" onclick="showBadgeInfo()">🛡️</div>
+                <div style="font-size: 14px; font-weight: 800; margin-top: 10px; color: var(--badge-gold);" id="badge-title">Locked</div>
+                <div style="font-size: 11px; color: var(--text-muted); margin-top: 5px;">Check-in for 30 days to unlock.</div>
             </div>
+
+            <div class="glass-card">
+                <div class="section-title" style="font-size: 15px; margin-bottom: 15px;"><i class="fa-solid fa-envelope-open-text"></i> Support Mailbox</div>
+                <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 15px;">Have a problem or a suggestion? Write to us, and our admin will reply soon!</p>
+                
+                <textarea id="support-msg" class="input-box" style="height: 90px; resize: none;" placeholder="Describe your issue here..."></textarea>
+                
+                <button class="btn-primary" style="padding: 12px; font-size: 14px;" onclick="sendSupportMessage()"><i class="fa-solid fa-paper-plane"></i> Send Message</button>
+            </div>
+
         </div>
 
     </div>
 
     <div class="bottom-nav">
-        <div class="nav-item active" onclick="switchTab('tab-tasks', this)"><i class="fa-solid fa-layer-group"></i>Tasks</div>
-        <div class="nav-item" onclick="switchTab('tab-friends', this)"><i class="fa-solid fa-user-group"></i>Friends</div>
+        <div class="nav-item active" onclick="switchTab('tab-home', this)"><i class="fa-solid fa-house"></i>Home</div>
+        <div class="nav-item" onclick="switchTab('tab-referral', this)"><i class="fa-solid fa-user-plus"></i>Invite</div>
         <div class="nav-item" onclick="switchTab('tab-wallet', this)"><i class="fa-solid fa-wallet"></i>Wallet</div>
-        <div class="nav-item" onclick="switchTab('tab-profile', this)"><i class="fa-solid fa-user-astronaut"></i>Profile</div>
+        <div class="nav-item" onclick="switchTab('tab-profile', this)"><i class="fa-solid fa-user"></i>Profile</div>
     </div>
 
     <script>
         const tg = window.Telegram.WebApp;
         tg.expand();
-        tg.setHeaderColor('#0b0f19'); 
-        tg.setBackgroundColor('#0b0f19');
+        tg.setHeaderColor('#0B0A15'); 
 
-        // State variables
         let userData = {
-            cp: 0,
-            adsWatched: 0,
-            referrals: 0,
-            isVIP: false,
-            dailyClaimed: false
+            cp: 0, referrals: 0, 
+            checkInDays: 0, 
+            dailyClaimed: false,
+            hasTrustBadge: false
         };
 
         const MIN_WITHDRAW_CP = 15000;
-        const REQ_ADS = 20;
-        const REQ_REFS = 2;
 
-        // Fetch TG User
         let tgUser = tg.initDataUnsafe?.user;
-        if(tgUser) {
-            document.getElementById("user-name").innerText = tgUser.first_name + (tgUser.last_name ? " " + tgUser.last_name : "");
-            document.getElementById("user-id").innerText = tgUser.id;
-            if(tgUser.photo_url) document.getElementById("user-pic").src = tgUser.photo_url;
-        } else {
-            document.getElementById("user-name").innerText = "Guest User";
-        }
+        if(tgUser && tgUser.photo_url) { document.getElementById("user-pic").src = tgUser.photo_url; }
 
-        // Core Update UI Function
         function updateUI() {
-            // Header Balance
-            document.getElementById("total-cp").innerText = userData.cp.toLocaleString();
-            let usdt = (userData.cp / 10000).toFixed(4);
-            document.getElementById("total-usdt").innerText = usdt;
-
-            // Profile & Friends Stats
+            document.getElementById("top-cp").innerText = userData.cp.toLocaleString();
+            let usdt = (userData.cp / 10000).toFixed(4); 
+            document.getElementById("top-usdt").innerText = usdt;
+            document.getElementById("wallet-usdt").innerText = usdt;
             document.getElementById("ref-count").innerText = userData.referrals;
-            document.getElementById("pro-ads").innerText = userData.adsWatched;
+
+            // Check-in Tracker
+            let streakPercent = (userData.checkInDays / 30) * 100;
+            document.getElementById("streak-bar").style.width = streakPercent + "%";
+            document.getElementById("streak-days").innerText = `Day ${userData.checkInDays}/30`;
             
-            // Wallet Requirements
-            let adPercent = Math.min((userData.adsWatched / REQ_ADS) * 100, 100);
-            document.getElementById("req-ad-bar").style.width = adPercent + "%";
-            document.getElementById("req-ad-text").innerText = `${userData.adsWatched}/${REQ_ADS}`;
+            // Calc Next Reward
+            let nextReward = 5;
+            if(userData.checkInDays === 6 || userData.checkInDays === 13 || userData.checkInDays === 20) nextReward = 20;
+            else if(userData.checkInDays === 29) nextReward = 100;
+            document.getElementById("today-reward").innerText = `${nextReward} CP`;
 
-            let refPercent = Math.min((userData.referrals / REQ_REFS) * 100, 100);
-            document.getElementById("req-ref-bar").style.width = refPercent + "%";
-            document.getElementById("req-ref-text").innerText = `${userData.referrals}/${REQ_REFS}`;
+            if(userData.dailyClaimed) {
+                let btn = document.getElementById("btn-claim");
+                btn.innerHTML = `<i class="fa-solid fa-check"></i> Claimed`;
+                btn.classList.add("disabled");
+            }
 
-            // Withdraw Button Logic
+            // Trust Badge
+            if(userData.hasTrustBadge || userData.checkInDays >= 30) {
+                userData.hasTrustBadge = true;
+                let badge = document.getElementById("trust-badge");
+                badge.classList.remove("badge-locked");
+                document.getElementById("badge-title").innerText = "Trusted Member";
+            }
+
+            // Withdraw Button
             let wBtn = document.getElementById("withdraw-btn");
-            if (userData.cp >= MIN_WITHDRAW_CP && userData.adsWatched >= REQ_ADS && userData.referrals >= REQ_REFS) {
-                wBtn.disabled = false;
-                wBtn.innerText = `Withdraw $${usdt} USDT`;
-            } else {
-                wBtn.disabled = true;
-                wBtn.innerText = "Requirements not met";
-            }
+            if (userData.cp >= MIN_WITHDRAW_CP) { wBtn.disabled = false; } 
+            else { wBtn.disabled = true; }
         }
 
-        function claimDaily() {
+        // ==========================================
+        // DAILY CHECK-IN WITH AD VIEW
+        // ==========================================
+        function claimDailyWithAd() {
             if(!userData.dailyClaimed) {
-                userData.cp += 50;
-                userData.dailyClaimed = true;
-                updateUI();
-                tg.HapticFeedback.notificationOccurred('success');
-                tg.showAlert("You claimed 50 CP for Daily Check-in!");
-            } else {
-                tg.showAlert("You already claimed today's reward. Come back tomorrow!");
+                let btn = document.getElementById("btn-claim");
+                btn.classList.add('loading');
+                btn.innerText = "Loading Ad...";
+                
+                // Open the Direct Ad Link (Adsterra / AdsGram)
+                window.open("https://google.com", "_blank"); // Replace with your Ad link
+
+                // Wait 6 seconds before giving the reward
+                setTimeout(() => {
+                    let reward = 5;
+                    let currentDay = userData.checkInDays + 1;
+                    
+                    if(currentDay === 7 || currentDay === 14 || currentDay === 21) reward = 20;
+                    else if(currentDay === 30) reward = 100;
+
+                    userData.cp += reward;
+                    userData.checkInDays = currentDay;
+                    userData.dailyClaimed = true;
+                    
+                    tg.HapticFeedback.notificationOccurred('success');
+                    
+                    if(currentDay === 30) {
+                        tg.showAlert(`🎉 JACKPOT! You watched the ad, completed 30 Days! You earned 100 CP and unlocked the TRUST BADGE!`);
+                        // Cycle reset logic can be done via DB
+                    } else {
+                        tg.showAlert(`Day ${currentDay} Check-in successful! +${reward} CP added.`);
+                    }
+                    
+                    updateUI();
+                }, 6000); 
             }
         }
 
-        function executeTask(type, reward, category) {
-            // In a real app, this opens the link and waits for a backend callback.
-            // For now, we simulate completion after 3 seconds.
-            let link = "https://google.com"; // Placeholder link
-            window.open(link, "_blank");
+        // Support Message Function
+        function sendSupportMessage() {
+            let msgInput = document.getElementById("support-msg");
+            if(msgInput.value.length < 10) {
+                tg.showAlert("Please write at least 10 characters to describe your issue.");
+                return;
+            }
             
+            // In future: send this text via Telegram Bot API or Firebase
+            tg.showAlert("✅ Your message has been securely sent to the Admin team. We will review it shortly.");
+            msgInput.value = ""; // clear the box
+            tg.HapticFeedback.notificationOccurred('success');
+        }
+
+        function showBadgeInfo() {
+            tg.HapticFeedback.impactOccurred('light');
+            if(userData.hasTrustBadge) {
+                tg.showAlert("🛡️ Trusted Member\n\nCongratulations! You are a Trusted Member. High trust level means more tasks, faster approval, and priority withdrawals!");
+            } else {
+                tg.showAlert("🔒 Locked Badge\n\nCheck-in for 30 consecutive days to unlock this badge. Trusted members receive priority support and exclusive high-paying tasks!");
+            }
+        }
+
+        function executeTask(btnId, reward) {
+            let btn = document.getElementById(btnId);
+            btn.classList.add('disabled');
+            btn.innerText = `Wait...`;
+            window.open("https://google.com", "_blank");
+
             setTimeout(() => {
                 userData.cp += reward;
-                if(category === 'ad') userData.adsWatched++;
+                btn.innerText = "Done";
                 updateUI();
                 tg.HapticFeedback.notificationOccurred('success');
-            }, 3000);
+            }, 5000); 
+        }
+
+        function requestWithdraw() {
+            let address = document.getElementById("wallet-address").value;
+            if(address.length < 20) { 
+                tg.showAlert("Please enter a valid USDT BEP20 address!");
+                return;
+            }
+            tg.showAlert(`Withdrawal of $${(userData.cp / 10000).toFixed(4)} USDT to [${address.substring(0,6)}...] submitted!`);
+            userData.cp = 0;
+            updateUI();
         }
 
         function copyRefLink() {
             let userId = tgUser?.id || "demo";
-            let refLink = `https://t.me/YourCryptoPayBot?start=${userId}`;
-            navigator.clipboard.writeText(refLink);
+            navigator.clipboard.writeText(`https://t.me/YourBot/app?startapp=${userId}`);
             tg.HapticFeedback.impactOccurred('medium');
-            tg.showAlert("Referral link copied to clipboard!");
-        }
-
-        function requestWithdraw() {
-            if(userData.cp >= MIN_WITHDRAW_CP) {
-                tg.showAlert("Withdrawal request sent successfully! Admin will process it within 24 hours.");
-                userData.cp = 0;
-                updateUI();
-            }
+            tg.showAlert("Referral link copied!");
         }
 
         function switchTab(tabId, element) {
@@ -357,7 +362,6 @@
             tg.HapticFeedback.impactOccurred('light');
         }
 
-        // Init
         updateUI();
     </script>
 </body>
