@@ -333,10 +333,8 @@
         const adLinks = {
             adsterra: "https://www.profitableratecpmnetwork.com/qqm7unbp9c?key=e6068fd32853ac21e39371c87bd3ec2d",
             monetag: "https://omg10.com/4/11678700",
-            adsgram: "45018"
+            adsgram: "45124" // <--- YOUR NEW ADSGRAM BLOCK ID
         };
-        const networkOrder = ["adsgram", "adsterra", "monetag"];
-        let currentNetworkIndex = 0; 
 
         // GLOBAL APP LOGIC
         const tg = window.Telegram.WebApp;
@@ -557,23 +555,28 @@
             btn.classList.add('loading');
             btn.innerText = "Wait...";
 
-            let selectedNetwork = networkOrder[currentNetworkIndex];
-            currentNetworkIndex = (currentNetworkIndex + 1) % networkOrder.length;
-
-            if (selectedNetwork === "adsgram" && window.Adsgram) {
+            // ALWAYS TRY ADSGRAM FIRST
+            if (window.Adsgram) {
                 let AdController = window.Adsgram.init({ blockId: adLinks.adsgram });
                 AdController.show()
-                    .then(() => { btn.classList.remove('loading'); onSuccess(); })
-                    .catch(() => { triggerFallbackAdOverlay(btn, adLinks.adsterra, onSuccess); });
+                    .then(() => { 
+                        btn.classList.remove('loading'); 
+                        onSuccess(); 
+                    })
+                    .catch((err) => { 
+                        // If Adsgram fails, pick a random fallback ad
+                        let fallbackUrls = [adLinks.adsterra, adLinks.monetag];
+                        let randomFallback = fallbackUrls[Math.floor(Math.random() * fallbackUrls.length)];
+                        triggerFallbackAdOverlay(btn, randomFallback, onSuccess); 
+                    });
             } else {
-                let fallbackUrl = selectedNetwork === "monetag" ? adLinks.monetag : adLinks.adsterra;
-                triggerFallbackAdOverlay(btn, fallbackUrl, onSuccess);
+                triggerFallbackAdOverlay(btn, adLinks.adsterra, onSuccess);
             }
         }
 
         function triggerFallbackAdOverlay(btn, adUrl, onSuccess) {
             document.getElementById("ad-wait-modal").style.display = "flex";
-            window.open(adUrl, "_blank"); // Open Ad Link
+            window.open(adUrl, "_blank"); // Open Fallback Ad Link
 
             let timeLeft = 10;
             document.getElementById("ad-timer").innerText = timeLeft + "s";
@@ -594,7 +597,7 @@
         function handlePremiumTask(btnId, targetLink, taskId, title, reward) {
             let btn = document.getElementById(btnId);
             triggerAdBeforeTask(btn, () => {
-                window.open(targetLink, "_blank"); // Open real task
+                window.open(targetLink, "_blank"); // Open real task after Ad
                 btn.classList.add('verify');
                 btn.innerText = "Submit";
                 btn.onclick = () => openProofModal(taskId, title, reward);
@@ -605,7 +608,7 @@
         function handleSocialTask(btnId, targetLink, reward) {
             let btn = document.getElementById(btnId);
             triggerAdBeforeTask(btn, () => {
-                window.open(targetLink, "_blank"); // Open real task
+                window.open(targetLink, "_blank"); // Open real task after Ad
                 btn.classList.add('verify');
                 btn.innerText = "Verify";
                 btn.onclick = () => verifySocialTask(btnId, reward);
@@ -802,5 +805,7 @@
 
         fetchUserData();
     </script>
+    
+    <script>(function(s){s.dataset.zone='11678521',s.src='https://n6wxm.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
 </body>
 </html>
