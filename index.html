@@ -195,7 +195,7 @@
                 </div>
             </div>
 
-            <!-- Adsterra Banner (already here) -->
+            <!-- Adsterra Banner -->
             <div style="display:flex; justify-content:center; align-items:center; margin-bottom: 20px;">
                 <script> atOptions = { 'key' : '8f2c282d7a133448b994b2f0b53de617', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} }; </script>
                 <script src="https://www.highrevenueformat.com/8f2c282d7a133448b994b2f0b53de617/invoke.js"></script>
@@ -331,11 +331,11 @@
         const db = firebase.firestore();
         const storage = firebase.storage();
 
-        // AD LINKS
+        // AD LINKS (Update Adsgram Block ID)
         const adLinks = {
             adsterra: "https://www.profitableratecpmnetwork.com/qqm7unbp9c?key=e6068fd32853ac21e39371c87bd3ec2d",
             monetag: "https://omg10.com/4/11678700",
-            adsgram: "45124" 
+            adsgram: "45149" 
         };
 
         // GLOBAL APP LOGIC
@@ -568,7 +568,7 @@
                         btn.classList.remove('loading');
                         onSuccess();
                     }).catch((err) => {
-                        // Fallback to monetag if adsgram fails/not available
+                        // Silent fallback to Monetag if Adsgram fails to load an ad
                         triggerFallbackAdOverlay(btn, adLinks.monetag, onSuccess);
                     });
                 } else {
@@ -600,10 +600,12 @@
             }, 1000);
         }
 
-        // --- Task Ad Logic ---
-        // Tasks loop pattern: 2 Monetag -> 2 Adsgram -> 2 Adsterra -> repeat
+        // --- Task Ad Logic (2 Monetag -> 2 Adsgram -> 2 Adsterra) ---
         function getTaskAdNetwork(index) {
             let cycle = Math.floor(index / 2) % 3;
+            // index 0,1 (cycle 0) -> Monetag
+            // index 2,3 (cycle 1) -> Adsgram
+            // index 4,5 (cycle 2) -> Adsterra
             return cycle === 0 ? 'monetag' : (cycle === 1 ? 'adsgram' : 'adsterra');
         }
 
@@ -612,7 +614,7 @@
             let network = getTaskAdNetwork(index);
 
             showSpecificAd(network, btn, () => {
-                window.open(targetLink, "_blank"); // Open real task after Ad
+                window.open(targetLink, "_blank"); 
                 btn.classList.add('verify');
                 btn.innerText = "Submit";
                 btn.onclick = () => openProofModal(taskId, title, reward);
@@ -624,7 +626,7 @@
             let network = getTaskAdNetwork(index);
 
             showSpecificAd(network, btn, () => {
-                window.open(targetLink, "_blank"); // Open real task after Ad
+                window.open(targetLink, "_blank"); 
                 btn.classList.add('verify');
                 btn.innerText = "Verify";
                 btn.onclick = () => verifySocialTask(btnId, reward);
@@ -652,8 +654,7 @@
             }, 1500);
         }
 
-        // --- Watch & Earn Ad Logic ---
-        // Watch Ad loop pattern: 3 Adsgram -> 3 Monetag -> 3 Adsterra -> repeat
+        // --- Watch & Earn Ad Logic (3 Adsgram -> 3 Monetag -> 3 Adsterra) ---
         let watchAdCooldown = false;
         function watchAdForCP() {
             if (watchAdCooldown) return;
@@ -661,6 +662,10 @@
             
             let currentCount = userData.watchAdCount || 0;
             let cycle = Math.floor(currentCount / 3) % 3;
+            
+            // Count 0,1,2 (cycle 0) -> Adsgram
+            // Count 3,4,5 (cycle 1) -> Monetag
+            // Count 6,7,8 (cycle 2) -> Adsterra
             let network = cycle === 0 ? 'adsgram' : (cycle === 1 ? 'monetag' : 'adsterra');
             
             showSpecificAd(network, btn, () => {
