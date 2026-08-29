@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Crypto Pay - Final Pro Edition</title>
+    <title>Crypto Pay - 3D Glass Edition</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -14,119 +14,131 @@
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
         
         :root {
-            --bg-color: #0B0A15; --card-bg: rgba(22, 19, 36, 0.8);
-            --primary: #9D4EDD; --secondary: #00F5D4; 
-            --text-main: #F8F9FA; --text-muted: #8D99AE;
-            --badge-gold: #FFD700;
+            /* Light 3D Glass Theme Variables */
+            --bg-color: #E6EAEF; 
+            --glass-bg: rgba(255, 255, 255, 0.45);
+            --glass-border-light: rgba(255, 255, 255, 0.9);
+            --glass-border-dark: rgba(255, 255, 255, 0.2);
+            --text-main: #1D1D1F; 
+            --text-muted: #86868B;
+            --primary-glow: rgba(0, 122, 255, 0.3);
+            --orange-glow: rgba(255, 122, 0, 0.3);
+            
+            --btn-orange: linear-gradient(180deg, #FF8C42, #FF3B30);
+            --btn-blue: linear-gradient(180deg, #42A5F5, #007AFF);
+            --badge-gold: #F5A623;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
         body { background: var(--bg-color); color: var(--text-main); overflow: hidden; user-select: none; -webkit-tap-highlight-color: transparent; }
         
         #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-color); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        .spinner { width: 50px; height: 50px; border: 5px solid rgba(157, 78, 221, 0.3); border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px; }
+        .spinner { width: 50px; height: 50px; border: 5px solid rgba(0, 122, 255, 0.2); border-top-color: #007AFF; border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        .glow-1 { position: absolute; top: -10%; left: -10%; width: 300px; height: 300px; background: rgba(157, 78, 221, 0.15); filter: blur(100px); z-index: -1; }
-        .glow-2 { position: absolute; bottom: 0; right: -10%; width: 250px; height: 250px; background: rgba(0, 245, 212, 0.1); filter: blur(90px); z-index: -1; }
+        /* Prismatic Background Glows */
+        .glow-1 { position: absolute; top: -10%; left: -10%; width: 350px; height: 350px; background: radial-gradient(circle, rgba(255,122,0,0.15) 0%, transparent 70%); filter: blur(40px); z-index: -1; }
+        .glow-2 { position: absolute; bottom: 10%; right: -10%; width: 300px; height: 300px; background: radial-gradient(circle, rgba(0,198,255,0.15) 0%, transparent 70%); filter: blur(40px); z-index: -1; }
+        .glow-3 { position: absolute; top: 40%; left: 30%; width: 250px; height: 250px; background: radial-gradient(circle, rgba(157,78,221,0.1) 0%, transparent 70%); filter: blur(40px); z-index: -1; }
 
-        /* =========================================
-           FIXED PAYOUT TICKER (Slim, Top-Center, Bottom-to-Top Animation)
-           ========================================= */
-        .popup-ticker-container { 
-            position: fixed; 
-            top: 25px; /* স্ক্রিনের উপরে */
-            left: 50%; 
-            transform: translateX(-50%); 
-            z-index: 10000; 
-            pointer-events: none; 
-            display: flex; 
-            justify-content: center; 
-            width: max-content; /* একদম চিকন রাখার জন্য */
+        /* Thick 3D Glass Card */
+        .glass-card { 
+            background: var(--glass-bg); 
+            backdrop-filter: blur(24px); 
+            -webkit-backdrop-filter: blur(24px);
+            border-top: 1.5px solid var(--glass-border-light);
+            border-left: 1.5px solid var(--glass-border-light);
+            border-bottom: 1px solid var(--glass-border-dark);
+            border-right: 1px solid var(--glass-border-dark);
+            border-radius: 24px; 
+            padding: 20px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.05), inset 0 2px 5px rgba(255,255,255,0.8); 
+            margin-bottom: 20px; 
+            position: relative;
         }
+
+        /* 3D Glass Ticker (Toast Style) */
+        .popup-ticker-container { position: fixed; top: 25px; left: 50%; transform: translateX(-50%); z-index: 10000; pointer-events: none; display: flex; justify-content: center; width: max-content; }
         .popup-ticker { 
-            background: rgba(11, 10, 21, 0.95); 
-            border: 1px solid rgba(0, 245, 212, 0.5); 
-            backdrop-filter: blur(15px); 
-            padding: 6px 14px; /* স্লিম প্যাডিং */
-            border-radius: 20px; 
-            font-size: 11px; 
-            color: var(--secondary); 
+            background: rgba(255,255,255,0.6); 
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.9); 
+            padding: 8px 18px; 
+            border-radius: 30px; 
+            font-size: 12px; 
+            color: #1D1D1F; 
             font-weight: 600; 
-            display: flex; 
-            align-items: center; 
-            gap: 6px; 
-            box-shadow: 0 4px 15px rgba(0, 245, 212, 0.2); 
-            
-            /* ডিফল্ট পজিশন: একটু নিচে থাকবে (ট্রানজিশনের শুরুর পয়েন্ট) */
-            opacity: 0; 
-            transform: translateY(20px); 
-            transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1); 
+            display: flex; align-items: center; gap: 8px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05), inset 0 0 10px rgba(255, 140, 66, 0.15); 
+            opacity: 0; transform: translateY(20px); transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1); 
         }
-        .popup-ticker.show { 
-            opacity: 1; 
-            transform: translateY(0); /* নিচ থেকে উপরে উঠে আসবে */
-        }
-        .popup-ticker.hide { 
-            opacity: 0; 
-            transform: translateY(-20px); /* গায়েব হওয়ার সময় আরও উপরে উঠে যাবে (কখনোই নিচে নামবে না) */
-        }
+        .popup-ticker.show { opacity: 1; transform: translateY(0); }
+        .popup-ticker.hide { opacity: 0; transform: translateY(-20px); }
 
-        .header-top { padding: 45px 20px 15px; background: linear-gradient(180deg, rgba(11,10,21,0.9) 0%, transparent 100%); display: flex; justify-content: space-between; align-items: center; }
-        .balance-amount { font-size: 32px; font-weight: 800; color: #fff; line-height: 1; }
-        .balance-usdt { font-size: 12px; color: var(--secondary); background: rgba(0, 245, 212, 0.1); padding: 4px 10px; border-radius: 12px; border: 1px solid rgba(0, 245, 212, 0.2); margin-top: 5px; display: inline-block; }
-        .user-mini-pic { width: 40px; height: 40px; border-radius: 12px; border: 2px solid var(--primary); object-fit: cover; }
+        .header-top { padding: 45px 20px 15px; display: flex; justify-content: space-between; align-items: center; z-index: 10; position: relative; }
+        .balance-amount { font-size: 36px; font-weight: 800; color: #1D1D1F; line-height: 1; letter-spacing: -1px; }
+        .balance-usdt { font-size: 13px; color: #007AFF; font-weight: 800; background: rgba(0, 122, 255, 0.1); padding: 4px 12px; border-radius: 12px; margin-top: 5px; display: inline-block; border: 1px solid rgba(255,255,255,0.5); box-shadow: inset 0 1px 2px rgba(255,255,255,0.8); }
+        .user-mini-pic { width: 45px; height: 45px; border-radius: 16px; border: 2px solid #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.1); object-fit: cover; }
 
-        .main-content { height: calc(100vh - 140px); overflow-y: auto; padding: 0 20px 100px 20px; }
+        .main-content { height: calc(100vh - 120px); overflow-y: auto; padding: 0 20px 100px 20px; }
         .main-content::-webkit-scrollbar { display: none; }
-        .tab-section { display: none; animation: fadeUp 0.3s ease-out; }
+        .tab-section { display: none; animation: fadeUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
         .tab-section.active { display: block; }
-        @keyframes fadeUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        .glass-card { background: var(--card-bg); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); margin-bottom: 20px; }
-        .section-title { font-size: 16px; font-weight: 800; margin: 0 0 12px 5px; display: flex; align-items: center; gap: 8px; }
+        .section-title { font-size: 16px; font-weight: 800; margin: 0 0 15px 5px; display: flex; align-items: center; gap: 8px; color: #1D1D1F; }
 
-        .streak-header { display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; margin-bottom: 8px; }
-        .progress-bg { width: 100%; height: 8px; background: rgba(255,255,255,0.05); border-radius: 10px; overflow: hidden; margin-bottom: 10px; }
-        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary)); border-radius: 10px; width: 0%; transition: 0.5s; }
-        .streak-reward-box { background: rgba(0,0,0,0.3); padding: 12px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(0, 245, 212, 0.1); }
+        .streak-header { display: flex; justify-content: space-between; font-size: 13px; font-weight: 800; margin-bottom: 8px; color: #1D1D1F; }
+        .progress-bg { width: 100%; height: 10px; background: rgba(0,0,0,0.05); border-radius: 10px; overflow: hidden; margin-bottom: 12px; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1); }
+        .progress-fill { height: 100%; background: var(--btn-blue); border-radius: 10px; width: 0%; transition: 0.5s; box-shadow: 0 0 10px rgba(0, 122, 255, 0.5); }
+        .streak-reward-box { background: rgba(255,255,255,0.5); padding: 12px 15px; border-radius: 16px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(255,255,255,0.8); box-shadow: inset 0 2px 5px rgba(255,255,255,1); }
 
-        .task-item { display: flex; align-items: center; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 14px; margin-bottom: 10px; border: 1px solid rgba(255,255,255,0.02); }
-        .task-icon { width: 45px; height: 45px; border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 20px; background: rgba(157, 78, 221, 0.1); color: var(--secondary); }
+        /* Glass Pill Task Items */
+        .task-item { display: flex; align-items: center; background: rgba(255,255,255,0.5); padding: 12px; border-radius: 20px; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.8); box-shadow: 0 5px 15px rgba(0,0,0,0.03), inset 0 2px 4px rgba(255,255,255,0.9); }
+        .task-icon { width: 45px; height: 45px; border-radius: 14px; display: flex; justify-content: center; align-items: center; font-size: 20px; background: linear-gradient(135deg, #E2E8F0, #FFFFFF); box-shadow: 0 2px 5px rgba(0,0,0,0.05); color: #007AFF; }
         .task-info { flex: 1; margin-left: 12px; }
-        .task-title { font-size: 14px; font-weight: 600; }
-        .task-reward { font-size: 12px; color: var(--primary); font-weight: 800; margin-top: 3px; }
+        .task-title { font-size: 15px; font-weight: 800; color: #1D1D1F; }
+        .task-reward { font-size: 12px; color: #FF8C42; font-weight: 800; margin-top: 2px; }
         
-        .btn-sm { background: var(--text-main); color: var(--bg-color); border: none; padding: 6px 15px; border-radius: 15px; font-weight: 800; font-size: 12px; cursor: pointer; transition: 0.2s; }
-        .btn-sm.disabled { background: #333 !important; color: #888 !important; pointer-events: none; }
-        .btn-sm.loading { background: var(--primary); color: #fff; pointer-events: none; }
-        .btn-sm.verify { background: #FFD700; color: #000; }
+        /* 3D Glossy Buttons */
+        .btn-sm { background: var(--btn-blue); color: #fff; border: none; padding: 8px 18px; border-radius: 20px; font-weight: 800; font-size: 12px; cursor: pointer; transition: 0.2s; box-shadow: 0 6px 12px var(--primary-glow), inset 0 2px 4px rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.2); }
+        .btn-sm.orange { background: var(--btn-orange); box-shadow: 0 6px 12px var(--orange-glow), inset 0 2px 4px rgba(255,255,255,0.5); }
+        .btn-sm.disabled { background: rgba(0,0,0,0.1) !important; color: #888 !important; box-shadow: none !important; border: 1px solid rgba(0,0,0,0.05) !important; pointer-events: none; }
+        .btn-sm.loading { background: #A0AEC0; box-shadow: inset 0 2px 4px rgba(255,255,255,0.4); pointer-events: none; }
+        .btn-sm.verify { background: linear-gradient(180deg, #FAD961, #F76B1C); box-shadow: 0 6px 12px rgba(247, 107, 28, 0.3), inset 0 2px 4px rgba(255,255,255,0.6); color: #fff; }
 
-        .input-box { width: 100%; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); padding: 15px; border-radius: 14px; color: #fff; font-size: 14px; margin-bottom: 15px; outline: none; transition: 0.3s; }
-        .input-box:focus { border-color: var(--primary); box-shadow: 0 0 10px rgba(157, 78, 221, 0.2); }
+        .btn-primary { width: 100%; background: var(--btn-blue); color: #fff; border: 1px solid rgba(255,255,255,0.3); padding: 15px; border-radius: 24px; font-size: 16px; font-weight: 800; cursor: pointer; transition: 0.2s; box-shadow: 0 10px 20px var(--primary-glow), inset 0 2px 4px rgba(255,255,255,0.5); }
+        .btn-primary:active { transform: scale(0.97); box-shadow: 0 4px 10px var(--primary-glow), inset 0 4px 6px rgba(0,0,0,0.1); }
+        .btn-primary:disabled { background: #E2E8F0; color: #A0AEC0; box-shadow: none; border: 1px solid #CBD5E0; }
 
-        .btn-primary { width: 100%; background: linear-gradient(90deg, var(--primary), #7B2CBF); color: #fff; border: none; padding: 15px; border-radius: 14px; font-size: 15px; font-weight: 800; cursor: pointer; transition: 0.2s; }
-        .btn-primary:active { transform: scale(0.97); }
-        .btn-primary:disabled { background: #2B283A; color: #6C6A7C; }
+        /* Hollow 3D Input (With suggestions style) */
+        .input-box { width: 100%; background: rgba(255, 255, 255, 0.6); border: 1px solid rgba(255, 255, 255, 0.9); padding: 15px 20px; border-radius: 20px; color: #1D1D1F; font-size: 15px; font-weight: 600; margin-bottom: 15px; outline: none; transition: 0.3s; box-shadow: inset 0 2px 5px rgba(0,0,0,0.05), 0 2px 10px rgba(255,255,255,0.5); }
+        .input-box::placeholder { color: #A0AEC0; font-weight: 400; }
+        .input-box:focus { border-color: #007AFF; box-shadow: inset 0 2px 5px rgba(0,0,0,0.05), 0 0 0 3px rgba(0, 122, 255, 0.2); }
 
-        .premium-badge { display: none; background: linear-gradient(135deg, #FFDF00, #D4AF37); color: #0B0A15; border-radius: 50%; width: 18px; height: 18px; font-size: 10px; align-items: center; justify-content: center; margin-left: 8px; box-shadow: 0 0 12px rgba(255, 223, 0, 0.5); vertical-align: middle; }
+        .premium-badge { display: none; background: linear-gradient(135deg, #F5A623, #F8E71C); color: #fff; border-radius: 50%; width: 20px; height: 20px; font-size: 10px; align-items: center; justify-content: center; margin-left: 8px; box-shadow: 0 2px 8px rgba(245, 166, 35, 0.5); vertical-align: middle; border: 1.5px solid #fff; }
         .premium-badge.show { display: inline-flex; }
 
-        .user-level { display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 800; margin-top: 5px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); }
+        .user-level { display: inline-block; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 800; margin-top: 8px; background: rgba(255,255,255,0.6); border: 1px solid rgba(255,255,255,0.9); box-shadow: 0 4px 10px rgba(0,0,0,0.05), inset 0 2px 4px rgba(255,255,255,1); }
 
-        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(11, 10, 21, 0.95); backdrop-filter: blur(20px); border-top: 1px solid rgba(255,255,255,0.03); display: flex; justify-content: space-around; padding: 12px 0 20px; z-index: 100; }
-        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 5px; color: #5C5A70; font-size: 11px; font-weight: 600; width: 25%; transition: 0.3s; cursor: pointer; }
-        .nav-item i { font-size: 20px; }
-        .nav-item.active { color: var(--text-main); }
-        .nav-item.active i { color: var(--secondary); transform: translateY(-3px); }
+        /* Floating 3D Bottom Nav */
+        .bottom-nav { position: fixed; bottom: 20px; left: 5%; width: 90%; background: rgba(255, 255, 255, 0.75); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border: 1.5px solid rgba(255,255,255,0.9); border-radius: 35px; display: flex; justify-content: space-around; padding: 12px 10px; z-index: 100; box-shadow: 0 15px 35px rgba(0,0,0,0.08), inset 0 2px 5px rgba(255,255,255,1); }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: #A0AEC0; font-size: 11px; font-weight: 800; width: 25%; transition: 0.3s; cursor: pointer; }
+        .nav-item i { font-size: 22px; transition: 0.3s; }
+        .nav-item.active { color: #007AFF; }
+        .nav-item.active i { transform: translateY(-3px) scale(1.1); filter: drop-shadow(0 4px 6px rgba(0, 122, 255, 0.3)); }
 
-        .profile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
-        .profile-action-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 12px; border-radius: 12px; display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 12px; font-weight: 600; cursor: pointer; transition: 0.3s; }
-        .profile-action-btn:active { transform: scale(0.95); background: rgba(157, 78, 221, 0.2); border-color: var(--primary); }
-        .profile-action-btn i { font-size: 20px; color: var(--secondary); }
+        .profile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px; }
+        .profile-action-btn { background: rgba(255,255,255,0.6); border: 1px solid rgba(255,255,255,0.9); color: #1D1D1F; padding: 15px; border-radius: 20px; display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 13px; font-weight: 800; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.03), inset 0 2px 4px rgba(255,255,255,1); }
+        .profile-action-btn:active { transform: scale(0.95); background: rgba(0, 122, 255, 0.1); border-color: #007AFF; }
+        .profile-action-btn i { font-size: 24px; color: #007AFF; }
 
-        /* Coin Drop Animation CSS */
-        .falling-coin { position: fixed; pointer-events: none; z-index: 10000; font-size: 24px; top: -50px; transition: transform 1.5s cubic-bezier(0.25, 1, 0.5, 1), opacity 1.5s ease-out; }
+        .falling-coin { position: fixed; pointer-events: none; z-index: 10000; font-size: 24px; top: -50px; transition: transform 1.5s cubic-bezier(0.25, 1, 0.5, 1), opacity 1.5s ease-out; filter: drop-shadow(0 4px 5px rgba(0,0,0,0.2)); }
+        
+        /* Stats Box inside Profile */
+        .stats-row { display: flex; justify-content: space-between; background: rgba(255,255,255,0.5); border-radius: 20px; padding: 15px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.9); box-shadow: inset 0 2px 5px rgba(255,255,255,1); }
+        .stat-col { text-align: center; width: 33%; }
+        .stat-col.mid { border-left: 1px solid rgba(0,0,0,0.05); border-right: 1px solid rgba(0,0,0,0.05); }
     </style>
 
     <script src="https://adsgram.ai/js/adsgram.js"></script>
@@ -135,183 +147,185 @@
 
     <div id="loader">
         <div class="spinner"></div>
-        <div style="font-weight: 800; color: var(--primary);">Connecting to Server...</div>
+        <div style="font-weight: 800; color: #007AFF;">Connecting securely...</div>
     </div>
 
-    <!-- 15s CUSTOM AD MODAL -->
-    <div id="waterfall-ad-modal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(11, 10, 21, 0.98); z-index: 10000; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px;">
-        <div style="background: var(--card-bg); border: 1px solid var(--primary); border-radius: 20px; width: 100%; max-width: 400px; padding: 20px; text-align: center; box-shadow: 0 10px 40px rgba(157, 78, 221, 0.3);">
-            <h3 style="color: #fff; font-size: 18px;">Please Wait & Verify</h3>
-            <div id="waterfall-timer" style="font-size: 24px; font-weight: 800; color: var(--secondary); margin: 15px 0;">15s</div>
+    <!-- Ad Modal (Glass style) -->
+    <div id="waterfall-ad-modal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(230, 234, 239, 0.95); backdrop-filter: blur(10px); z-index: 10000; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px;">
+        <div class="glass-card" style="width: 100%; max-width: 400px; text-align: center; border-radius: 30px;">
+            <h3 style="color: #1D1D1F; font-size: 18px; font-weight: 800;">Please Wait & Verify</h3>
+            <div id="waterfall-timer" style="font-size: 28px; font-weight: 800; color: #FF8C42; margin: 15px 0;">15s</div>
             
-            <div style="width: 100%; height: 250px; background: #000; border-radius: 12px; margin-bottom: 10px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1);">
+            <div style="width: 100%; height: 250px; background: #fff; border-radius: 16px; margin-bottom: 15px; overflow: hidden; border: 1px solid rgba(0,0,0,0.1); box-shadow: inset 0 2px 10px rgba(0,0,0,0.05);">
                 <iframe id="waterfall-iframe" src="" style="width: 100%; height: 100%; border: none;"></iframe>
             </div>
             
             <button id="btn-wf-verify" class="btn-primary" style="display: none;" onclick="wfCompleteTask()">Go to Task & Claim</button>
-            <button id="btn-wf-verify-onlyad" class="btn-primary" style="display: none;" onclick="wfCompleteOnlyAd()">Claim Ad Reward</button>
-            <button id="btn-wf-cancel" style="width: 100%; background: #333; color: #fff; border: none; padding: 10px; border-radius: 14px; font-weight: 800; margin-top: 10px; cursor: pointer;" onclick="wfCancelTask()">Cancel</button>
+            <button id="btn-wf-verify-onlyad" class="btn-primary" style="display: none; background: var(--btn-orange); box-shadow: 0 10px 20px var(--orange-glow);" onclick="wfCompleteOnlyAd()">Claim Ad Reward</button>
+            <button id="btn-wf-cancel" style="width: 100%; background: rgba(0,0,0,0.05); color: #1D1D1F; border: 1px solid rgba(0,0,0,0.1); padding: 12px; border-radius: 20px; font-weight: 800; margin-top: 10px; cursor: pointer;" onclick="wfCancelTask()">Cancel</button>
         </div>
     </div>
 
-    <!-- Payout Ticker Only Appears on Home Tab -->
+    <!-- Payout Ticker -->
     <div class="popup-ticker-container" id="ticker-container">
         <div id="live-ticker" class="popup-ticker hide"></div>
     </div>
 
     <div class="glow-1"></div>
     <div class="glow-2"></div>
+    <div class="glow-3"></div>
 
     <div class="header-top">
         <div>
-            <div class="balance-amount" id="top-cp">0 <span style="font-size: 16px; color: var(--primary);">CP</span></div>
+            <div class="balance-amount" id="top-cp">0 <span style="font-size: 18px; color: #007AFF;">CP</span></div>
             <div class="balance-usdt">≈ $<span id="top-usdt">0.0000</span></div>
         </div>
-        <img id="user-pic" src="https://via.placeholder.com/100/161324/9D4EDD?text=U" class="user-mini-pic">
+        <img id="user-pic" src="https://via.placeholder.com/100/ffffff/007AFF?text=U" class="user-mini-pic">
     </div>
 
     <div class="main-content">
+        <!-- HOME TAB -->
         <div id="tab-home" class="tab-section active">
             
             <div class="glass-card">
                 <div class="streak-header">
-                    <span>🔥 30-Day Check-In Tracker</span>
-                    <span id="streak-days" style="color: var(--secondary);">Day 0/30</span>
+                    <span>🔥 30-Day Tracker</span>
+                    <span id="streak-days" style="color: #007AFF;">Day 0/30</span>
                 </div>
                 <div class="progress-bg"><div class="progress-fill" id="streak-bar"></div></div>
                 <div class="streak-reward-box">
                     <div>
-                        <div style="font-size: 11px; color: var(--text-muted);">Today's Reward</div>
-                        <div style="font-size: 16px; font-weight: 800; color: var(--primary);" id="today-reward">5 CP</div>
+                        <div style="font-size: 11px; color: var(--text-muted); font-weight: 600;">Today's Reward</div>
+                        <div style="font-size: 16px; font-weight: 800; color: #FF8C42;" id="today-reward">5 CP</div>
                     </div>
-                    <button class="btn-sm" id="btn-claim" onclick="claimDailyWithAd()" style="background: var(--secondary); color: #000;"><i class="fa-solid fa-play" style="font-size: 10px; margin-right: 3px;"></i> Check-In</button>
+                    <button class="btn-sm orange" id="btn-claim" onclick="claimDailyWithAd()"><i class="fa-solid fa-play" style="font-size: 10px; margin-right: 3px;"></i> Check-In</button>
                 </div>
             </div>
 
-            <div class="glass-card" style="border-color: rgba(0, 245, 212, 0.3); background: linear-gradient(145deg, rgba(22, 19, 36, 0.9), rgba(0, 245, 212, 0.05));">
+            <div class="glass-card" style="background: linear-gradient(135deg, rgba(255,255,255,0.7), rgba(0, 198, 255, 0.1)); border-color: rgba(0, 198, 255, 0.4);">
                 <div style="display: flex; justify-content: space-between; align-items: center;">
                     <div>
-                        <div style="font-size: 16px; font-weight: 800; color: #fff;"><i class="fa-solid fa-tv" style="color: var(--secondary);"></i> Watch & Earn</div>
-                        <div style="font-size: 11px; color: var(--text-muted); margin-top: 3px;">Watch a short ad to earn instant CP.</div>
+                        <div style="font-size: 16px; font-weight: 800; color: #1D1D1F;"><i class="fa-solid fa-tv" style="color: #007AFF;"></i> Watch & Earn</div>
+                        <div style="font-size: 11px; color: var(--text-muted); margin-top: 3px; font-weight: 600;">Watch a short ad instantly.</div>
                     </div>
-                    <button class="btn-sm" id="btn-watch-ad" onclick="watchAdForCP()" style="background: var(--primary); font-size: 13px; padding: 8px 15px;">
-                        <i class="fa-solid fa-play" style="margin-right: 5px;"></i> +10 CP
+                    <button class="btn-sm" id="btn-watch-ad" onclick="watchAdForCP()">
+                        <i class="fa-solid fa-play" style="margin-right: 3px;"></i> +10 CP
                     </button>
                 </div>
             </div>
 
-            <div style="display:flex; justify-content:center; align-items:center; width: 100%; margin-bottom: 20px;">
-                <script>
-                  atOptions = { 'key' : '8f2c282d7a133448b994b2f0b53de617', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} };
-                </script>
+            <div style="display:flex; justify-content:center; align-items:center; margin-bottom: 20px;">
+                <script> atOptions = { 'key' : '8f2c282d7a133448b994b2f0b53de617', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} }; </script>
                 <script src="https://www.highrevenueformat.com/8f2c282d7a133448b994b2f0b53de617/invoke.js"></script>
             </div>
 
-            <div class="section-title"><i class="fa-solid fa-gamepad"></i> Premium Tasks</div>
-            <div id="dynamic-premium-tasks">
-                <div style="text-align: center; color: #888; font-size: 12px;">Loading tasks...</div>
-            </div>
+            <div class="section-title"><i class="fa-solid fa-layer-group" style="color: #FF8C42;"></i> Premium Tasks</div>
+            <div id="dynamic-premium-tasks"><div style="text-align: center; color: #888; font-size: 12px; font-weight: 600;">Loading...</div></div>
 
-            <div class="section-title" style="margin-top: 25px;"><i class="fa-solid fa-list-check"></i> Social Tasks</div>
-            <div id="dynamic-social-tasks">
-                <div style="text-align: center; color: #888; font-size: 12px;">Loading tasks...</div>
-            </div>
+            <div class="section-title" style="margin-top: 25px;"><i class="fa-solid fa-users" style="color: #00C7B5;"></i> Social Tasks</div>
+            <div id="dynamic-social-tasks"><div style="text-align: center; color: #888; font-size: 12px; font-weight: 600;">Loading...</div></div>
         </div>
 
+        <!-- REFERRAL TAB -->
         <div id="tab-referral" class="tab-section">
             <div class="glass-card" style="text-align: center;">
-                <div style="font-size: 40px; margin-bottom: 10px;">🎁</div>
-                <h2 style="font-size: 20px; font-weight: 800; margin-bottom: 10px;">Invite & Earn</h2>
-                <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5; margin-bottom: 20px;">
-                    Earn <span style="color: var(--secondary); font-weight: 800;">100 CP</span> per invite + <span style="color: var(--primary); font-weight: 800;">10% lifetime commission</span>!
+                <div style="font-size: 45px; margin-bottom: 10px; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1));">🎁</div>
+                <h2 style="font-size: 22px; font-weight: 800; margin-bottom: 10px; color: #1D1D1F;">Invite & Earn Lifetime</h2>
+                <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5; margin-bottom: 20px; font-weight: 600;">
+                    Earn <span style="color: #FF8C42; font-weight: 800;">100 CP</span> per invite + <span style="color: #007AFF; font-weight: 800;">10% lifetime commission</span> on all their earnings!
                 </p>
-                <div style="font-size: 24px; font-weight: 800; margin-bottom: 15px;"><span id="ref-count">0</span> <span style="font-size:12px; color:var(--text-muted);">Friends Invited</span></div>
-                <button class="btn-primary" onclick="copyRefLink()">Copy Invite Link</button>
+                <div style="font-size: 28px; font-weight: 800; margin-bottom: 20px; color: #1D1D1F;"><span id="ref-count">0</span> <span style="font-size:12px; color:var(--text-muted);">Friends</span></div>
+                <button class="btn-primary" onclick="copyRefLink()" style="background: var(--btn-orange); box-shadow: 0 10px 20px var(--orange-glow);">Copy Invite Link</button>
             </div>
         </div>
 
+        <!-- WALLET TAB -->
         <div id="tab-wallet" class="tab-section">
             <div class="glass-card">
                 <div style="text-align: center; margin-bottom: 20px;">
-                    <div style="font-size: 12px; color: var(--text-muted);">Available for Withdrawal</div>
-                    <div style="font-size: 28px; font-weight: 800; color: var(--secondary); margin: 5px 0;">$<span id="wallet-usdt">0.0000</span></div>
-                    <div style="font-size: 11px; color: #fff; background: rgba(157, 78, 221, 0.2); display: inline-block; padding: 4px 10px; border-radius: 10px;">Min. Payout: 15,000 CP ($1.50)</div>
+                    <div style="font-size: 12px; font-weight: 800; color: var(--text-muted);">Available for Withdrawal</div>
+                    <div style="font-size: 32px; font-weight: 800; color: #1D1D1F; margin: 5px 0; letter-spacing: -1px;">$<span id="wallet-usdt">0.0000</span></div>
+                    <div style="font-size: 11px; font-weight: 800; color: #FF8C42; background: rgba(255, 140, 66, 0.1); display: inline-block; padding: 6px 12px; border-radius: 12px; border: 1px solid rgba(255, 140, 66, 0.3);">Min. Payout: 15,000 CP ($1.50)</div>
                 </div>
-                <div class="section-title" style="font-size: 14px;"><i class="fa-brands fa-bitcoin"></i> Withdraw via USDT (BEP20)</div>
+                <div class="section-title" style="font-size: 14px;"><i class="fa-brands fa-bitcoin" style="color:#F5A623;"></i> Withdraw USDT (BEP20)</div>
                 <input type="text" class="input-box" id="wallet-address" placeholder="Enter USDT BEP20 Address...">
-                <button id="withdraw-btn" class="btn-primary" disabled onclick="requestWithdraw()">Submit Withdrawal</button>
+                <button id="withdraw-btn" class="btn-primary" disabled onclick="requestWithdraw()">Submit Request</button>
             </div>
         </div>
 
+        <!-- PROFILE TAB -->
         <div id="tab-profile" class="tab-section">
             <div class="glass-card" style="position: relative;">
                 
-                <div style="position: absolute; top: 15px; right: 15px; display: flex; align-items: center; gap: 5px; background: rgba(255,215,0,0.1); border: 1px solid var(--badge-gold); padding: 5px 10px; border-radius: 20px; font-size: 11px; font-weight: 800; color: var(--badge-gold); cursor: pointer;" onclick="showBadgeInfo()">
-                    <i class="fa-solid fa-shield-check"></i> <span id="badge-title-mini">Unverified</span>
+                <div style="position: absolute; top: 15px; right: 15px; display: flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.8); border: 1px solid var(--glass-border-light); padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: 800; color: #888; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.05);" onclick="showBadgeInfo()">
+                    <i class="fa-solid fa-shield-check" id="badge-icon-mini"></i> <span id="badge-title-mini">Unverified</span>
                 </div>
 
-                <div style="text-align: center; padding-top: 10px;">
-                    <img id="profile-avatar" src="https://via.placeholder.com/100/161324/9D4EDD?text=U" style="width: 80px; height: 80px; border-radius: 50%; border: 3px solid var(--primary); margin-bottom: 10px; object-fit: cover;">
-                    <h2 style="font-size: 22px; font-weight: 800; color: #fff; display: flex; align-items: center; justify-content: center; gap: 5px;">
+                <div style="text-align: center; padding-top: 15px;">
+                    <img id="profile-avatar" src="https://via.placeholder.com/100/ffffff/007AFF?text=U" style="width: 85px; height: 85px; border-radius: 50%; border: 4px solid #fff; box-shadow: 0 8px 20px rgba(0,0,0,0.1); margin-bottom: 12px; object-fit: cover;">
+                    <h2 style="font-size: 22px; font-weight: 800; color: #1D1D1F; display: flex; align-items: center; justify-content: center; gap: 6px;">
                         <span id="profile-name">Guest User</span>
                         <span id="premium-name-badge" class="premium-badge" title="Trusted Member"><i class="fa-solid fa-check"></i></span>
                     </h2>
                     <div id="profile-level" class="user-level"><i class="fa-solid fa-award"></i> Bronze Member</div>
-                    <div style="font-size: 12px; color: var(--text-muted); margin: 10px 0 20px;">ID: <span id="profile-id">00000000</span></div>
+                    <div style="font-size: 12px; font-weight: 600; color: var(--text-muted); margin: 12px 0 20px;">ID: <span id="profile-id">00000000</span></div>
                 </div>
                 
-                <div style="display: flex; justify-content: space-between; background: rgba(0,0,0,0.3); border-radius: 15px; padding: 15px; margin-bottom: 15px;">
-                    <div style="text-align: center; width: 33%;">
-                        <div style="font-size: 16px; font-weight: 800; color: var(--secondary);"><span id="profile-balance">0</span></div>
-                        <div style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; margin-top: 3px;">Total CP</div>
+                <div class="stats-row">
+                    <div class="stat-col">
+                        <div style="font-size: 16px; font-weight: 800; color: #007AFF;"><span id="profile-balance">0</span></div>
+                        <div style="font-size: 10px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-top: 3px;">Total CP</div>
                     </div>
-                    <div style="text-align: center; width: 33%; border-left: 1px solid rgba(255,255,255,0.05); border-right: 1px solid rgba(255,255,255,0.05);">
-                        <div style="font-size: 16px; font-weight: 800; color: var(--primary);" id="profile-refs">0</div>
-                        <div style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; margin-top: 3px;">Referrals</div>
+                    <div class="stat-col mid">
+                        <div style="font-size: 16px; font-weight: 800; color: #FF8C42;" id="profile-refs">0</div>
+                        <div style="font-size: 10px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-top: 3px;">Referrals</div>
                     </div>
-                    <div style="text-align: center; width: 33%;">
-                        <div style="font-size: 16px; font-weight: 800; color: var(--badge-gold);" id="profile-streak">0</div>
-                        <div style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; margin-top: 3px;">Day Streak</div>
+                    <div class="stat-col">
+                        <div style="font-size: 16px; font-weight: 800; color: #00C7B5;" id="profile-streak">0</div>
+                        <div style="font-size: 10px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-top: 3px;">Streak</div>
                     </div>
                 </div>
 
                 <div class="profile-grid">
                     <div class="profile-action-btn" onclick="copyRefLink()">
-                        <i class="fa-solid fa-users"></i>
-                        Copy Invite Link
+                        <i class="fa-solid fa-link"></i> Get Invite Link
                     </div>
                     <div class="profile-action-btn" onclick="switchTab('tab-wallet', document.querySelectorAll('.nav-item')[2])">
-                        <i class="fa-solid fa-wallet"></i>
-                        Withdraw Funds
+                        <i class="fa-solid fa-money-bill-transfer" style="color:#FF8C42;"></i> Withdraw
                     </div>
                 </div>
             </div>
 
             <!-- PROMO CODE SECTION -->
             <div class="glass-card">
-                <div class="section-title" style="font-size: 15px; margin-bottom: 15px;"><i class="fa-solid fa-gift"></i> Redeem Promo Code</div>
+                <div class="section-title" style="font-size: 15px; margin-bottom: 15px;"><i class="fa-solid fa-gift" style="color:#FF3B30;"></i> Promo Code</div>
                 <div style="display: flex; gap: 10px;">
                     <input type="text" class="input-box" id="promo-input" placeholder="Enter Code Here..." style="margin-bottom: 0; flex: 1;">
-                    <button class="btn-primary" style="width: auto; padding: 0 20px;" onclick="claimPromoCode()">Claim</button>
+                    <button class="btn-primary" style="width: auto; padding: 0 20px; border-radius: 20px;" onclick="claimPromoCode()">Claim</button>
                 </div>
             </div>
 
             <div class="glass-card">
-                <div class="section-title" style="font-size: 15px; margin-bottom: 15px;"><i class="fa-solid fa-envelope-open-text"></i> Support Mailbox</div>
-                <textarea id="support-msg" class="input-box" style="height: 80px; resize: none;" placeholder="Describe your issue here..."></textarea>
-                <button class="btn-primary" style="padding: 12px; font-size: 14px;" onclick="sendSupportMessage()"><i class="fa-solid fa-paper-plane"></i> Send Message</button>
+                <div class="section-title" style="font-size: 15px; margin-bottom: 15px;"><i class="fa-solid fa-envelope-open-text" style="color:#007AFF;"></i> Support Box</div>
+                <textarea id="support-msg" class="input-box" style="height: 80px; resize: none;" placeholder="Describe your issue..."></textarea>
+                <button class="btn-primary" style="padding: 12px; font-size: 14px;" onclick="sendSupportMessage()"><i class="fa-solid fa-paper-plane"></i> Send</button>
             </div>
         </div>
     </div>
 
     <div class="bottom-nav">
-        <div class="nav-item active" onclick="switchTab('tab-home', this)"><i class="fa-solid fa-house"></i>Home</div>
+        <div class="nav-item active" onclick="switchTab('tab-home', this)"><i class="fa-solid fa-house-chimney"></i>Home</div>
         <div class="nav-item" onclick="switchTab('tab-referral', this)"><i class="fa-solid fa-user-plus"></i>Invite</div>
         <div class="nav-item" onclick="switchTab('tab-wallet', this)"><i class="fa-solid fa-wallet"></i>Wallet</div>
-        <div class="nav-item" onclick="switchTab('tab-profile', this)"><i class="fa-solid fa-user"></i>Profile</div>
+        <div class="nav-item" onclick="switchTab('tab-profile', this)"><i class="fa-solid fa-circle-user"></i>Profile</div>
     </div>
 
     <script>
+        // ==========================================
+        // CONFIGURATION (CHANGE THIS TO YOUR BOT USERNAME)
+        // ==========================================
+        const BOT_USERNAME = "acryptopay_bot"; // <--- আপনার বটের আসল ইউজারনেম দিন (যেমন: CryptoPayBot)
+
         // ==========================================
         // FIREBASE INITIALIZATION 
         // ==========================================
@@ -326,9 +340,7 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // ==========================================
-        // SMART AD ROTATION SYSTEM
-        // ==========================================
+        // AD LINKS
         const adLinks = {
             adsterra: "https://www.profitableratecpmnetwork.com/qqm7unbp9c?key=e6068fd32853ac21e39371c87bd3ec2d",
             monetag: "https://omg10.com/4/11678700",
@@ -337,31 +349,29 @@
         const networkOrder = ["adsgram", "adsterra", "monetag"];
         let currentNetworkIndex = 0; 
 
-        // ==========================================
-        // UI & GLOBAL LOGIC
-        // ==========================================
+        // GLOBAL APP LOGIC
         const tg = window.Telegram.WebApp;
         tg.expand();
-        tg.setHeaderColor('#0B0A15'); 
+        tg.setHeaderColor('#E6EAEF'); 
+        tg.setBackgroundColor('#E6EAEF');
 
         let tgUser = tg.initDataUnsafe?.user;
         let userId = tgUser?.id ? tgUser.id.toString() : "demo_user";
         
-        let userData = { name: tgUser?.first_name || "Guest User", cp: 0, referrals: 0, checkInDays: 0, lastCheckInDate: "", hasTrustBadge: false, claimedCodes: [] };
+        let userData = { name: tgUser?.first_name || "Guest User", cp: 0, referrals: 0, checkInDays: 0, lastCheckInDate: "", hasTrustBadge: false, claimedCodes: [], referredBy: null };
         const MIN_WITHDRAW_CP = 15000;
         const MIN_REFS_NEEDED = 5; 
 
-        // Level Config
+        // Levels
         function getLevelData(cp) {
-            if (cp >= 15000) return { name: "VIP Member", color: "var(--primary)", icon: "fa-crown", border: "var(--primary)" };
-            if (cp >= 5000) return { name: "Gold Member", color: "#FFD700", icon: "fa-medal", border: "#FFD700" };
-            if (cp >= 1000) return { name: "Silver Member", color: "#C0C0C0", icon: "fa-star", border: "#C0C0C0" };
-            return { name: "Bronze Member", color: "#CD7F32", icon: "fa-award", border: "#CD7F32" };
+            if (cp >= 15000) return { name: "VIP Member", color: "#FF3B30", icon: "fa-crown", border: "rgba(255, 59, 48, 0.4)" };
+            if (cp >= 5000) return { name: "Gold Member", color: "#F5A623", icon: "fa-medal", border: "rgba(245, 166, 35, 0.4)" };
+            if (cp >= 1000) return { name: "Silver Member", color: "#8E8E93", icon: "fa-star", border: "rgba(142, 142, 147, 0.4)" };
+            return { name: "Bronze Member", color: "#A0522D", icon: "fa-award", border: "rgba(160, 82, 45, 0.3)" };
         }
 
-        // Animated Coin Drop
+        // Coin Drop
         function playCoinDropAnimation() {
-            const colors = ['#FFD700', '#FDB931'];
             for(let i=0; i<15; i++) {
                 let coin = document.createElement("div");
                 coin.innerHTML = "🪙";
@@ -369,7 +379,6 @@
                 coin.style.left = (Math.random() * 90) + 5 + "vw";
                 coin.style.fontSize = (Math.random() * 15 + 15) + "px";
                 document.body.appendChild(coin);
-                
                 setTimeout(() => {
                     coin.style.transform = `translateY(${window.innerHeight + 100}px) rotate(${Math.random() * 360}deg)`;
                     coin.style.opacity = "0";
@@ -392,9 +401,10 @@
                     const docSnap = await docRef.get();
                     if (docSnap.exists) { userData = { ...userData, ...docSnap.data() }; } 
                     else {
-                        await saveUserData();
                         let startParam = tg.initDataUnsafe?.start_param;
-                        if(startParam && startParam !== userId) { processReferral(startParam); }
+                        if(startParam && startParam !== userId) { userData.referredBy = startParam; }
+                        await saveUserData();
+                        if(userData.referredBy) { processReferral(userData.referredBy); }
                     }
                 } catch(e) {}
             }
@@ -403,27 +413,35 @@
         }
 
         async function saveUserData() {
-            if(userId !== "demo_user") {
-                try { await db.collection("users").doc(userId).set(userData, {merge: true}); } catch(e) {}
-            }
+            if(userId !== "demo_user") { try { await db.collection("users").doc(userId).set(userData, {merge: true}); } catch(e) {} }
         }
 
+        // Add 100 CP to Referrer on first join
         async function processReferral(referrerId) {
             try {
                 const refDoc = db.collection("users").doc(referrerId);
-                const refSnap = await refDoc.get();
-                if(refSnap.exists) {
-                    let refData = refSnap.data();
-                    refData.cp = (refData.cp || 0) + 100;
-                    refData.referrals = (refData.referrals || 0) + 1;
-                    await refDoc.update({ cp: refData.cp, referrals: refData.referrals });
-                }
+                await refDoc.update({ 
+                    cp: firebase.firestore.FieldValue.increment(100),
+                    referrals: firebase.firestore.FieldValue.increment(1)
+                });
             } catch(e) {}
         }
 
+        // LIFETIME 10% COMMISSION SYSTEM
+        async function processCommission(amountEarned) {
+            if (userData.referredBy && amountEarned > 0) {
+                let commission = amountEarned * 0.10; 
+                try {
+                    await db.collection("users").doc(userData.referredBy).update({
+                        cp: firebase.firestore.FieldValue.increment(commission)
+                    });
+                } catch(e) {}
+            }
+        }
+
         function updateUI() {
-            let formattedCP = userData.cp.toLocaleString();
-            document.getElementById("top-cp").innerHTML = `${formattedCP} <span style="font-size: 16px; color: var(--primary);">CP</span>`;
+            let formattedCP = userData.cp.toLocaleString(undefined, {maximumFractionDigits: 2});
+            document.getElementById("top-cp").innerHTML = `${formattedCP} <span style="font-size: 18px; color: #007AFF;">CP</span>`;
             document.getElementById("top-usdt").innerText = (userData.cp / 10000).toFixed(4);
             document.getElementById("wallet-usdt").innerText = (userData.cp / 10000).toFixed(4);
             document.getElementById("ref-count").innerText = userData.referrals;
@@ -453,45 +471,40 @@
             if(userData.hasTrustBadge || userData.checkInDays >= 30) {
                 userData.hasTrustBadge = true; 
                 document.getElementById("premium-name-badge").classList.add("show");
-                document.getElementById("badge-title-mini").innerText = "Verified Premium";
+                let b = document.getElementById("badge-title-mini");
+                b.innerText = "Verified Premium";
+                b.style.color = "#F5A623";
+                document.getElementById("badge-icon-mini").style.color = "#F5A623";
+                b.parentElement.style.borderColor = "rgba(245, 166, 35, 0.5)";
+                b.parentElement.style.background = "rgba(245, 166, 35, 0.1)";
             }
 
             document.getElementById("withdraw-btn").disabled = userData.cp < MIN_WITHDRAW_CP;
         }
 
-        // ==========================================
-        // PROMO CODE LOGIC
-        // ==========================================
+        // PROMO CODE
         const activePromoCodes = { "WELCOME": 20, "PROMO50": 50 };
-
         function claimPromoCode() {
             let input = document.getElementById("promo-input").value.toUpperCase().trim();
             if(!input) return;
             if(!userData.claimedCodes) userData.claimedCodes = [];
-
-            if(userData.claimedCodes.includes(input)) {
-                tg.showAlert("⚠️ You have already claimed this Promo Code!");
-                return;
-            }
+            if(userData.claimedCodes.includes(input)) { tg.showAlert("⚠️ You already claimed this Code!"); return; }
 
             if(activePromoCodes[input]) {
                 let reward = activePromoCodes[input];
                 userData.cp += reward;
                 userData.claimedCodes.push(input);
                 saveUserData();
+                processCommission(reward); // Give 10% to referrer
                 updateUI();
                 playCoinDropAnimation();
                 tg.HapticFeedback.notificationOccurred('success');
                 tg.showAlert(`🎉 Success! You earned ${reward} CP.`);
                 document.getElementById("promo-input").value = "";
-            } else {
-                tg.showAlert("❌ Invalid or Expired Promo Code.");
-            }
+            } else { tg.showAlert("❌ Invalid Code."); }
         }
 
-        // ==========================================
         // DYNAMIC TASKS
-        // ==========================================
         function loadDynamicTasks() {
             db.collection("app_tasks").orderBy("timestamp", "asc").onSnapshot((snapshot) => {
                 let premiumHtml = "", socialHtml = "";
@@ -509,58 +522,38 @@
                     `;
                     if(task.type === "premium") premiumHtml += taskTemplate; else socialHtml += taskTemplate;
                 });
-                document.getElementById("dynamic-premium-tasks").innerHTML = premiumHtml || `<div style="text-align:center; color:#888; font-size:12px;">No Premium Tasks</div>`;
-                document.getElementById("dynamic-social-tasks").innerHTML = socialHtml || `<div style="text-align:center; color:#888; font-size:12px;">No Social Tasks</div>`;
+                document.getElementById("dynamic-premium-tasks").innerHTML = premiumHtml || `<div style="text-align:center; color:#888; font-size:12px;">No Tasks Available</div>`;
+                document.getElementById("dynamic-social-tasks").innerHTML = socialHtml || `<div style="text-align:center; color:#888; font-size:12px;">No Tasks Available</div>`;
             });
         }
         loadDynamicTasks(); 
 
-        // ==========================================
-        // LIVE PAYOUT TICKER (FIXED)
-        // ==========================================
-        const nameList = ["A***n", "S***h", "M***e", "E***a", "A***i", "F***a", "D***d", "A***a", "V***m", "N***a", "O***r", "S***a", "L***s", "M***a", "Z***n", "C***e", "L***m", "A***a", "N***h", "I***a", "H***n", "K***a", "D***o"];
+        // LIVE PAYOUT TICKER
+        const nameList = ["A***n", "S***h", "M***e", "E***a", "A***i", "F***a", "D***d", "A***a", "V***m", "N***a", "O***r", "S***a", "L***s", "M***a", "Z***n", "C***e", "L***m", "H***n", "K***a", "D***o"];
         let currentActiveTabId = 'tab-home'; 
         const tickerContainer = document.getElementById("ticker-container");
         const tickerElement = document.getElementById("live-ticker");
 
         function showNextTicker() {
             if(currentActiveTabId !== 'tab-home') return; 
-
             let randomName = nameList[Math.floor(Math.random() * nameList.length)];
             let randomAmount = (Math.random() * (15.00 - 1.50) + 1.50).toFixed(2);
-            
-            tickerElement.innerHTML = `<i class="fa-solid fa-circle-check"></i> ${randomName} withdrew $${randomAmount}`;
-            
+            tickerElement.innerHTML = `<i class="fa-solid fa-circle-check" style="color:#FF8C42;"></i> ${randomName} withdrew $${randomAmount}`;
             tickerElement.classList.remove("hide");
             tickerElement.classList.add("show");
             
-            // 3 seconds display
             setTimeout(() => {
                 tickerElement.classList.remove("show");
                 tickerElement.classList.add("hide");
-                
-                // Reset the class invisibly after transition to prepare for next slide up
-                setTimeout(() => {
-                    tickerElement.classList.remove("hide");
-                }, 600);
+                setTimeout(() => { tickerElement.classList.remove("hide"); }, 600);
             }, 3000); 
         }
 
-        setTimeout(() => {
-            showNextTicker();
-            setInterval(showNextTicker, 4500); // Trigger every 4.5s (leaves a 1.5s gap between popups)
-        }, 1000);
+        setTimeout(() => { showNextTicker(); setInterval(showNextTicker, 4500); }, 1000);
 
         function switchTab(tabId, element) {
             currentActiveTabId = tabId; 
-            
-            // Hide ticker container entirely if not on home tab
-            if(tabId !== 'tab-home') {
-                tickerContainer.style.display = 'none';
-            } else {
-                tickerContainer.style.display = 'flex';
-            }
-
+            tickerContainer.style.display = (tabId !== 'tab-home') ? 'none' : 'flex';
             document.querySelectorAll('.tab-section').forEach(tab => tab.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
@@ -568,11 +561,8 @@
             tg.HapticFeedback.impactOccurred('light');
         }
 
-        // ==========================================
-        // WATCH & EARN + TASK VERIFICATION LOGIC
-        // ==========================================
+        // WATCH & EARN + TASK LOGIC
         let watchAdCooldown = false;
-        
         function watchAdForCP() {
             if (watchAdCooldown) return;
             let btn = document.getElementById("btn-watch-ad");
@@ -581,7 +571,7 @@
 
             if (window.Adsgram) {
                 let AdController = window.Adsgram.init({ blockId: adLinks.adsgram });
-                AdController.show().then((result) => { giveAdReward(btn); }).catch((err) => { showFallbackOnlyAd(btn); });
+                AdController.show().then(() => { giveAdReward(btn); }).catch(() => { showFallbackOnlyAd(btn); });
             } else { showFallbackOnlyAd(btn); }
         }
 
@@ -590,7 +580,7 @@
             btn.classList.remove('loading');
             document.getElementById("waterfall-ad-modal").style.display = "flex";
             document.getElementById("btn-wf-verify").style.display = "none";
-            document.getElementById("btn-wf-verify-onlyad").style.display = "none";
+            document.getElementById("btn-wf-verify-onlyad").style.display = "block";
             document.getElementById("btn-wf-cancel").style.display = "block";
             
             let fallbackUrls = [adLinks.adsterra, adLinks.monetag];
@@ -605,8 +595,6 @@
                 if(timeLeft <= 0) {
                     clearInterval(wfTimerInt);
                     document.getElementById("waterfall-timer").innerText = "Ready!";
-                    document.getElementById("btn-wf-verify-onlyad").style.display = "block";
-                    document.getElementById("btn-wf-cancel").style.display = "none";
                 }
             }, 1000);
         }
@@ -618,8 +606,10 @@
         }
 
         function giveAdReward(btn) {
-            userData.cp += 10;
+            let reward = 10;
+            userData.cp += reward;
             saveUserData();
+            processCommission(reward); // Give 10% to referrer
             updateUI();
             playCoinDropAnimation();
             tg.HapticFeedback.notificationOccurred('success');
@@ -637,18 +627,17 @@
                     clearInterval(cdInterval);
                     watchAdCooldown = false;
                     btn.classList.remove('disabled');
-                    btn.innerHTML = `<i class="fa-solid fa-play" style="margin-right: 5px;"></i> +10 CP`;
+                    btn.innerHTML = `<i class="fa-solid fa-play" style="margin-right: 3px;"></i> +10 CP`;
                 }
             }, 1000);
         }
 
-        let wfCurrentTask = null, activePendingTask = null, taskOpenTime = 0;
+        let wfCurrentTask = null, activePendingTask = null, taskOpenTime = 0, wfTimerInt = null;
 
         function startTaskFlow(btnId, reward, link, isPremium) {
             let btn = document.getElementById(btnId);
             btn.classList.add('loading');
-            btn.innerText = "Loading Ad...";
-            
+            btn.innerText = "Wait...";
             wfCurrentTask = { id: btnId, reward: reward, link: link };
 
             if (isPremium) { proceedToTask(wfCurrentTask); } else {
@@ -665,7 +654,6 @@
 
         function showIframeAd(adUrl) {
             let btn = document.getElementById(wfCurrentTask.id);
-            btn.innerText = "Wait...";
             btn.classList.remove('loading');
             document.getElementById("waterfall-ad-modal").style.display = "flex";
             document.getElementById("btn-wf-verify").style.display = "none";
@@ -701,7 +689,7 @@
             if(btn && !btn.innerHTML.includes("Done") && !btn.innerHTML.includes("Wait")) {
                 btn.classList.remove('disabled');
                 btn.classList.remove('loading');
-                btn.innerHTML = btn.id === "btn-watch-ad" ? `<i class="fa-solid fa-play" style="margin-right: 5px;"></i> +10 CP` : "Start";
+                btn.innerHTML = btn.id === "btn-watch-ad" ? `<i class="fa-solid fa-play" style="margin-right: 3px;"></i> +10 CP` : "Start";
             }
         }
 
@@ -719,7 +707,6 @@
         document.addEventListener("visibilitychange", () => {
             if (document.visibilityState === "visible" && activePendingTask) { checkTaskAndReward(); }
         });
-
         function manualVerifyClick() { if(activePendingTask) checkTaskAndReward(); }
 
         function checkTaskAndReward() {
@@ -732,12 +719,14 @@
             setTimeout(() => {
                 userData.cp += activePendingTask.reward;
                 saveUserData();
+                processCommission(activePendingTask.reward); // Give 10% to referrer
                 updateUI();
                 playCoinDropAnimation();
                 btn.classList.remove('loading');
                 btn.classList.add('disabled');
                 btn.innerHTML = `<i class="fa-solid fa-check"></i> Done`;
-                btn.style.background = "#333";
+                btn.style.background = "rgba(0,0,0,0.1)";
+                btn.style.color = "#888";
                 tg.HapticFeedback.notificationOccurred('success');
                 activePendingTask = null; 
             }, 1500);
@@ -748,7 +737,7 @@
             if(userData.lastCheckInDate !== today) {
                 let btn = document.getElementById("btn-claim");
                 btn.classList.add('loading');
-                btn.innerText = "Loading Ad...";
+                btn.innerText = "Wait...";
                 let claimLinks = [adLinks.adsterra, adLinks.monetag];
                 window.open(claimLinks[Math.floor(Math.random() * claimLinks.length)], "_blank"); 
 
@@ -761,6 +750,7 @@
                     if(currentDay === 30) userData.hasTrustBadge = true; 
                     
                     saveUserData(); 
+                    processCommission(reward); // Give 10% to referrer
                     updateUI();
                     playCoinDropAnimation();
                     tg.HapticFeedback.notificationOccurred('success');
@@ -770,11 +760,37 @@
 
         function copyRefLink() {
             let refId = tgUser?.id || "demo";
-            navigator.clipboard.writeText(`https://t.me/YourBot/app?startapp=${refId}`);
+            // Uses BOT_USERNAME from top of script
+            navigator.clipboard.writeText(`https://t.me/${BOT_USERNAME}/app?startapp=${refId}`);
             tg.HapticFeedback.impactOccurred('medium'); tg.showAlert("Referral link copied!");
+        }
+
+        async function sendSupportMessage() {
+            let msgInput = document.getElementById("support-msg");
+            if(msgInput.value.length < 10) { tg.showAlert("Please write at least 10 characters."); return; }
+            try {
+                await db.collection("support_tickets").add({
+                    userId: userId, name: userData.name, message: msgInput.value, timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                tg.showAlert("✅ Sent to Admin safely.");
+                msgInput.value = ""; tg.HapticFeedback.notificationOccurred('success');
+            } catch(e) {}
+        }
+        function showBadgeInfo() { tg.showAlert(userData.hasTrustBadge ? "🛡️ Premium Verified Member" : "🔒 Check-in 30 days to verify!"); }
+        function requestWithdraw() {
+            let address = document.getElementById("wallet-address").value;
+            if(address.length < 20) { tg.showAlert("Enter valid USDT BEP20 address!"); return; }
+            if(userData.referrals < MIN_REFS_NEEDED) { tg.showAlert(`⚠️ Need at least ${MIN_REFS_NEEDED} valid referrals.`); return; }
+            db.collection("withdraw_requests").add({
+                userId: userId, name: userData.name, amountUSDT: (userData.cp / 10000).toFixed(4), walletAddress: address, status: "Pending", timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            tg.showAlert(`Success! Withdrawing $${(userData.cp / 10000).toFixed(4)} USDT.`);
+            userData.cp = 0; saveUserData(); updateUI();
         }
 
         fetchUserData();
     </script>
+    
+    <script>(function(s){s.dataset.zone='11678521',s.src='https://n6wxm.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
 </body>
 </html>
