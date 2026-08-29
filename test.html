@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adsgram Test Page</title>
+    <!-- Telegram WebApp Script -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <!-- Adsgram Official Script -->
+    <script src="https://adsgram.ai/js/adsgram.js"></script>
+    <style>
+        body {
+            background-color: #0f172a;
+            color: #ffffff;
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+            padding: 20px;
+        }
+        .btn {
+            background: #007AFF;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,122,255,0.4);
+            margin-top: 20px;
+        }
+        .status-box {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            font-size: 14px;
+            word-break: break-word;
+            max-width: 90%;
+            color: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Adsgram Direct Test</h2>
+    <p>Block ID: <b>45149</b></p>
+    
+    <button class="btn" id="ad-btn" onclick="runAdTest()">🎬 Show Adsgram Ad</button>
+    <div class="status-box" id="status">Status: Ready to test</div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+
+        function runAdTest() {
+            const statusBox = document.getElementById("status");
+            const btn = document.getElementById("ad-btn");
+            
+            statusBox.innerHTML = "⏳ Initializing Adsgram...";
+            btn.disabled = true;
+
+            if (window.Adsgram) {
+                const AdController = window.Adsgram.init({ blockId: "45149" });
+
+                AdController.show()
+                    .then((result) => {
+                        statusBox.innerHTML = "🎉 <b>SUCCESS!</b> Ad shown perfectly.<br>Result: " + JSON.stringify(result);
+                        btn.disabled = false;
+                    })
+                    .catch((error) => {
+                        // আসল এরর এখানে প্রিন্ট হবে
+                        statusBox.innerHTML = "❌ <b>FAILED!</b><br>Reason: " + (error.description || error.message || JSON.stringify(error));
+                        btn.disabled = false;
+                    });
+            } else {
+                statusBox.innerHTML = "❌ Adsgram script failed to load. Are you inside Telegram?";
+                btn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>
