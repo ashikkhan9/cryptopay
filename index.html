@@ -30,11 +30,47 @@
         .glow-1 { position: absolute; top: -10%; left: -10%; width: 300px; height: 300px; background: rgba(157, 78, 221, 0.15); filter: blur(100px); z-index: -1; }
         .glow-2 { position: absolute; bottom: 0; right: -10%; width: 250px; height: 250px; background: rgba(0, 245, 212, 0.1); filter: blur(90px); z-index: -1; }
 
-        /* Updated Payout Ticker (Bottom up, hidden originally) */
-        .popup-ticker-container { position: fixed; bottom: 85px; left: 50%; transform: translateX(-50%); z-index: 99; pointer-events: none; display: flex; justify-content: center; width: 90%; }
-        .popup-ticker { background: rgba(0, 245, 212, 0.15); border: 1px solid rgba(0, 245, 212, 0.3); backdrop-filter: blur(15px); padding: 10px 20px; border-radius: 30px; font-size: 12px; color: var(--secondary); font-weight: 600; display: flex; align-items: center; gap: 8px; box-shadow: 0 5px 20px rgba(0, 245, 212, 0.15); opacity: 0; transform: translateY(40px); transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .popup-ticker.show { opacity: 1; transform: translateY(0); }
-        .popup-ticker.hide { opacity: 0; transform: translateY(-40px); }
+        /* =========================================
+           FIXED PAYOUT TICKER (Slim, Top-Center, Bottom-to-Top Animation)
+           ========================================= */
+        .popup-ticker-container { 
+            position: fixed; 
+            top: 25px; /* স্ক্রিনের উপরে */
+            left: 50%; 
+            transform: translateX(-50%); 
+            z-index: 10000; 
+            pointer-events: none; 
+            display: flex; 
+            justify-content: center; 
+            width: max-content; /* একদম চিকন রাখার জন্য */
+        }
+        .popup-ticker { 
+            background: rgba(11, 10, 21, 0.95); 
+            border: 1px solid rgba(0, 245, 212, 0.5); 
+            backdrop-filter: blur(15px); 
+            padding: 6px 14px; /* স্লিম প্যাডিং */
+            border-radius: 20px; 
+            font-size: 11px; 
+            color: var(--secondary); 
+            font-weight: 600; 
+            display: flex; 
+            align-items: center; 
+            gap: 6px; 
+            box-shadow: 0 4px 15px rgba(0, 245, 212, 0.2); 
+            
+            /* ডিফল্ট পজিশন: একটু নিচে থাকবে (ট্রানজিশনের শুরুর পয়েন্ট) */
+            opacity: 0; 
+            transform: translateY(20px); 
+            transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1); 
+        }
+        .popup-ticker.show { 
+            opacity: 1; 
+            transform: translateY(0); /* নিচ থেকে উপরে উঠে আসবে */
+        }
+        .popup-ticker.hide { 
+            opacity: 0; 
+            transform: translateY(-20px); /* গায়েব হওয়ার সময় আরও উপরে উঠে যাবে (কখনোই নিচে নামবে না) */
+        }
 
         .header-top { padding: 45px 20px 15px; background: linear-gradient(180deg, rgba(11,10,21,0.9) 0%, transparent 100%); display: flex; justify-content: space-between; align-items: center; }
         .balance-amount { font-size: 32px; font-weight: 800; color: #fff; line-height: 1; }
@@ -119,7 +155,7 @@
     </div>
 
     <!-- Payout Ticker Only Appears on Home Tab -->
-    <div class="popup-ticker-container">
+    <div class="popup-ticker-container" id="ticker-container">
         <div id="live-ticker" class="popup-ticker hide"></div>
     </div>
 
@@ -162,6 +198,13 @@
                         <i class="fa-solid fa-play" style="margin-right: 5px;"></i> +10 CP
                     </button>
                 </div>
+            </div>
+
+            <div style="display:flex; justify-content:center; align-items:center; width: 100%; margin-bottom: 20px;">
+                <script>
+                  atOptions = { 'key' : '8f2c282d7a133448b994b2f0b53de617', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} };
+                </script>
+                <script src="https://www.highrevenueformat.com/8f2c282d7a133448b994b2f0b53de617/invoke.js"></script>
             </div>
 
             <div class="section-title"><i class="fa-solid fa-gamepad"></i> Premium Tasks</div>
@@ -473,41 +516,51 @@
         loadDynamicTasks(); 
 
         // ==========================================
-        // LIVE PAYOUT TICKER (HOME TAB ONLY & REALISTIC NAMES)
+        // LIVE PAYOUT TICKER (FIXED)
         // ==========================================
-        const nameList = ["John", "Sarah", "Mike", "Emma", "Ali", "Fatima", "David", "Ayesha", "Vikram", "Nina", "Omar", "Sophia", "Lucas", "Mia", "Zayn", "Chloe", "Liam", "Ava", "Noah", "Isabella", "Hassan", "Kenza", "Diego"];
+        const nameList = ["A***n", "S***h", "M***e", "E***a", "A***i", "F***a", "D***d", "A***a", "V***m", "N***a", "O***r", "S***a", "L***s", "M***a", "Z***n", "C***e", "L***m", "A***a", "N***h", "I***a", "H***n", "K***a", "D***o"];
         let currentActiveTabId = 'tab-home'; 
+        const tickerContainer = document.getElementById("ticker-container");
         const tickerElement = document.getElementById("live-ticker");
-
-        function maskName(name) {
-            if(name.length <= 2) return name;
-            return name.charAt(0) + "***" + name.charAt(name.length - 1).toLowerCase();
-        }
 
         function showNextTicker() {
             if(currentActiveTabId !== 'tab-home') return; 
 
-            let randomName = maskName(nameList[Math.floor(Math.random() * nameList.length)]);
+            let randomName = nameList[Math.floor(Math.random() * nameList.length)];
             let randomAmount = (Math.random() * (15.00 - 1.50) + 1.50).toFixed(2);
-            let text = `${randomName} withdrew $${randomAmount} USDT`;
             
-            tickerElement.innerHTML = `<i class="fa-solid fa-circle-check"></i> ${text}`;
+            tickerElement.innerHTML = `<i class="fa-solid fa-circle-check"></i> ${randomName} withdrew $${randomAmount}`;
+            
             tickerElement.classList.remove("hide");
             tickerElement.classList.add("show");
             
+            // 3 seconds display
             setTimeout(() => {
                 tickerElement.classList.remove("show");
                 tickerElement.classList.add("hide");
-            }, 2500); // 2.5 seconds display
+                
+                // Reset the class invisibly after transition to prepare for next slide up
+                setTimeout(() => {
+                    tickerElement.classList.remove("hide");
+                }, 600);
+            }, 3000); 
         }
 
         setTimeout(() => {
             showNextTicker();
-            setInterval(showNextTicker, 3500);
+            setInterval(showNextTicker, 4500); // Trigger every 4.5s (leaves a 1.5s gap between popups)
         }, 1000);
 
         function switchTab(tabId, element) {
             currentActiveTabId = tabId; 
+            
+            // Hide ticker container entirely if not on home tab
+            if(tabId !== 'tab-home') {
+                tickerContainer.style.display = 'none';
+            } else {
+                tickerContainer.style.display = 'flex';
+            }
+
             document.querySelectorAll('.tab-section').forEach(tab => tab.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
