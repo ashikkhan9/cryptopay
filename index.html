@@ -7,10 +7,9 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script> <!-- Added Storage -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
@@ -95,27 +94,24 @@
         .progress-fill { height: 100%; background: var(--btn-blue); border-radius: 10px; width: 0%; transition: 0.5s; box-shadow: 0 0 10px rgba(0, 122, 255, 0.5); }
         .streak-reward-box { background: rgba(255,255,255,0.5); padding: 12px 15px; border-radius: 16px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(255,255,255,0.8); box-shadow: inset 0 2px 5px rgba(255,255,255,1); }
 
-        /* Glass Pill Task Items */
         .task-item { display: flex; align-items: center; background: rgba(255,255,255,0.5); padding: 12px; border-radius: 20px; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.8); box-shadow: 0 5px 15px rgba(0,0,0,0.03), inset 0 2px 4px rgba(255,255,255,0.9); }
-        .task-icon { width: 45px; height: 45px; border-radius: 14px; display: flex; justify-content: center; align-items: center; font-size: 20px; background: linear-gradient(135deg, #E2E8F0, #FFFFFF); box-shadow: 0 2px 5px rgba(0,0,0,0.05); color: #007AFF; min-width: 45px; }
-        .task-info { flex: 1; margin-left: 12px; padding-right: 10px; }
-        .task-title { font-size: 14px; font-weight: 800; color: #1D1D1F; line-height: 1.2; }
+        .task-icon { width: 45px; height: 45px; border-radius: 14px; display: flex; justify-content: center; align-items: center; font-size: 20px; background: linear-gradient(135deg, #E2E8F0, #FFFFFF); box-shadow: 0 2px 5px rgba(0,0,0,0.05); color: #007AFF; min-width: 45px;}
+        .task-info { flex: 1; margin-left: 12px; padding-right: 10px;}
+        .task-title { font-size: 14px; font-weight: 800; color: #1D1D1F; line-height: 1.2;}
         .task-reward { font-size: 12px; color: #FF8C42; font-weight: 800; margin-top: 4px; }
         
         .task-actions { display: flex; flex-direction: column; gap: 6px; }
 
-        /* 3D Glossy Buttons */
-        .btn-sm { background: var(--btn-blue); color: #fff; border: none; padding: 8px 15px; border-radius: 20px; font-weight: 800; font-size: 12px; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 10px var(--primary-glow), inset 0 2px 4px rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.2); }
-        .btn-sm.orange { background: var(--btn-orange); box-shadow: 0 4px 10px var(--orange-glow), inset 0 2px 4px rgba(255,255,255,0.5); }
+        .btn-sm { background: var(--btn-blue); color: #fff; border: none; padding: 8px 15px; border-radius: 20px; font-weight: 800; font-size: 12px; cursor: pointer; transition: 0.2s; box-shadow: 0 6px 12px var(--primary-glow), inset 0 2px 4px rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.2); }
+        .btn-sm.orange { background: var(--btn-orange); box-shadow: 0 6px 12px var(--orange-glow), inset 0 2px 4px rgba(255,255,255,0.5); }
         .btn-sm.disabled { background: rgba(0,0,0,0.1) !important; color: #888 !important; box-shadow: none !important; border: 1px solid rgba(0,0,0,0.05) !important; pointer-events: none; }
         .btn-sm.loading { background: #A0AEC0; box-shadow: inset 0 2px 4px rgba(255,255,255,0.4); pointer-events: none; }
-        .btn-sm.verify { background: linear-gradient(180deg, #FAD961, #F76B1C); box-shadow: 0 4px 10px rgba(247, 107, 28, 0.3), inset 0 2px 4px rgba(255,255,255,0.6); color: #fff; }
+        .btn-sm.verify { background: linear-gradient(180deg, #FAD961, #F76B1C); box-shadow: 0 6px 12px rgba(247, 107, 28, 0.3), inset 0 2px 4px rgba(255,255,255,0.6); color: #fff; }
 
         .btn-primary { width: 100%; background: var(--btn-blue); color: #fff; border: 1px solid rgba(255,255,255,0.3); padding: 15px; border-radius: 24px; font-size: 16px; font-weight: 800; cursor: pointer; transition: 0.2s; box-shadow: 0 10px 20px var(--primary-glow), inset 0 2px 4px rgba(255,255,255,0.5); }
         .btn-primary:active { transform: scale(0.97); box-shadow: 0 4px 10px var(--primary-glow), inset 0 4px 6px rgba(0,0,0,0.1); }
         .btn-primary:disabled { background: #E2E8F0; color: #A0AEC0; box-shadow: none; border: 1px solid #CBD5E0; }
 
-        /* Hollow 3D Input */
         .input-box { width: 100%; background: rgba(255, 255, 255, 0.6); border: 1px solid rgba(255, 255, 255, 0.9); padding: 15px 20px; border-radius: 20px; color: #1D1D1F; font-size: 15px; font-weight: 600; margin-bottom: 15px; outline: none; transition: 0.3s; box-shadow: inset 0 2px 5px rgba(0,0,0,0.05), 0 2px 10px rgba(255,255,255,0.5); }
         .input-box::placeholder { color: #A0AEC0; font-weight: 400; }
         .input-box:focus { border-color: #007AFF; box-shadow: inset 0 2px 5px rgba(0,0,0,0.05), 0 0 0 3px rgba(0, 122, 255, 0.2); }
@@ -154,22 +150,6 @@
     <div id="loader">
         <div class="spinner"></div>
         <div style="font-weight: 800; color: #007AFF;">Connecting securely...</div>
-    </div>
-
-    <!-- Ad Modal (Glass style) -->
-    <div id="waterfall-ad-modal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(230, 234, 239, 0.95); backdrop-filter: blur(10px); z-index: 10000; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 0;">
-        <div class="glass-card" style="width: 100%; height: 100%; max-width: 100%; text-align: center; border-radius: 0; display: flex; flex-direction: column; margin-bottom: 0; padding: 20px;">
-            <h3 style="color: #1D1D1F; font-size: 18px; font-weight: 800;">Please Wait & Verify</h3>
-            <div id="waterfall-timer" style="font-size: 28px; font-weight: 800; color: #FF8C42; margin: 15px 0;">15s</div>
-            
-            <div style="width: 100%; flex-grow: 1; background: #fff; border-radius: 16px; margin-bottom: 15px; overflow: hidden; border: 1px solid rgba(0,0,0,0.1); box-shadow: inset 0 2px 10px rgba(0,0,0,0.05);">
-                <iframe id="waterfall-iframe" src="" style="width: 100%; height: 100%; border: none;"></iframe>
-            </div>
-            
-            <button id="btn-wf-verify" class="btn-primary" style="display: none;" onclick="wfCompleteTask()">Go to Task & Claim</button>
-            <button id="btn-wf-verify-onlyad" class="btn-primary" style="display: none; background: var(--btn-orange); box-shadow: 0 10px 20px var(--orange-glow);" onclick="wfCompleteOnlyAd()">Claim Ad Reward</button>
-            <button id="btn-wf-cancel" style="width: 100%; background: rgba(0,0,0,0.05); color: #1D1D1F; border: 1px solid rgba(0,0,0,0.1); padding: 12px; border-radius: 20px; font-weight: 800; margin-top: 10px; cursor: pointer;" onclick="wfCancelTask()">Cancel</button>
-        </div>
     </div>
 
     <!-- Proof Submit Modal -->
@@ -339,7 +319,7 @@
         </div>
     </div>
 
-    <!-- BOTTOM NAV - Now 5 Items -->
+    <!-- BOTTOM NAV - 5 Items -->
     <div class="bottom-nav">
         <div class="nav-item active" onclick="switchTab('tab-home', this)"><i class="fa-solid fa-house-chimney"></i>Home</div>
         <div class="nav-item" onclick="switchTab('tab-premium', this)"><i class="fa-solid fa-star"></i>Pro Tasks</div>
@@ -350,7 +330,7 @@
 
     <script>
         // ==========================================
-        // CONFIGURATION (CHANGE THIS TO YOUR BOT USERNAME)
+        // CONFIGURATION
         // ==========================================
         const BOT_USERNAME = "@acryptopay_bot"; 
 
@@ -367,7 +347,7 @@
         };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
-        const storage = firebase.storage(); // Init Storage
+        const storage = firebase.storage();
 
         // AD LINKS
         const adLinks = {
@@ -388,7 +368,7 @@
         let userId = tgUser?.id ? tgUser.id.toString() : "demo_user";
         
         let userData = { name: tgUser?.first_name || "Guest User", cp: 0, referrals: 0, checkInDays: 0, lastCheckInDate: "", hasTrustBadge: false, claimedCodes: [], referredBy: null };
-        let userSubmissions = {}; // To store user's task proofs status
+        let userSubmissions = {}; 
 
         const MIN_WITHDRAW_CP = 15000;
         const MIN_REFS_NEEDED = 5; 
@@ -437,7 +417,6 @@
                         await saveUserData();
                         if(userData.referredBy) { processReferral(userData.referredBy); }
                     }
-                    // Fetch submissions
                     fetchSubmissions();
                 } catch(e) {}
             }
@@ -521,7 +500,7 @@
                 userData.cp += reward;
                 userData.claimedCodes.push(input);
                 saveUserData();
-                processCommission(reward); // Give 10% to referrer
+                processCommission(reward); 
                 updateUI();
                 playCoinDropAnimation();
                 tg.HapticFeedback.notificationOccurred('success');
@@ -535,7 +514,7 @@
             db.collection("task_submissions").where("userId", "==", userId).onSnapshot((snap) => {
                 userSubmissions = {};
                 snap.forEach(doc => { userSubmissions[doc.data().taskId] = doc.data(); });
-                loadDynamicTasks(); // re-render tasks with updated status
+                loadDynamicTasks(); 
             });
         }
 
@@ -575,7 +554,6 @@
                             </div>
                         `;
                     } else {
-                        // Regular Social Tasks
                         socialHtml += `
                             <div class="task-item">
                                 <div class="task-icon"><i class="${task.icon}"></i></div>
@@ -583,13 +561,13 @@
                                     <div class="task-title">${task.title}</div>
                                     <div class="task-reward">${task.reward} CP</div>
                                 </div>
-                                <button class="btn-sm" id="btn-${taskId}" onclick="startTaskFlow('btn-${taskId}', ${task.reward}, '${task.link}', false)">Start</button>
+                                <button class="btn-sm" id="btn-${taskId}" onclick="startSocialTaskFlow('btn-${taskId}', ${task.reward}, '${task.link}')">Start</button>
                             </div>
                         `;
                     }
                 });
-                document.getElementById("dynamic-premium-tasks").innerHTML = premiumHtml || `<div style="text-align:center; color:#888; font-size:12px;">No Pro Tasks Available</div>`;
-                document.getElementById("dynamic-social-tasks").innerHTML = socialHtml || `<div style="text-align:center; color:#888; font-size:12px;">No Social Tasks Available</div>`;
+                document.getElementById("dynamic-premium-tasks").innerHTML = premiumHtml || `<div style="text-align:center; color:#888; font-size:12px; font-weight: 600;">No Pro Tasks Available</div>`;
+                document.getElementById("dynamic-social-tasks").innerHTML = socialHtml || `<div style="text-align:center; color:#888; font-size:12px; font-weight: 600;">No Tasks Available</div>`;
             });
         }
 
@@ -601,7 +579,7 @@
             currentUploadTaskId = taskId;
             currentUploadReward = reward;
             document.getElementById('proof-task-title').innerText = title;
-            document.getElementById('proof-file').value = ""; // reset file input
+            document.getElementById('proof-file').value = ""; 
             document.getElementById('proof-modal').style.display = "flex";
         }
 
@@ -615,19 +593,17 @@
             btn.classList.add('loading');
 
             try {
-                // Upload to Firebase Storage
                 let storageRef = storage.ref(`proofs/${userId}/${currentUploadTaskId}_${Date.now()}`);
                 await storageRef.put(file);
                 let downloadUrl = await storageRef.getDownloadURL();
 
-                // Save to Firestore submissions collection
                 await db.collection("task_submissions").add({
                     userId: userId,
                     name: userData.name,
                     taskId: currentUploadTaskId,
                     reward: currentUploadReward,
                     proofUrl: downloadUrl,
-                    status: "pending", // admin can change this to 'approved' or 'rejected'
+                    status: "pending",
                     timestamp: firebase.firestore.FieldValue.serverTimestamp()
                 });
 
@@ -650,8 +626,7 @@
 
         function showNextTicker() {
             if(currentActiveTabId !== 'tab-home' || 
-               document.getElementById("loader").style.display !== "none" || 
-               document.getElementById("waterfall-ad-modal").style.display === "flex") {
+               document.getElementById("loader").style.display !== "none") {
                 return;
             }
             let randomName = nameList[Math.floor(Math.random() * nameList.length)];
@@ -679,7 +654,7 @@
             tg.HapticFeedback.impactOccurred('light');
         }
 
-        // WATCH & EARN + TASK LOGIC (SOCIAL)
+        // WATCH & EARN + TASK LOGIC (NO IFRAME)
         let watchAdCooldown = false;
         function watchAdForCP() {
             if (watchAdCooldown) return;
@@ -692,46 +667,33 @@
 
             if (selectedNetwork === "adsgram" && window.Adsgram) {
                 let AdController = window.Adsgram.init({ blockId: adLinks.adsgram });
-                AdController.show().then(() => { giveAdReward(btn); }).catch(() => { showFallbackOnlyAd(btn, adLinks.adsterra); });
-            } else if (selectedNetwork === "monetag") { showFallbackOnlyAd(btn, adLinks.monetag); } 
-            else { showFallbackOnlyAd(btn, adLinks.adsterra); }
+                AdController.show().then(() => { giveAdReward(btn); }).catch(() => { triggerFallbackAd(btn, adLinks.adsterra); });
+            } else {
+                triggerFallbackAd(btn, selectedNetwork === "monetag" ? adLinks.monetag : adLinks.adsterra);
+            }
         }
 
-        function showFallbackOnlyAd(btn, adUrl) {
-            btn.innerText = "Wait...";
+        function triggerFallbackAd(btn, adUrl) {
+            window.open(adUrl, "_blank"); // Open directly to prevent iframe blocking
             btn.classList.remove('loading');
-            document.getElementById("waterfall-ad-modal").style.display = "flex";
-            document.getElementById("btn-wf-verify").style.display = "none";
-            document.getElementById("btn-wf-verify-onlyad").style.display = "block";
-            document.getElementById("btn-wf-cancel").style.display = "block";
-            
-            let fallbackUrls = [adLinks.adsterra, adLinks.monetag];
-            document.getElementById("waterfall-iframe").src = adUrl || fallbackUrls[Math.floor(Math.random() * fallbackUrls.length)];
-            
-            let timeLeft = 15; 
-            document.getElementById("waterfall-timer").innerText = timeLeft + "s";
-            
-            wfTimerInt = setInterval(() => {
+            btn.classList.add('disabled');
+            let timeLeft = 10;
+            btn.innerText = `Wait ${timeLeft}s`;
+            let cdInt = setInterval(() => {
                 timeLeft--;
-                document.getElementById("waterfall-timer").innerText = timeLeft + "s";
+                btn.innerText = `Wait ${timeLeft}s`;
                 if(timeLeft <= 0) {
-                    clearInterval(wfTimerInt);
-                    document.getElementById("waterfall-timer").innerText = "Ready!";
+                    clearInterval(cdInt);
+                    giveAdReward(btn);
                 }
             }, 1000);
-        }
-
-        function wfCompleteOnlyAd() {
-            document.getElementById("waterfall-ad-modal").style.display = "none";
-            document.getElementById("waterfall-iframe").src = "";
-            giveAdReward(document.getElementById("btn-watch-ad"));
         }
 
         function giveAdReward(btn) {
             let reward = 10;
             userData.cp += reward;
             saveUserData();
-            processCommission(reward); // Give 10% to referrer
+            processCommission(reward); 
             updateUI();
             playCoinDropAnimation();
             tg.HapticFeedback.notificationOccurred('success');
@@ -754,104 +716,46 @@
             }, 1000);
         }
 
-        let wfCurrentTask = null, activePendingTask = null, taskOpenTime = 0, wfTimerInt = null;
-
-        function startTaskFlow(btnId, reward, link, isPremium) {
+        function startSocialTaskFlow(btnId, reward, link) {
             let btn = document.getElementById(btnId);
             btn.classList.add('loading');
             btn.innerText = "Wait...";
-            wfCurrentTask = { id: btnId, reward: reward, link: link };
 
-            if (isPremium) { proceedToTask(wfCurrentTask); } else {
-                let selectedNetwork = networkOrder[currentNetworkIndex];
-                currentNetworkIndex = (currentNetworkIndex + 1) % networkOrder.length;
+            let selectedNetwork = networkOrder[currentNetworkIndex];
+            currentNetworkIndex = (currentNetworkIndex + 1) % networkOrder.length;
 
-                if (selectedNetwork === "adsgram" && window.Adsgram) {
-                    let AdController = window.Adsgram.init({ blockId: adLinks.adsgram });
-                    AdController.show().then(() => { proceedToTask(wfCurrentTask); }).catch(() => { showIframeAd(adLinks.adsterra); });
-                } else if (selectedNetwork === "monetag") { showIframeAd(adLinks.monetag); } 
-                else { showIframeAd(adLinks.adsterra); }
+            if (selectedNetwork === "adsgram" && window.Adsgram) {
+                let AdController = window.Adsgram.init({ blockId: adLinks.adsgram });
+                AdController.show().then(() => { proceedSocialTask(btn, reward, link); }).catch(() => { proceedSocialTask(btn, reward, link); window.open(adLinks.adsterra, "_blank"); });
+            } else { 
+                proceedSocialTask(btn, reward, link); 
+                window.open(selectedNetwork === "monetag" ? adLinks.monetag : adLinks.adsterra, "_blank");
             }
         }
 
-        function showIframeAd(adUrl) {
-            let btn = document.getElementById(wfCurrentTask.id);
+        function proceedSocialTask(btn, reward, link) {
             btn.classList.remove('loading');
-            document.getElementById("waterfall-ad-modal").style.display = "flex";
-            document.getElementById("btn-wf-verify").style.display = "none";
-            document.getElementById("btn-wf-verify-onlyad").style.display = "none";
-            document.getElementById("btn-wf-cancel").style.display = "block";
-            document.getElementById("waterfall-iframe").src = adUrl;
-            
-            let timeLeft = 15; 
-            document.getElementById("waterfall-timer").innerText = timeLeft + "s";
-            
-            wfTimerInt = setInterval(() => {
-                timeLeft--;
-                document.getElementById("waterfall-timer").innerText = timeLeft + "s";
-                if(timeLeft <= 0) {
-                    clearInterval(wfTimerInt);
-                    document.getElementById("waterfall-timer").innerText = "Ready!";
-                    document.getElementById("btn-wf-verify").style.display = "block";
-                    document.getElementById("btn-wf-cancel").style.display = "none";
-                }
-            }, 1000);
-        }
-
-        function wfCompleteTask() {
-            document.getElementById("waterfall-ad-modal").style.display = "none";
-            document.getElementById("waterfall-iframe").src = "";
-            proceedToTask(wfCurrentTask);
-        }
-
-        function wfCancelTask() {
-            if(wfTimerInt) clearInterval(wfTimerInt);
-            document.getElementById("waterfall-ad-modal").style.display = "none";
-            let btn = document.getElementById(wfCurrentTask?.id || "btn-watch-ad");
-            if(btn && !btn.innerHTML.includes("Done") && !btn.innerHTML.includes("Wait")) {
-                btn.classList.remove('disabled');
-                btn.classList.remove('loading');
-                btn.innerHTML = btn.id === "btn-watch-ad" ? `<i class="fa-solid fa-play" style="margin-right: 3px;"></i> +10 CP` : "Start";
-            }
-        }
-
-        function proceedToTask(task) {
-            let btn = document.getElementById(task.id);
-            btn.classList.remove('loading');
-            window.open(task.link, "_blank");
-            activePendingTask = task;
-            taskOpenTime = Date.now();
+            window.open(link, "_blank");
             btn.classList.add('verify');
             btn.innerText = "Verify";
-            btn.onclick = function() { manualVerifyClick(); };
-        }
-
-        document.addEventListener("visibilitychange", () => {
-            if (document.visibilityState === "visible" && activePendingTask) { checkTaskAndReward(); }
-        });
-        function manualVerifyClick() { if(activePendingTask) checkTaskAndReward(); }
-
-        function checkTaskAndReward() {
-            if ((Date.now() - taskOpenTime) < 5000) { tg.showAlert("Please wait at least 10 seconds on the page!"); return; }
-            let btn = document.getElementById(activePendingTask.id);
-            btn.innerText = "Checking...";
-            btn.classList.add('loading');
-            btn.classList.remove('verify');
-
-            setTimeout(() => {
-                userData.cp += activePendingTask.reward;
-                saveUserData();
-                processCommission(activePendingTask.reward); // Give 10% to referrer
-                updateUI();
-                playCoinDropAnimation();
-                btn.classList.remove('loading');
-                btn.classList.add('disabled');
-                btn.innerHTML = `<i class="fa-solid fa-check"></i> Done`;
-                btn.style.background = "rgba(0,0,0,0.1)";
-                btn.style.color = "#888";
-                tg.HapticFeedback.notificationOccurred('success');
-                activePendingTask = null; 
-            }, 1500);
+            btn.onclick = function() { 
+                btn.innerText = "Checking...";
+                btn.classList.add('loading');
+                btn.classList.remove('verify');
+                setTimeout(() => {
+                    userData.cp += reward;
+                    saveUserData();
+                    processCommission(reward);
+                    updateUI();
+                    playCoinDropAnimation();
+                    btn.classList.remove('loading');
+                    btn.classList.add('disabled');
+                    btn.innerHTML = `<i class="fa-solid fa-check"></i> Done`;
+                    btn.style.background = "rgba(0,0,0,0.1)";
+                    btn.style.color = "#888";
+                    tg.HapticFeedback.notificationOccurred('success');
+                }, 1500);
+            };
         }
 
         function claimDailyWithAd() {
@@ -872,7 +776,7 @@
                     if(currentDay === 30) userData.hasTrustBadge = true; 
                     
                     saveUserData(); 
-                    processCommission(reward); // Give 10% to referrer
+                    processCommission(reward); 
                     updateUI();
                     playCoinDropAnimation();
                     tg.HapticFeedback.notificationOccurred('success');
@@ -897,7 +801,9 @@
                 msgInput.value = ""; tg.HapticFeedback.notificationOccurred('success');
             } catch(e) {}
         }
+
         function showBadgeInfo() { tg.showAlert(userData.hasTrustBadge ? "🛡️ Premium Verified Member" : "🔒 Check-in 30 days to verify!"); }
+
         function requestWithdraw() {
             let address = document.getElementById("wallet-address").value;
             if(address.length < 20) { tg.showAlert("Enter valid USDT BEP20 address!"); return; }
