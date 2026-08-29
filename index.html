@@ -15,7 +15,6 @@
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
         
         :root {
-            /* Light 3D Glass Theme Variables */
             --bg-color: #E6EAEF; 
             --glass-bg: rgba(255, 255, 255, 0.45);
             --glass-border-light: rgba(255, 255, 255, 0.9);
@@ -24,7 +23,6 @@
             --text-muted: #86868B;
             --primary-glow: rgba(0, 122, 255, 0.3);
             --orange-glow: rgba(255, 122, 0, 0.3);
-            
             --btn-orange: linear-gradient(180deg, #FF8C42, #FF3B30);
             --btn-blue: linear-gradient(180deg, #42A5F5, #007AFF);
             --badge-gold: #F5A623;
@@ -37,42 +35,14 @@
         .spinner { width: 50px; height: 50px; border: 5px solid rgba(0, 122, 255, 0.2); border-top-color: #007AFF; border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* Prismatic Background Glows */
         .glow-1 { position: absolute; top: -10%; left: -10%; width: 350px; height: 350px; background: radial-gradient(circle, rgba(255,122,0,0.15) 0%, transparent 70%); filter: blur(40px); z-index: -1; }
         .glow-2 { position: absolute; bottom: 10%; right: -10%; width: 300px; height: 300px; background: radial-gradient(circle, rgba(0,198,255,0.15) 0%, transparent 70%); filter: blur(40px); z-index: -1; }
         .glow-3 { position: absolute; top: 40%; left: 30%; width: 250px; height: 250px; background: radial-gradient(circle, rgba(157,78,221,0.1) 0%, transparent 70%); filter: blur(40px); z-index: -1; }
 
-        /* Thick 3D Glass Card */
-        .glass-card { 
-            background: var(--glass-bg); 
-            backdrop-filter: blur(24px); 
-            -webkit-backdrop-filter: blur(24px);
-            border-top: 1.5px solid var(--glass-border-light);
-            border-left: 1.5px solid var(--glass-border-light);
-            border-bottom: 1px solid var(--glass-border-dark);
-            border-right: 1px solid var(--glass-border-dark);
-            border-radius: 24px; 
-            padding: 20px; 
-            box-shadow: 0 15px 35px rgba(0,0,0,0.05), inset 0 2px 5px rgba(255,255,255,0.8); 
-            margin-bottom: 20px; 
-            position: relative;
-        }
+        .glass-card { background: var(--glass-bg); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border-top: 1.5px solid var(--glass-border-light); border-left: 1.5px solid var(--glass-border-light); border-bottom: 1px solid var(--glass-border-dark); border-right: 1px solid var(--glass-border-dark); border-radius: 24px; padding: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.05), inset 0 2px 5px rgba(255,255,255,0.8); margin-bottom: 20px; position: relative; }
 
-        /* 3D Glass Ticker */
         .popup-ticker-container { position: fixed; top: 25px; left: 50%; transform: translateX(-50%); z-index: 10000; pointer-events: none; display: flex; justify-content: center; width: max-content; }
-        .popup-ticker { 
-            background: rgba(255,255,255,0.6); 
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.9); 
-            padding: 8px 18px; 
-            border-radius: 30px; 
-            font-size: 12px; 
-            color: #1D1D1F; 
-            font-weight: 600; 
-            display: flex; align-items: center; gap: 8px; 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05), inset 0 0 10px rgba(255, 140, 66, 0.15); 
-            opacity: 0; transform: translateY(20px); transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1); 
-        }
+        .popup-ticker { background: rgba(255,255,255,0.6); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.9); padding: 8px 18px; border-radius: 30px; font-size: 12px; color: #1D1D1F; font-weight: 600; display: flex; align-items: center; gap: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.05), inset 0 0 10px rgba(255, 140, 66, 0.15); opacity: 0; transform: translateY(20px); transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1); }
         .popup-ticker.show { opacity: 1; transform: translateY(0); }
         .popup-ticker.hide { opacity: 0; transform: translateY(-20px); }
 
@@ -95,12 +65,11 @@
         .streak-reward-box { background: rgba(255,255,255,0.5); padding: 12px 15px; border-radius: 16px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(255,255,255,0.8); box-shadow: inset 0 2px 5px rgba(255,255,255,1); }
 
         .task-item { display: flex; align-items: center; background: rgba(255,255,255,0.5); padding: 12px; border-radius: 20px; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.8); box-shadow: 0 5px 15px rgba(0,0,0,0.03), inset 0 2px 4px rgba(255,255,255,0.9); }
-        .task-icon { width: 45px; height: 45px; border-radius: 14px; display: flex; justify-content: center; align-items: center; font-size: 20px; background: linear-gradient(135deg, #E2E8F0, #FFFFFF); box-shadow: 0 2px 5px rgba(0,0,0,0.05); color: #007AFF; min-width: 45px;}
-        .task-info { flex: 1; margin-left: 12px; padding-right: 10px;}
-        .task-title { font-size: 14px; font-weight: 800; color: #1D1D1F; line-height: 1.2;}
+        .task-icon { width: 45px; height: 45px; border-radius: 14px; display: flex; justify-content: center; align-items: center; font-size: 20px; background: linear-gradient(135deg, #E2E8F0, #FFFFFF); box-shadow: 0 2px 5px rgba(0,0,0,0.05); color: #007AFF; min-width: 45px; }
+        .task-info { flex: 1; margin-left: 12px; padding-right: 10px; }
+        .task-title { font-size: 14px; font-weight: 800; color: #1D1D1F; line-height: 1.2; }
         .task-reward { font-size: 12px; color: #FF8C42; font-weight: 800; margin-top: 4px; }
-        
-        .task-actions { display: flex; flex-direction: column; gap: 6px; }
+        .task-actions { display: flex; flex-direction: column; gap: 6px; min-width: 80px; }
 
         .btn-sm { background: var(--btn-blue); color: #fff; border: none; padding: 8px 15px; border-radius: 20px; font-weight: 800; font-size: 12px; cursor: pointer; transition: 0.2s; box-shadow: 0 6px 12px var(--primary-glow), inset 0 2px 4px rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.2); }
         .btn-sm.orange { background: var(--btn-orange); box-shadow: 0 6px 12px var(--orange-glow), inset 0 2px 4px rgba(255,255,255,0.5); }
@@ -113,7 +82,6 @@
         .btn-primary:disabled { background: #E2E8F0; color: #A0AEC0; box-shadow: none; border: 1px solid #CBD5E0; }
 
         .input-box { width: 100%; background: rgba(255, 255, 255, 0.6); border: 1px solid rgba(255, 255, 255, 0.9); padding: 15px 20px; border-radius: 20px; color: #1D1D1F; font-size: 15px; font-weight: 600; margin-bottom: 15px; outline: none; transition: 0.3s; box-shadow: inset 0 2px 5px rgba(0,0,0,0.05), 0 2px 10px rgba(255,255,255,0.5); }
-        .input-box::placeholder { color: #A0AEC0; font-weight: 400; }
         .input-box:focus { border-color: #007AFF; box-shadow: inset 0 2px 5px rgba(0,0,0,0.05), 0 0 0 3px rgba(0, 122, 255, 0.2); }
 
         .premium-badge { display: none; background: linear-gradient(135deg, #F5A623, #F8E71C); color: #fff; border-radius: 50%; width: 20px; height: 20px; font-size: 10px; align-items: center; justify-content: center; margin-left: 8px; box-shadow: 0 2px 8px rgba(245, 166, 35, 0.5); vertical-align: middle; border: 1.5px solid #fff; }
@@ -121,7 +89,6 @@
 
         .user-level { display: inline-block; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 800; margin-top: 8px; background: rgba(255,255,255,0.6); border: 1px solid rgba(255,255,255,0.9); box-shadow: 0 4px 10px rgba(0,0,0,0.05), inset 0 2px 4px rgba(255,255,255,1); }
 
-        /* Floating 3D Bottom Nav - 5 Items */
         .bottom-nav { position: fixed; bottom: 20px; left: 5%; width: 90%; background: rgba(255, 255, 255, 0.75); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border: 1.5px solid rgba(255,255,255,0.9); border-radius: 35px; display: flex; justify-content: space-around; padding: 12px 5px; z-index: 100; box-shadow: 0 15px 35px rgba(0,0,0,0.08), inset 0 2px 5px rgba(255,255,255,1); }
         .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: #A0AEC0; font-size: 11px; font-weight: 800; width: 20%; transition: 0.3s; cursor: pointer; }
         .nav-item i { font-size: 20px; transition: 0.3s; }
@@ -139,8 +106,12 @@
         .stat-col { text-align: center; width: 33%; }
         .stat-col.mid { border-left: 1px solid rgba(0,0,0,0.05); border-right: 1px solid rgba(0,0,0,0.05); }
 
-        /* Modal Overlay */
         .modal-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(230, 234, 239, 0.85); backdrop-filter:blur(10px); z-index:10001; justify-content:center; align-items:center; padding: 20px; }
+        
+        /* Clean Waiting Modal */
+        #ad-wait-modal { flex-direction: column; text-align: center; }
+        #ad-wait-modal h2 { color: #1D1D1F; font-size: 22px; font-weight: 800; margin-bottom: 10px; }
+        #ad-wait-modal .timer { font-size: 35px; color: #FF8C42; font-weight: 800; }
     </style>
 
     <script src="https://adsgram.ai/js/adsgram.js"></script>
@@ -150,6 +121,15 @@
     <div id="loader">
         <div class="spinner"></div>
         <div style="font-weight: 800; color: #007AFF;">Connecting securely...</div>
+    </div>
+
+    <!-- Ad Waiting Overlay -->
+    <div id="ad-wait-modal" class="modal-overlay">
+        <div class="glass-card" style="width: 100%; max-width: 350px;">
+            <h2>Please Wait...</h2>
+            <p style="font-size: 13px; color: var(--text-muted); font-weight: 600;">Reward is processing</p>
+            <div class="timer" id="ad-timer">10s</div>
+        </div>
     </div>
 
     <!-- Proof Submit Modal -->
@@ -509,7 +489,9 @@
             } else { tg.showAlert("❌ Invalid Code."); }
         }
 
-        // DYNAMIC TASKS AND SUBMISSIONS
+        // ==========================================
+        // DYNAMIC TASKS AND AD LOGIC
+        // ==========================================
         function fetchSubmissions() {
             db.collection("task_submissions").where("userId", "==", userId).onSnapshot((snap) => {
                 userSubmissions = {};
@@ -537,10 +519,7 @@
                                 buttonsHtml = `<button class="btn-sm" style="background:#FF3B30;width: 100%;" onclick="openProofModal('${taskId}', '${task.title.replace(/'/g, "\\'")}', ${task.reward})">🔄 Resubmit</button>`;
                             }
                         } else {
-                            buttonsHtml = `
-                                <button class="btn-sm" onclick="window.open('${task.link}', '_blank')">Do Task</button>
-                                <button class="btn-sm verify" onclick="openProofModal('${taskId}', '${task.title.replace(/'/g, "\\'")}', ${task.reward})">Submit</button>
-                            `;
+                            buttonsHtml = `<button class="btn-sm" id="btn-${taskId}" onclick="handlePremiumTask('btn-${taskId}', '${task.link}', '${taskId}', '${task.title.replace(/'/g, "\\'")}', ${task.reward})">Do Task</button>`;
                         }
 
                         premiumHtml += `
@@ -561,7 +540,9 @@
                                     <div class="task-title">${task.title}</div>
                                     <div class="task-reward">${task.reward} CP</div>
                                 </div>
-                                <button class="btn-sm" id="btn-${taskId}" onclick="startSocialTaskFlow('btn-${taskId}', ${task.reward}, '${task.link}')">Start</button>
+                                <div class="task-actions">
+                                    <button class="btn-sm" id="btn-${taskId}" onclick="handleSocialTask('btn-${taskId}', '${task.link}', ${task.reward})">Start</button>
+                                </div>
                             </div>
                         `;
                     }
@@ -571,7 +552,121 @@
             });
         }
 
-        // PROOF SUBMISSION LOGIC
+        // --- Core Ad Trigger Logic ---
+        function triggerAdBeforeTask(btn, onSuccess) {
+            btn.classList.add('loading');
+            btn.innerText = "Wait...";
+
+            let selectedNetwork = networkOrder[currentNetworkIndex];
+            currentNetworkIndex = (currentNetworkIndex + 1) % networkOrder.length;
+
+            if (selectedNetwork === "adsgram" && window.Adsgram) {
+                let AdController = window.Adsgram.init({ blockId: adLinks.adsgram });
+                AdController.show()
+                    .then(() => { btn.classList.remove('loading'); onSuccess(); })
+                    .catch(() => { triggerFallbackAdOverlay(btn, adLinks.adsterra, onSuccess); });
+            } else {
+                let fallbackUrl = selectedNetwork === "monetag" ? adLinks.monetag : adLinks.adsterra;
+                triggerFallbackAdOverlay(btn, fallbackUrl, onSuccess);
+            }
+        }
+
+        function triggerFallbackAdOverlay(btn, adUrl, onSuccess) {
+            document.getElementById("ad-wait-modal").style.display = "flex";
+            window.open(adUrl, "_blank"); // Open Ad Link
+
+            let timeLeft = 10;
+            document.getElementById("ad-timer").innerText = timeLeft + "s";
+            
+            let timerInt = setInterval(() => {
+                timeLeft--;
+                document.getElementById("ad-timer").innerText = timeLeft + "s";
+                if(timeLeft <= 0) {
+                    clearInterval(timerInt);
+                    document.getElementById("ad-wait-modal").style.display = "none";
+                    btn.classList.remove('loading');
+                    onSuccess();
+                }
+            }, 1000);
+        }
+
+        // --- Premium Task Handlers ---
+        function handlePremiumTask(btnId, targetLink, taskId, title, reward) {
+            let btn = document.getElementById(btnId);
+            triggerAdBeforeTask(btn, () => {
+                window.open(targetLink, "_blank"); // Open real task
+                btn.classList.add('verify');
+                btn.innerText = "Submit";
+                btn.onclick = () => openProofModal(taskId, title, reward);
+            });
+        }
+
+        // --- Social Task Handlers ---
+        function handleSocialTask(btnId, targetLink, reward) {
+            let btn = document.getElementById(btnId);
+            triggerAdBeforeTask(btn, () => {
+                window.open(targetLink, "_blank"); // Open real task
+                btn.classList.add('verify');
+                btn.innerText = "Verify";
+                btn.onclick = () => verifySocialTask(btnId, reward);
+            });
+        }
+
+        function verifySocialTask(btnId, reward) {
+            let btn = document.getElementById(btnId);
+            btn.innerText = "Checking...";
+            btn.classList.add('loading');
+            btn.classList.remove('verify');
+            
+            setTimeout(() => {
+                userData.cp += reward;
+                saveUserData();
+                processCommission(reward);
+                updateUI();
+                playCoinDropAnimation();
+                btn.classList.remove('loading');
+                btn.classList.add('disabled');
+                btn.innerHTML = `<i class="fa-solid fa-check"></i> Done`;
+                btn.style.background = "rgba(0,0,0,0.1)";
+                btn.style.color = "#888";
+                tg.HapticFeedback.notificationOccurred('success');
+            }, 1500);
+        }
+
+        // --- Standard Watch Ad ---
+        let watchAdCooldown = false;
+        function watchAdForCP() {
+            if (watchAdCooldown) return;
+            let btn = document.getElementById("btn-watch-ad");
+            
+            triggerAdBeforeTask(btn, () => {
+                let reward = 10;
+                userData.cp += reward;
+                saveUserData();
+                processCommission(reward); 
+                updateUI();
+                playCoinDropAnimation();
+                tg.HapticFeedback.notificationOccurred('success');
+                
+                watchAdCooldown = true;
+                btn.classList.add('disabled');
+                
+                let cdTime = 60;
+                btn.innerText = `Wait ${cdTime}s`;
+                let cdInterval = setInterval(() => {
+                    cdTime--;
+                    btn.innerText = `Wait ${cdTime}s`;
+                    if(cdTime <= 0) {
+                        clearInterval(cdInterval);
+                        watchAdCooldown = false;
+                        btn.classList.remove('disabled');
+                        btn.innerHTML = `<i class="fa-solid fa-play" style="margin-right: 3px;"></i> +10 CP`;
+                    }
+                }, 1000);
+            });
+        }
+
+        // --- Proof Submit Logic ---
         let currentUploadTaskId = null;
         let currentUploadReward = 0;
 
@@ -618,17 +713,16 @@
             btn.classList.remove('loading');
         }
 
-        // LIVE PAYOUT TICKER
+        // ==========================================
+        // LIVE PAYOUT TICKER & UTILS
+        // ==========================================
         const nameList = ["A***n", "S***h", "M***e", "E***a", "A***i", "F***a", "D***d", "A***a", "V***m", "N***a", "O***r", "S***a", "L***s", "M***a", "Z***n", "C***e", "L***m", "H***n", "K***a", "D***o"];
         let currentActiveTabId = 'tab-home'; 
         const tickerContainer = document.getElementById("ticker-container");
         const tickerElement = document.getElementById("live-ticker");
 
         function showNextTicker() {
-            if(currentActiveTabId !== 'tab-home' || 
-               document.getElementById("loader").style.display !== "none") {
-                return;
-            }
+            if(currentActiveTabId !== 'tab-home' || document.getElementById("loader").style.display !== "none") return;
             let randomName = nameList[Math.floor(Math.random() * nameList.length)];
             let randomAmount = (Math.random() * (15.00 - 1.50) + 1.50).toFixed(2);
             tickerElement.innerHTML = `<i class="fa-solid fa-circle-check" style="color:#FF8C42;"></i> ${randomName} withdrew $${randomAmount}`;
@@ -654,120 +748,11 @@
             tg.HapticFeedback.impactOccurred('light');
         }
 
-        // WATCH & EARN + TASK LOGIC (NO IFRAME)
-        let watchAdCooldown = false;
-        function watchAdForCP() {
-            if (watchAdCooldown) return;
-            let btn = document.getElementById("btn-watch-ad");
-            btn.classList.add('loading');
-            btn.innerText = "Loading...";
-
-            let selectedNetwork = networkOrder[currentNetworkIndex];
-            currentNetworkIndex = (currentNetworkIndex + 1) % networkOrder.length;
-
-            if (selectedNetwork === "adsgram" && window.Adsgram) {
-                let AdController = window.Adsgram.init({ blockId: adLinks.adsgram });
-                AdController.show().then(() => { giveAdReward(btn); }).catch(() => { triggerFallbackAd(btn, adLinks.adsterra); });
-            } else {
-                triggerFallbackAd(btn, selectedNetwork === "monetag" ? adLinks.monetag : adLinks.adsterra);
-            }
-        }
-
-        function triggerFallbackAd(btn, adUrl) {
-            window.open(adUrl, "_blank"); // Open directly to prevent iframe blocking
-            btn.classList.remove('loading');
-            btn.classList.add('disabled');
-            let timeLeft = 10;
-            btn.innerText = `Wait ${timeLeft}s`;
-            let cdInt = setInterval(() => {
-                timeLeft--;
-                btn.innerText = `Wait ${timeLeft}s`;
-                if(timeLeft <= 0) {
-                    clearInterval(cdInt);
-                    giveAdReward(btn);
-                }
-            }, 1000);
-        }
-
-        function giveAdReward(btn) {
-            let reward = 10;
-            userData.cp += reward;
-            saveUserData();
-            processCommission(reward); 
-            updateUI();
-            playCoinDropAnimation();
-            tg.HapticFeedback.notificationOccurred('success');
-            
-            watchAdCooldown = true;
-            btn.classList.remove('loading');
-            btn.classList.add('disabled');
-            
-            let cdTime = 60;
-            btn.innerText = `Wait ${cdTime}s`;
-            let cdInterval = setInterval(() => {
-                cdTime--;
-                btn.innerText = `Wait ${cdTime}s`;
-                if(cdTime <= 0) {
-                    clearInterval(cdInterval);
-                    watchAdCooldown = false;
-                    btn.classList.remove('disabled');
-                    btn.innerHTML = `<i class="fa-solid fa-play" style="margin-right: 3px;"></i> +10 CP`;
-                }
-            }, 1000);
-        }
-
-        function startSocialTaskFlow(btnId, reward, link) {
-            let btn = document.getElementById(btnId);
-            btn.classList.add('loading');
-            btn.innerText = "Wait...";
-
-            let selectedNetwork = networkOrder[currentNetworkIndex];
-            currentNetworkIndex = (currentNetworkIndex + 1) % networkOrder.length;
-
-            if (selectedNetwork === "adsgram" && window.Adsgram) {
-                let AdController = window.Adsgram.init({ blockId: adLinks.adsgram });
-                AdController.show().then(() => { proceedSocialTask(btn, reward, link); }).catch(() => { proceedSocialTask(btn, reward, link); window.open(adLinks.adsterra, "_blank"); });
-            } else { 
-                proceedSocialTask(btn, reward, link); 
-                window.open(selectedNetwork === "monetag" ? adLinks.monetag : adLinks.adsterra, "_blank");
-            }
-        }
-
-        function proceedSocialTask(btn, reward, link) {
-            btn.classList.remove('loading');
-            window.open(link, "_blank");
-            btn.classList.add('verify');
-            btn.innerText = "Verify";
-            btn.onclick = function() { 
-                btn.innerText = "Checking...";
-                btn.classList.add('loading');
-                btn.classList.remove('verify');
-                setTimeout(() => {
-                    userData.cp += reward;
-                    saveUserData();
-                    processCommission(reward);
-                    updateUI();
-                    playCoinDropAnimation();
-                    btn.classList.remove('loading');
-                    btn.classList.add('disabled');
-                    btn.innerHTML = `<i class="fa-solid fa-check"></i> Done`;
-                    btn.style.background = "rgba(0,0,0,0.1)";
-                    btn.style.color = "#888";
-                    tg.HapticFeedback.notificationOccurred('success');
-                }, 1500);
-            };
-        }
-
         function claimDailyWithAd() {
             let today = new Date().toDateString();
             if(userData.lastCheckInDate !== today) {
                 let btn = document.getElementById("btn-claim");
-                btn.classList.add('loading');
-                btn.innerText = "Wait...";
-                let claimLinks = [adLinks.adsterra, adLinks.monetag];
-                window.open(claimLinks[Math.floor(Math.random() * claimLinks.length)], "_blank"); 
-
-                setTimeout(() => {
+                triggerAdBeforeTask(btn, () => {
                     let currentDay = userData.checkInDays + 1;
                     let reward = (currentDay === 7 || currentDay === 14 || currentDay === 21) ? 20 : (currentDay === 30 ? 100 : 5);
                     userData.cp += reward;
@@ -780,7 +765,7 @@
                     updateUI();
                     playCoinDropAnimation();
                     tg.HapticFeedback.notificationOccurred('success');
-                }, 6000); 
+                });
             }
         }
 
@@ -817,7 +802,5 @@
 
         fetchUserData();
     </script>
-    
-    <script>(function(s){s.dataset.zone='11678521',s.src='https://n6wxm.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
 </body>
 </html>
