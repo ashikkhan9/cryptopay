@@ -7,8 +7,10 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script> <!-- Added Storage -->
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
@@ -57,7 +59,7 @@
             position: relative;
         }
 
-        /* 3D Glass Ticker (Toast Style) */
+        /* 3D Glass Ticker */
         .popup-ticker-container { position: fixed; top: 25px; left: 50%; transform: translateX(-50%); z-index: 10000; pointer-events: none; display: flex; justify-content: center; width: max-content; }
         .popup-ticker { 
             background: rgba(255,255,255,0.6); 
@@ -95,23 +97,25 @@
 
         /* Glass Pill Task Items */
         .task-item { display: flex; align-items: center; background: rgba(255,255,255,0.5); padding: 12px; border-radius: 20px; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.8); box-shadow: 0 5px 15px rgba(0,0,0,0.03), inset 0 2px 4px rgba(255,255,255,0.9); }
-        .task-icon { width: 45px; height: 45px; border-radius: 14px; display: flex; justify-content: center; align-items: center; font-size: 20px; background: linear-gradient(135deg, #E2E8F0, #FFFFFF); box-shadow: 0 2px 5px rgba(0,0,0,0.05); color: #007AFF; }
-        .task-info { flex: 1; margin-left: 12px; }
-        .task-title { font-size: 15px; font-weight: 800; color: #1D1D1F; }
-        .task-reward { font-size: 12px; color: #FF8C42; font-weight: 800; margin-top: 2px; }
+        .task-icon { width: 45px; height: 45px; border-radius: 14px; display: flex; justify-content: center; align-items: center; font-size: 20px; background: linear-gradient(135deg, #E2E8F0, #FFFFFF); box-shadow: 0 2px 5px rgba(0,0,0,0.05); color: #007AFF; min-width: 45px; }
+        .task-info { flex: 1; margin-left: 12px; padding-right: 10px; }
+        .task-title { font-size: 14px; font-weight: 800; color: #1D1D1F; line-height: 1.2; }
+        .task-reward { font-size: 12px; color: #FF8C42; font-weight: 800; margin-top: 4px; }
         
+        .task-actions { display: flex; flex-direction: column; gap: 6px; }
+
         /* 3D Glossy Buttons */
-        .btn-sm { background: var(--btn-blue); color: #fff; border: none; padding: 8px 18px; border-radius: 20px; font-weight: 800; font-size: 12px; cursor: pointer; transition: 0.2s; box-shadow: 0 6px 12px var(--primary-glow), inset 0 2px 4px rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.2); }
-        .btn-sm.orange { background: var(--btn-orange); box-shadow: 0 6px 12px var(--orange-glow), inset 0 2px 4px rgba(255,255,255,0.5); }
+        .btn-sm { background: var(--btn-blue); color: #fff; border: none; padding: 8px 15px; border-radius: 20px; font-weight: 800; font-size: 12px; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 10px var(--primary-glow), inset 0 2px 4px rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.2); }
+        .btn-sm.orange { background: var(--btn-orange); box-shadow: 0 4px 10px var(--orange-glow), inset 0 2px 4px rgba(255,255,255,0.5); }
         .btn-sm.disabled { background: rgba(0,0,0,0.1) !important; color: #888 !important; box-shadow: none !important; border: 1px solid rgba(0,0,0,0.05) !important; pointer-events: none; }
         .btn-sm.loading { background: #A0AEC0; box-shadow: inset 0 2px 4px rgba(255,255,255,0.4); pointer-events: none; }
-        .btn-sm.verify { background: linear-gradient(180deg, #FAD961, #F76B1C); box-shadow: 0 6px 12px rgba(247, 107, 28, 0.3), inset 0 2px 4px rgba(255,255,255,0.6); color: #fff; }
+        .btn-sm.verify { background: linear-gradient(180deg, #FAD961, #F76B1C); box-shadow: 0 4px 10px rgba(247, 107, 28, 0.3), inset 0 2px 4px rgba(255,255,255,0.6); color: #fff; }
 
         .btn-primary { width: 100%; background: var(--btn-blue); color: #fff; border: 1px solid rgba(255,255,255,0.3); padding: 15px; border-radius: 24px; font-size: 16px; font-weight: 800; cursor: pointer; transition: 0.2s; box-shadow: 0 10px 20px var(--primary-glow), inset 0 2px 4px rgba(255,255,255,0.5); }
         .btn-primary:active { transform: scale(0.97); box-shadow: 0 4px 10px var(--primary-glow), inset 0 4px 6px rgba(0,0,0,0.1); }
         .btn-primary:disabled { background: #E2E8F0; color: #A0AEC0; box-shadow: none; border: 1px solid #CBD5E0; }
 
-        /* Hollow 3D Input (With suggestions style) */
+        /* Hollow 3D Input */
         .input-box { width: 100%; background: rgba(255, 255, 255, 0.6); border: 1px solid rgba(255, 255, 255, 0.9); padding: 15px 20px; border-radius: 20px; color: #1D1D1F; font-size: 15px; font-weight: 600; margin-bottom: 15px; outline: none; transition: 0.3s; box-shadow: inset 0 2px 5px rgba(0,0,0,0.05), 0 2px 10px rgba(255,255,255,0.5); }
         .input-box::placeholder { color: #A0AEC0; font-weight: 400; }
         .input-box:focus { border-color: #007AFF; box-shadow: inset 0 2px 5px rgba(0,0,0,0.05), 0 0 0 3px rgba(0, 122, 255, 0.2); }
@@ -121,10 +125,10 @@
 
         .user-level { display: inline-block; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 800; margin-top: 8px; background: rgba(255,255,255,0.6); border: 1px solid rgba(255,255,255,0.9); box-shadow: 0 4px 10px rgba(0,0,0,0.05), inset 0 2px 4px rgba(255,255,255,1); }
 
-        /* Floating 3D Bottom Nav */
-        .bottom-nav { position: fixed; bottom: 20px; left: 5%; width: 90%; background: rgba(255, 255, 255, 0.75); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border: 1.5px solid rgba(255,255,255,0.9); border-radius: 35px; display: flex; justify-content: space-around; padding: 12px 10px; z-index: 100; box-shadow: 0 15px 35px rgba(0,0,0,0.08), inset 0 2px 5px rgba(255,255,255,1); }
-        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: #A0AEC0; font-size: 11px; font-weight: 800; width: 25%; transition: 0.3s; cursor: pointer; }
-        .nav-item i { font-size: 22px; transition: 0.3s; }
+        /* Floating 3D Bottom Nav - 5 Items */
+        .bottom-nav { position: fixed; bottom: 20px; left: 5%; width: 90%; background: rgba(255, 255, 255, 0.75); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border: 1.5px solid rgba(255,255,255,0.9); border-radius: 35px; display: flex; justify-content: space-around; padding: 12px 5px; z-index: 100; box-shadow: 0 15px 35px rgba(0,0,0,0.08), inset 0 2px 5px rgba(255,255,255,1); }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: #A0AEC0; font-size: 11px; font-weight: 800; width: 20%; transition: 0.3s; cursor: pointer; }
+        .nav-item i { font-size: 20px; transition: 0.3s; }
         .nav-item.active { color: #007AFF; }
         .nav-item.active i { transform: translateY(-3px) scale(1.1); filter: drop-shadow(0 4px 6px rgba(0, 122, 255, 0.3)); }
 
@@ -135,10 +139,12 @@
 
         .falling-coin { position: fixed; pointer-events: none; z-index: 10000; font-size: 24px; top: -50px; transition: transform 1.5s cubic-bezier(0.25, 1, 0.5, 1), opacity 1.5s ease-out; filter: drop-shadow(0 4px 5px rgba(0,0,0,0.2)); }
         
-        /* Stats Box inside Profile */
         .stats-row { display: flex; justify-content: space-between; background: rgba(255,255,255,0.5); border-radius: 20px; padding: 15px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.9); box-shadow: inset 0 2px 5px rgba(255,255,255,1); }
         .stat-col { text-align: center; width: 33%; }
         .stat-col.mid { border-left: 1px solid rgba(0,0,0,0.05); border-right: 1px solid rgba(0,0,0,0.05); }
+
+        /* Modal Overlay */
+        .modal-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(230, 234, 239, 0.85); backdrop-filter:blur(10px); z-index:10001; justify-content:center; align-items:center; padding: 20px; }
     </style>
 
     <script src="https://adsgram.ai/js/adsgram.js"></script>
@@ -151,18 +157,32 @@
     </div>
 
     <!-- Ad Modal (Glass style) -->
-    <div id="waterfall-ad-modal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(230, 234, 239, 0.95); backdrop-filter: blur(10px); z-index: 10000; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px;">
-        <div class="glass-card" style="width: 100%; max-width: 400px; text-align: center; border-radius: 30px;">
+    <div id="waterfall-ad-modal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(230, 234, 239, 0.95); backdrop-filter: blur(10px); z-index: 10000; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 0;">
+        <div class="glass-card" style="width: 100%; height: 100%; max-width: 100%; text-align: center; border-radius: 0; display: flex; flex-direction: column; margin-bottom: 0; padding: 20px;">
             <h3 style="color: #1D1D1F; font-size: 18px; font-weight: 800;">Please Wait & Verify</h3>
             <div id="waterfall-timer" style="font-size: 28px; font-weight: 800; color: #FF8C42; margin: 15px 0;">15s</div>
             
-            <div style="width: 100%; height: 250px; background: #fff; border-radius: 16px; margin-bottom: 15px; overflow: hidden; border: 1px solid rgba(0,0,0,0.1); box-shadow: inset 0 2px 10px rgba(0,0,0,0.05);">
+            <div style="width: 100%; flex-grow: 1; background: #fff; border-radius: 16px; margin-bottom: 15px; overflow: hidden; border: 1px solid rgba(0,0,0,0.1); box-shadow: inset 0 2px 10px rgba(0,0,0,0.05);">
                 <iframe id="waterfall-iframe" src="" style="width: 100%; height: 100%; border: none;"></iframe>
             </div>
             
             <button id="btn-wf-verify" class="btn-primary" style="display: none;" onclick="wfCompleteTask()">Go to Task & Claim</button>
             <button id="btn-wf-verify-onlyad" class="btn-primary" style="display: none; background: var(--btn-orange); box-shadow: 0 10px 20px var(--orange-glow);" onclick="wfCompleteOnlyAd()">Claim Ad Reward</button>
             <button id="btn-wf-cancel" style="width: 100%; background: rgba(0,0,0,0.05); color: #1D1D1F; border: 1px solid rgba(0,0,0,0.1); padding: 12px; border-radius: 20px; font-weight: 800; margin-top: 10px; cursor: pointer;" onclick="wfCancelTask()">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Proof Submit Modal -->
+    <div id="proof-modal" class="modal-overlay">
+        <div class="glass-card" style="width:100%; max-width:400px; text-align:center; padding: 30px 20px;">
+            <div style="font-size: 35px; margin-bottom: 15px;">📸</div>
+            <h3 id="proof-task-title" style="font-size: 18px; font-weight: 800; margin-bottom: 5px;">Submit Proof</h3>
+            <p style="font-size:13px; color:var(--text-muted); font-weight: 600; margin-bottom:20px;">Upload a screenshot showing you completed this task.</p>
+            
+            <input type="file" id="proof-file" accept="image/*" class="input-box" style="padding:10px; background: rgba(255,255,255,0.9);">
+            
+            <button class="btn-primary" id="btn-submit-proof" onclick="submitTaskProof()" style="margin-bottom: 10px;">Upload & Submit</button>
+            <button class="btn-sm" style="width: 100%; background: rgba(0,0,0,0.05); color: #1D1D1F; border: 1px solid rgba(0,0,0,0.1); padding: 12px; box-shadow: none;" onclick="document.getElementById('proof-modal').style.display='none'">Cancel</button>
         </div>
     </div>
 
@@ -219,11 +239,17 @@
                 <script src="https://www.highrevenueformat.com/8f2c282d7a133448b994b2f0b53de617/invoke.js"></script>
             </div>
 
-            <div class="section-title"><i class="fa-solid fa-layer-group" style="color: #FF8C42;"></i> Premium Tasks</div>
-            <div id="dynamic-premium-tasks"><div style="text-align: center; color: #888; font-size: 12px; font-weight: 600;">Loading...</div></div>
-
             <div class="section-title" style="margin-top: 25px;"><i class="fa-solid fa-users" style="color: #00C7B5;"></i> Social Tasks</div>
             <div id="dynamic-social-tasks"><div style="text-align: center; color: #888; font-size: 12px; font-weight: 600;">Loading...</div></div>
+        </div>
+
+        <!-- PREMIUM TASKS TAB -->
+        <div id="tab-premium" class="tab-section">
+            <div class="glass-card">
+                <h2 style="font-size: 18px; font-weight: 800; color: #1D1D1F; margin-bottom: 5px;"><i class="fa-solid fa-star" style="color: #F5A623;"></i> Pro Tasks</h2>
+                <p style="font-size: 12px; color: var(--text-muted); font-weight: 600; margin-bottom: 15px;">Complete tasks as instructed and upload screenshot proof. Rewards will be added after admin verification.</p>
+                <div id="dynamic-premium-tasks"><div style="text-align: center; color: #888; font-size: 12px; font-weight: 600;">Loading...</div></div>
+            </div>
         </div>
 
         <!-- REFERRAL TAB -->
@@ -290,7 +316,7 @@
                     <div class="profile-action-btn" onclick="copyRefLink()">
                         <i class="fa-solid fa-link"></i> Get Invite Link
                     </div>
-                    <div class="profile-action-btn" onclick="switchTab('tab-wallet', document.querySelectorAll('.nav-item')[2])">
+                    <div class="profile-action-btn" onclick="switchTab('tab-wallet', document.querySelectorAll('.nav-item')[3])">
                         <i class="fa-solid fa-money-bill-transfer" style="color:#FF8C42;"></i> Withdraw
                     </div>
                 </div>
@@ -313,8 +339,10 @@
         </div>
     </div>
 
+    <!-- BOTTOM NAV - Now 5 Items -->
     <div class="bottom-nav">
         <div class="nav-item active" onclick="switchTab('tab-home', this)"><i class="fa-solid fa-house-chimney"></i>Home</div>
+        <div class="nav-item" onclick="switchTab('tab-premium', this)"><i class="fa-solid fa-star"></i>Pro Tasks</div>
         <div class="nav-item" onclick="switchTab('tab-referral', this)"><i class="fa-solid fa-user-plus"></i>Invite</div>
         <div class="nav-item" onclick="switchTab('tab-wallet', this)"><i class="fa-solid fa-wallet"></i>Wallet</div>
         <div class="nav-item" onclick="switchTab('tab-profile', this)"><i class="fa-solid fa-circle-user"></i>Profile</div>
@@ -324,7 +352,7 @@
         // ==========================================
         // CONFIGURATION (CHANGE THIS TO YOUR BOT USERNAME)
         // ==========================================
-        const BOT_USERNAME = "@acryptopay_bot"; // <--- আপনার বটের আসল ইউজারনেম দিন (যেমন: CryptoPayBot)
+        const BOT_USERNAME = "@acryptopay_bot"; 
 
         // ==========================================
         // FIREBASE INITIALIZATION 
@@ -339,6 +367,7 @@
         };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
+        const storage = firebase.storage(); // Init Storage
 
         // AD LINKS
         const adLinks = {
@@ -359,6 +388,8 @@
         let userId = tgUser?.id ? tgUser.id.toString() : "demo_user";
         
         let userData = { name: tgUser?.first_name || "Guest User", cp: 0, referrals: 0, checkInDays: 0, lastCheckInDate: "", hasTrustBadge: false, claimedCodes: [], referredBy: null };
+        let userSubmissions = {}; // To store user's task proofs status
+
         const MIN_WITHDRAW_CP = 15000;
         const MIN_REFS_NEEDED = 5; 
 
@@ -406,6 +437,8 @@
                         await saveUserData();
                         if(userData.referredBy) { processReferral(userData.referredBy); }
                     }
+                    // Fetch submissions
+                    fetchSubmissions();
                 } catch(e) {}
             }
             document.getElementById("loader").style.display = "none";
@@ -416,7 +449,6 @@
             if(userId !== "demo_user") { try { await db.collection("users").doc(userId).set(userData, {merge: true}); } catch(e) {} }
         }
 
-        // Add 100 CP to Referrer on first join
         async function processReferral(referrerId) {
             try {
                 const refDoc = db.collection("users").doc(referrerId);
@@ -427,15 +459,10 @@
             } catch(e) {}
         }
 
-        // LIFETIME 10% COMMISSION SYSTEM
         async function processCommission(amountEarned) {
             if (userData.referredBy && amountEarned > 0) {
                 let commission = amountEarned * 0.10; 
-                try {
-                    await db.collection("users").doc(userData.referredBy).update({
-                        cp: firebase.firestore.FieldValue.increment(commission)
-                    });
-                } catch(e) {}
+                try { await db.collection("users").doc(userData.referredBy).update({ cp: firebase.firestore.FieldValue.increment(commission) }); } catch(e) {}
             }
         }
 
@@ -478,7 +505,6 @@
                 b.parentElement.style.borderColor = "rgba(245, 166, 35, 0.5)";
                 b.parentElement.style.background = "rgba(245, 166, 35, 0.1)";
             }
-
             document.getElementById("withdraw-btn").disabled = userData.cp < MIN_WITHDRAW_CP;
         }
 
@@ -504,29 +530,117 @@
             } else { tg.showAlert("❌ Invalid Code."); }
         }
 
-        // DYNAMIC TASKS
+        // DYNAMIC TASKS AND SUBMISSIONS
+        function fetchSubmissions() {
+            db.collection("task_submissions").where("userId", "==", userId).onSnapshot((snap) => {
+                userSubmissions = {};
+                snap.forEach(doc => { userSubmissions[doc.data().taskId] = doc.data(); });
+                loadDynamicTasks(); // re-render tasks with updated status
+            });
+        }
+
         function loadDynamicTasks() {
             db.collection("app_tasks").orderBy("timestamp", "asc").onSnapshot((snapshot) => {
                 let premiumHtml = "", socialHtml = "";
                 snapshot.forEach(doc => {
                     let task = doc.data(), taskId = doc.id;
-                    let taskTemplate = `
-                        <div class="task-item">
-                            <div class="task-icon"><i class="${task.icon}"></i></div>
-                            <div class="task-info">
-                                <div class="task-title">${task.title}</div>
-                                <div class="task-reward">${task.reward} CP</div>
+                    
+                    if (task.type === "premium") {
+                        let sub = userSubmissions[taskId];
+                        let buttonsHtml = "";
+                        
+                        if(sub) {
+                            if(sub.status === 'pending') {
+                                buttonsHtml = `<button class="btn-sm disabled" style="width: 100%;">⏳ Pending</button>`;
+                            } else if (sub.status === 'approved') {
+                                buttonsHtml = `<button class="btn-sm disabled" style="background:#4CAF50!important;color:#fff!important;width: 100%;"><i class="fa-solid fa-check"></i> Paid</button>`;
+                            } else if (sub.status === 'rejected') {
+                                buttonsHtml = `<button class="btn-sm" style="background:#FF3B30;width: 100%;" onclick="openProofModal('${taskId}', '${task.title.replace(/'/g, "\\'")}', ${task.reward})">🔄 Resubmit</button>`;
+                            }
+                        } else {
+                            buttonsHtml = `
+                                <button class="btn-sm" onclick="window.open('${task.link}', '_blank')">Do Task</button>
+                                <button class="btn-sm verify" onclick="openProofModal('${taskId}', '${task.title.replace(/'/g, "\\'")}', ${task.reward})">Submit</button>
+                            `;
+                        }
+
+                        premiumHtml += `
+                            <div class="task-item">
+                                <div class="task-icon"><i class="${task.icon}"></i></div>
+                                <div class="task-info">
+                                    <div class="task-title">${task.title}</div>
+                                    <div class="task-reward">${task.reward} CP</div>
+                                </div>
+                                <div class="task-actions">${buttonsHtml}</div>
                             </div>
-                            <button class="btn-sm" id="btn-${taskId}" onclick="startTaskFlow('btn-${taskId}', ${task.reward}, '${task.link}', ${task.type === 'premium'})">Start</button>
-                        </div>
-                    `;
-                    if(task.type === "premium") premiumHtml += taskTemplate; else socialHtml += taskTemplate;
+                        `;
+                    } else {
+                        // Regular Social Tasks
+                        socialHtml += `
+                            <div class="task-item">
+                                <div class="task-icon"><i class="${task.icon}"></i></div>
+                                <div class="task-info">
+                                    <div class="task-title">${task.title}</div>
+                                    <div class="task-reward">${task.reward} CP</div>
+                                </div>
+                                <button class="btn-sm" id="btn-${taskId}" onclick="startTaskFlow('btn-${taskId}', ${task.reward}, '${task.link}', false)">Start</button>
+                            </div>
+                        `;
+                    }
                 });
-                document.getElementById("dynamic-premium-tasks").innerHTML = premiumHtml || `<div style="text-align:center; color:#888; font-size:12px;">No Tasks Available</div>`;
-                document.getElementById("dynamic-social-tasks").innerHTML = socialHtml || `<div style="text-align:center; color:#888; font-size:12px;">No Tasks Available</div>`;
+                document.getElementById("dynamic-premium-tasks").innerHTML = premiumHtml || `<div style="text-align:center; color:#888; font-size:12px;">No Pro Tasks Available</div>`;
+                document.getElementById("dynamic-social-tasks").innerHTML = socialHtml || `<div style="text-align:center; color:#888; font-size:12px;">No Social Tasks Available</div>`;
             });
         }
-        loadDynamicTasks(); 
+
+        // PROOF SUBMISSION LOGIC
+        let currentUploadTaskId = null;
+        let currentUploadReward = 0;
+
+        function openProofModal(taskId, title, reward) {
+            currentUploadTaskId = taskId;
+            currentUploadReward = reward;
+            document.getElementById('proof-task-title').innerText = title;
+            document.getElementById('proof-file').value = ""; // reset file input
+            document.getElementById('proof-modal').style.display = "flex";
+        }
+
+        async function submitTaskProof() {
+            let fileInput = document.getElementById('proof-file');
+            if (!fileInput.files.length) { tg.showAlert("⚠️ Please select a screenshot to upload."); return; }
+            
+            let file = fileInput.files[0];
+            let btn = document.getElementById('btn-submit-proof');
+            btn.innerText = "Uploading...";
+            btn.classList.add('loading');
+
+            try {
+                // Upload to Firebase Storage
+                let storageRef = storage.ref(`proofs/${userId}/${currentUploadTaskId}_${Date.now()}`);
+                await storageRef.put(file);
+                let downloadUrl = await storageRef.getDownloadURL();
+
+                // Save to Firestore submissions collection
+                await db.collection("task_submissions").add({
+                    userId: userId,
+                    name: userData.name,
+                    taskId: currentUploadTaskId,
+                    reward: currentUploadReward,
+                    proofUrl: downloadUrl,
+                    status: "pending", // admin can change this to 'approved' or 'rejected'
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                tg.HapticFeedback.notificationOccurred('success');
+                tg.showAlert("✅ Proof submitted successfully! Please wait for admin verification.");
+                document.getElementById('proof-modal').style.display = "none";
+            } catch (error) {
+                tg.showAlert("❌ Upload Failed. " + error.message);
+            }
+            
+            btn.innerText = "Upload & Submit";
+            btn.classList.remove('loading');
+        }
 
         // LIVE PAYOUT TICKER
         const nameList = ["A***n", "S***h", "M***e", "E***a", "A***i", "F***a", "D***d", "A***a", "V***m", "N***a", "O***r", "S***a", "L***s", "M***a", "Z***n", "C***e", "L***m", "H***n", "K***a", "D***o"];
@@ -535,7 +649,11 @@
         const tickerElement = document.getElementById("live-ticker");
 
         function showNextTicker() {
-            if(currentActiveTabId !== 'tab-home') return; 
+            if(currentActiveTabId !== 'tab-home' || 
+               document.getElementById("loader").style.display !== "none" || 
+               document.getElementById("waterfall-ad-modal").style.display === "flex") {
+                return;
+            }
             let randomName = nameList[Math.floor(Math.random() * nameList.length)];
             let randomAmount = (Math.random() * (15.00 - 1.50) + 1.50).toFixed(2);
             tickerElement.innerHTML = `<i class="fa-solid fa-circle-check" style="color:#FF8C42;"></i> ${randomName} withdrew $${randomAmount}`;
@@ -561,7 +679,7 @@
             tg.HapticFeedback.impactOccurred('light');
         }
 
-        // WATCH & EARN + TASK LOGIC
+        // WATCH & EARN + TASK LOGIC (SOCIAL)
         let watchAdCooldown = false;
         function watchAdForCP() {
             if (watchAdCooldown) return;
@@ -569,13 +687,17 @@
             btn.classList.add('loading');
             btn.innerText = "Loading...";
 
-            if (window.Adsgram) {
+            let selectedNetwork = networkOrder[currentNetworkIndex];
+            currentNetworkIndex = (currentNetworkIndex + 1) % networkOrder.length;
+
+            if (selectedNetwork === "adsgram" && window.Adsgram) {
                 let AdController = window.Adsgram.init({ blockId: adLinks.adsgram });
-                AdController.show().then(() => { giveAdReward(btn); }).catch(() => { showFallbackOnlyAd(btn); });
-            } else { showFallbackOnlyAd(btn); }
+                AdController.show().then(() => { giveAdReward(btn); }).catch(() => { showFallbackOnlyAd(btn, adLinks.adsterra); });
+            } else if (selectedNetwork === "monetag") { showFallbackOnlyAd(btn, adLinks.monetag); } 
+            else { showFallbackOnlyAd(btn, adLinks.adsterra); }
         }
 
-        function showFallbackOnlyAd(btn) {
+        function showFallbackOnlyAd(btn, adUrl) {
             btn.innerText = "Wait...";
             btn.classList.remove('loading');
             document.getElementById("waterfall-ad-modal").style.display = "flex";
@@ -584,7 +706,7 @@
             document.getElementById("btn-wf-cancel").style.display = "block";
             
             let fallbackUrls = [adLinks.adsterra, adLinks.monetag];
-            document.getElementById("waterfall-iframe").src = fallbackUrls[Math.floor(Math.random() * fallbackUrls.length)];
+            document.getElementById("waterfall-iframe").src = adUrl || fallbackUrls[Math.floor(Math.random() * fallbackUrls.length)];
             
             let timeLeft = 15; 
             document.getElementById("waterfall-timer").innerText = timeLeft + "s";
@@ -760,8 +882,7 @@
 
         function copyRefLink() {
             let refId = tgUser?.id || "demo";
-            // Uses BOT_USERNAME from top of script
-            navigator.clipboard.writeText(`https://t.me/${BOT_USERNAME}/app?startapp=${refId}`);
+            navigator.clipboard.writeText(`https://t.me/${BOT_USERNAME.replace('@','')}/app?startapp=${refId}`);
             tg.HapticFeedback.impactOccurred('medium'); tg.showAlert("Referral link copied!");
         }
 
