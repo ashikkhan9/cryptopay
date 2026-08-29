@@ -3,72 +3,196 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crypto Pay - Admin Panel</title>
+    <title>Master Admin - 3D Glass Edition</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0B0A15; color: #fff; margin: 0; padding: 20px; }
-        .container { max-width: 800px; margin: 0 auto; }
-        .card { background: rgba(22, 19, 36, 0.9); padding: 20px; border-radius: 15px; border: 1px solid #9D4EDD; margin-bottom: 20px; }
-        input, select { width: 100%; padding: 10px; margin: 10px 0; background: #1a1625; border: 1px solid #333; color: white; border-radius: 8px; box-sizing: border-box; }
-        button { background: #9D4EDD; color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; }
-        button:hover { background: #7B2CBF; }
-        .task-list-item { background: #1a1625; padding: 15px; border-radius: 8px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid #00F5D4; }
-        .btn-delete { background: #ff4757; width: auto; padding: 8px 15px; }
-        .btn-delete:hover { background: #ff6b81; }
-        #login-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 80vh; }
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
+        
+        :root {
+            --bg-color: #E6EAEF; 
+            --glass-bg: rgba(255, 255, 255, 0.45);
+            --glass-border-light: rgba(255, 255, 255, 0.9);
+            --glass-border-dark: rgba(255, 255, 255, 0.2);
+            --text-main: #1D1D1F; 
+            --text-muted: #86868B;
+            --primary-glow: rgba(0, 122, 255, 0.3);
+            --btn-blue: linear-gradient(180deg, #42A5F5, #007AFF);
+            --btn-green: linear-gradient(180deg, #34C759, #28A745);
+            --btn-red: linear-gradient(180deg, #FF3B30, #C62828);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
+        body { background: var(--bg-color); color: var(--text-main); display: flex; height: 100vh; overflow: hidden; }
+
+        /* Prismatic Glows */
+        .glow-1 { position: absolute; top: -10%; left: -10%; width: 400px; height: 400px; background: radial-gradient(circle, rgba(0,198,255,0.15) 0%, transparent 70%); filter: blur(50px); z-index: -1; }
+        .glow-2 { position: absolute; bottom: 10%; right: -10%; width: 400px; height: 400px; background: radial-gradient(circle, rgba(255,122,0,0.15) 0%, transparent 70%); filter: blur(50px); z-index: -1; }
+
+        /* Glass Structure */
+        .sidebar { width: 260px; background: var(--glass-bg); backdrop-filter: blur(24px); border-right: 1px solid var(--glass-border-light); padding: 25px 20px; display: flex; flex-direction: column; gap: 15px; box-shadow: 10px 0 30px rgba(0,0,0,0.02); z-index: 10; }
+        .main-content { flex: 1; padding: 30px; overflow-y: auto; z-index: 1; position: relative; }
+        
+        .brand { font-size: 24px; font-weight: 800; color: #1D1D1F; margin-bottom: 30px; text-align: center; text-shadow: 0 2px 10px rgba(255,255,255,0.8); }
+        .brand i { color: #007AFF; }
+
+        .nav-btn { background: transparent; border: 1px solid transparent; text-align: left; padding: 15px 20px; font-size: 15px; font-weight: 800; border-radius: 20px; cursor: pointer; transition: 0.3s; color: var(--text-muted); display: flex; align-items: center; gap: 10px; }
+        .nav-btn:hover { background: rgba(255,255,255,0.5); color: #1D1D1F; }
+        .nav-btn.active { background: rgba(255,255,255,0.8); border: 1px solid var(--glass-border-light); color: #007AFF; box-shadow: 0 5px 15px rgba(0,0,0,0.05), inset 0 2px 5px rgba(255,255,255,1); }
+
+        .glass-card { background: var(--glass-bg); backdrop-filter: blur(24px); border-top: 1.5px solid var(--glass-border-light); border-left: 1.5px solid var(--glass-border-light); border-bottom: 1px solid var(--glass-border-dark); border-right: 1px solid var(--glass-border-dark); border-radius: 24px; padding: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.05), inset 0 2px 5px rgba(255,255,255,0.8); margin-bottom: 25px; }
+
+        .section-title { font-size: 22px; font-weight: 800; margin-bottom: 20px; color: #1D1D1F; display: flex; align-items: center; gap: 10px; }
+
+        /* Dashboard Grid */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .stat-box { background: rgba(255,255,255,0.6); border: 1px solid var(--glass-border-light); padding: 20px; border-radius: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.03); }
+        .stat-box h3 { font-size: 13px; color: var(--text-muted); font-weight: 800; text-transform: uppercase; margin-bottom: 5px; }
+        .stat-box h1 { font-size: 32px; font-weight: 800; color: #1D1D1F; }
+        .stat-box.profit h1 { color: #34C759; }
+
+        /* Inputs & Buttons */
+        .input-box { width: 100%; background: rgba(255, 255, 255, 0.7); border: 1px solid var(--glass-border-light); padding: 15px 20px; border-radius: 15px; color: #1D1D1F; font-size: 14px; font-weight: 600; margin-bottom: 15px; outline: none; transition: 0.3s; box-shadow: inset 0 2px 5px rgba(0,0,0,0.02); }
+        .input-box:focus { border-color: #007AFF; box-shadow: inset 0 2px 5px rgba(0,0,0,0.05), 0 0 0 3px rgba(0, 122, 255, 0.2); }
+
+        .btn { padding: 12px 20px; border: none; border-radius: 15px; font-weight: 800; font-size: 13px; cursor: pointer; color: #fff; transition: 0.2s; box-shadow: 0 6px 15px rgba(0,0,0,0.1), inset 0 2px 4px rgba(255,255,255,0.3); border: 1px solid rgba(255,255,255,0.2); }
+        .btn:active { transform: scale(0.96); }
+        .btn-blue { background: var(--btn-blue); box-shadow: 0 6px 15px var(--primary-glow); }
+        .btn-green { background: var(--btn-green); box-shadow: 0 6px 15px rgba(52, 199, 89, 0.3); }
+        .btn-red { background: var(--btn-red); box-shadow: 0 6px 15px rgba(255, 59, 48, 0.3); }
+
+        /* Tables */
+        table { width: 100%; border-collapse: separate; border-spacing: 0 10px; }
+        th { text-align: left; padding: 0 15px; font-size: 13px; color: var(--text-muted); font-weight: 800; text-transform: uppercase; }
+        td { background: rgba(255,255,255,0.6); padding: 15px; border-top: 1px solid var(--glass-border-light); border-bottom: 1px solid var(--glass-border-light); font-size: 14px; font-weight: 600; vertical-align: middle; }
+        td:first-child { border-left: 1px solid var(--glass-border-light); border-radius: 15px 0 0 15px; }
+        td:last-child { border-right: 1px solid var(--glass-border-light); border-radius: 0 15px 15px 0; }
+        
+        .proof-img { width: 60px; height: 100px; object-fit: cover; border-radius: 8px; border: 2px solid #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.1); cursor: pointer; transition: 0.3s; }
+        .proof-img:hover { transform: scale(1.05); }
+
+        /* Tabs */
+        .tab-section { display: none; animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        .tab-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Image Viewer Modal */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 9999; justify-content: center; align-items: center; padding: 20px; }
+        .modal-overlay img { max-width: 90%; max-height: 90vh; border-radius: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .modal-close { position: absolute; top: 20px; right: 30px; font-size: 40px; color: #fff; cursor: pointer; font-weight: 800; }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <!-- Login Screen -->
-        <div id="login-screen">
-            <div class="card" style="width: 100%; max-width: 400px; text-align: center;">
-                <h2>Admin Login</h2>
-                <input type="password" id="admin-pass" placeholder="Enter Admin Password">
-                <button onclick="loginAdmin()">Login</button>
-            </div>
-        </div>
+    <div class="glow-1"></div>
+    <div class="glow-2"></div>
 
-        <!-- Dashboard Screen -->
-        <div id="dashboard-screen" style="display: none;">
-            <h1 style="text-align: center; color: #00F5D4;"><i class="fa-solid fa-user-shield"></i> Admin Dashboard</h1>
+    <!-- Image Preview Modal -->
+    <div id="image-modal" class="modal-overlay" onclick="closeImage()">
+        <span class="modal-close">&times;</span>
+        <img id="full-image" src="" onclick="event.stopPropagation()">
+    </div>
+
+    <div class="sidebar">
+        <div class="brand"><i class="fa-solid fa-crown"></i> Master Panel</div>
+        <button class="nav-btn active" onclick="switchTab('tab-dashboard', this)"><i class="fa-solid fa-chart-pie"></i> Live Dashboard</button>
+        <button class="nav-btn" onclick="switchTab('tab-proofs', this)"><i class="fa-solid fa-check-to-slot"></i> Verify Proofs</button>
+        <button class="nav-btn" onclick="switchTab('tab-tasks', this)"><i class="fa-solid fa-list-check"></i> Manage Tasks</button>
+        <button class="nav-btn" onclick="switchTab('tab-withdraws', this)"><i class="fa-solid fa-money-bill-transfer"></i> Payouts</button>
+    </div>
+
+    <div class="main-content">
+        
+        <!-- DASHBOARD TAB -->
+        <div id="tab-dashboard" class="tab-section active">
+            <div class="section-title"><i class="fa-solid fa-chart-line" style="color: #007AFF;"></i> Analytics & Live Profit</div>
             
-            <div class="card">
-                <h3><i class="fa-solid fa-plus"></i> Add New Task</h3>
-                <input type="text" id="task-title" placeholder="Task Title (e.g., Join Telegram)">
-                <input type="number" id="task-reward" placeholder="Reward CP (e.g., 50)">
-                <input type="text" id="task-link" placeholder="Task Link (Your Real Work Link)">
-                
-                <select id="task-icon">
-                    <option value="fa-brands fa-telegram">Telegram Icon</option>
-                    <option value="fa-brands fa-youtube">YouTube Icon</option>
-                    <option value="fa-brands fa-twitter">Twitter Icon</option>
-                    <option value="fa-solid fa-thumbs-up">Facebook / Like Icon</option>
-                    <option value="fa-solid fa-globe">Website / Web Icon</option>
-                    <option value="fa-solid fa-play">Video / Play Icon</option>
-                </select>
-
-                <select id="task-type">
-                    <option value="social">Social Task (15s Direct Link Waterfall)</option>
-                    <option value="premium">Premium Task (No 15s Timer, Direct Open)</option>
-                </select>
-
-                <button onclick="addTask()">➕ Add Task to App</button>
+            <div class="glass-card" style="display: flex; gap: 15px; align-items: center; background: rgba(255,255,255,0.7);">
+                <div style="flex: 1;">
+                    <h3 style="font-size: 14px; margin-bottom: 5px; color: #1D1D1F;">Estimate Ad Rates (USD)</h3>
+                    <p style="font-size: 11px; color: var(--text-muted); font-weight: 600;">Update these values based on your Adsterra/Monetag average to see Live Profit.</p>
+                </div>
+                <input type="number" id="rate-impression" class="input-box" value="0.002" step="0.001" style="width: 150px; margin: 0;" placeholder="Per Ad Watch">
+                <input type="number" id="rate-task" class="input-box" value="0.02" step="0.005" style="width: 150px; margin: 0;" placeholder="Per Task">
+                <button class="btn btn-blue" onclick="calculateProfit()">Recalculate</button>
             </div>
 
-            <div class="card">
-                <h3><i class="fa-solid fa-list"></i> Active Tasks</h3>
-                <div id="active-tasks">Loading tasks...</div>
+            <div class="stats-grid">
+                <div class="stat-box"><h3>Total Users</h3><h1 id="stat-users">0</h1></div>
+                <div class="stat-box"><h3>Total Liability (User Balances)</h3><h1 id="stat-liability" style="color: #FF3B30;">$0.00</h1></div>
+                <div class="stat-box"><h3>Pending Proofs</h3><h1 id="stat-pending-proofs">0</h1></div>
+                <div class="stat-box"><h3>Total Withdrawals Paid</h3><h1 id="stat-paid">$0.00</h1></div>
+            </div>
+
+            <div class="glass-card" style="text-align: center; padding: 40px;">
+                <h3 style="font-size: 16px; color: var(--text-muted); font-weight: 800; text-transform: uppercase;">Estimated Live Profit</h3>
+                <h1 id="stat-profit" style="font-size: 65px; font-weight: 800; color: #34C759; margin-top: 10px; letter-spacing: -2px;">$0.00</h1>
+                <p style="font-size: 13px; color: #888; font-weight: 600; margin-top: 10px;">(Estimated Revenue) - (Total User Balances + Paid Withdrawals)</p>
             </div>
         </div>
+
+        <!-- VERIFY PROOFS TAB -->
+        <div id="tab-proofs" class="tab-section">
+            <div class="section-title"><i class="fa-solid fa-camera-retro" style="color: #FF8C42;"></i> Pending Approvals</div>
+            <div class="glass-card">
+                <table>
+                    <thead><tr><th>User Info</th><th>Task ID</th><th>Reward</th><th>Screenshot</th><th>Action</th></tr></thead>
+                    <tbody id="table-proofs"><tr><td colspan="5" style="text-align:center;">Loading...</td></tr></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- MANAGE TASKS TAB -->
+        <div id="tab-tasks" class="tab-section">
+            <div class="section-title"><i class="fa-solid fa-layer-group" style="color: #F5A623;"></i> App Tasks</div>
+            
+            <div class="glass-card" style="background: rgba(255, 255, 255, 0.8);">
+                <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 15px;" id="form-task-heading">Add New Task</h3>
+                <input type="hidden" id="task-id">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <input type="text" id="task-title" class="input-box" placeholder="Task Title (e.g. Join TG Channel)">
+                    <input type="text" id="task-link" class="input-box" placeholder="Target Link (URL)">
+                    <input type="number" id="task-reward" class="input-box" placeholder="Reward in CP (e.g. 50)">
+                    <input type="text" id="task-icon" class="input-box" placeholder="FontAwesome Class (e.g. fa-brands fa-telegram)" value="fa-brands fa-telegram">
+                    <select id="task-type" class="input-box" style="grid-column: span 2;">
+                        <option value="premium">Pro Task (User must submit Screenshot)</option>
+                        <option value="social">Social Task (Auto Verify with Timer)</option>
+                    </select>
+                </div>
+                <div style="display: flex; gap: 10px; margin-top: 15px;">
+                    <button class="btn btn-blue" id="btn-save-task" onclick="saveTask()">Publish Task</button>
+                    <button class="btn btn-red" id="btn-cancel-task" style="display: none;" onclick="resetTaskForm()">Cancel Edit</button>
+                </div>
+            </div>
+
+            <div class="glass-card">
+                <table>
+                    <thead><tr><th>Icon</th><th>Title</th><th>Type</th><th>Reward</th><th>Actions</th></tr></thead>
+                    <tbody id="table-tasks"><tr><td colspan="5" style="text-align:center;">Loading...</td></tr></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- WITHDRAWALS TAB -->
+        <div id="tab-withdraws" class="tab-section">
+            <div class="section-title"><i class="fa-solid fa-money-bill-wave" style="color: #34C759;"></i> Withdrawal Requests</div>
+            <div class="glass-card">
+                <table>
+                    <thead><tr><th>User Name</th><th>Amount</th><th>Wallet (BEP20)</th><th>Status</th><th>Action</th></tr></thead>
+                    <tbody id="table-withdraws"><tr><td colspan="5" style="text-align:center;">Loading...</td></tr></tbody>
+                </table>
+            </div>
+        </div>
+
     </div>
 
     <script>
+        // ==========================================
+        // FIREBASE INIT
+        // ==========================================
         const firebaseConfig = {
             apiKey: "AIzaSyB-XSDKkEDRs6q6SJoruZjwaI1725Kqo0U",
             authDomain: "crypto-pay-3ca70.firebaseapp.com",
@@ -80,65 +204,214 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        function loginAdmin() {
-            let pass = document.getElementById("admin-pass").value;
-            if(pass === "admin1234") { // <--- ADMIN PASSWORD
-                document.getElementById("login-screen").style.display = "none";
-                document.getElementById("dashboard-screen").style.display = "block";
-                fetchTasks();
-            } else {
-                alert("Wrong Password!");
-            }
+        // Variables for Live Profit Calculation
+        let totalUsers = 0, totalLiability = 0, totalPendingProofs = 0, totalApprovedProofs = 0, totalWithdrawPaid = 0;
+
+        function switchTab(tabId, element) {
+            document.querySelectorAll('.tab-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            element.classList.add('active');
         }
 
-        async function addTask() {
+        // ==========================================
+        // LIVE DASHBOARD & PROFIT CALCULATOR
+        // ==========================================
+        db.collection("users").onSnapshot(snap => {
+            totalUsers = snap.size;
+            totalLiability = 0;
+            snap.forEach(doc => { totalLiability += (doc.data().cp || 0); });
+            document.getElementById("stat-users").innerText = totalUsers;
+            document.getElementById("stat-liability").innerText = "$" + (totalLiability / 10000).toFixed(4);
+            calculateProfit();
+        });
+
+        db.collection("withdraw_requests").where("status", "==", "Paid").onSnapshot(snap => {
+            totalWithdrawPaid = 0;
+            snap.forEach(doc => { totalWithdrawPaid += parseFloat(doc.data().amountUSDT || 0); });
+            document.getElementById("stat-paid").innerText = "$" + totalWithdrawPaid.toFixed(2);
+            calculateProfit();
+        });
+
+        db.collection("task_submissions").onSnapshot(snap => {
+            totalPendingProofs = 0;
+            totalApprovedProofs = 0;
+            snap.forEach(doc => {
+                if(doc.data().status === 'pending') totalPendingProofs++;
+                if(doc.data().status === 'approved') totalApprovedProofs++;
+            });
+            document.getElementById("stat-pending-proofs").innerText = totalPendingProofs;
+            calculateProfit();
+        });
+
+        function calculateProfit() {
+            let adRate = parseFloat(document.getElementById("rate-impression").value) || 0.002;
+            let taskRate = parseFloat(document.getElementById("rate-task").value) || 0.02;
+            
+            // Assumption: Total Users * 5 (Avg ads watched)
+            let estAdRev = (totalUsers * 5) * adRate;
+            let estTaskRev = totalApprovedProofs * taskRate;
+            let totalRevenue = estAdRev + estTaskRev;
+            
+            let totalCost = (totalLiability / 10000) + totalWithdrawPaid;
+            let netProfit = totalRevenue - totalCost;
+            
+            let pElem = document.getElementById("stat-profit");
+            pElem.innerText = "$" + netProfit.toFixed(4);
+            pElem.style.color = netProfit >= 0 ? "#34C759" : "#FF3B30";
+        }
+
+        // ==========================================
+        // VERIFY PROOFS LOGIC
+        // ==========================================
+        db.collection("task_submissions").where("status", "==", "pending").orderBy("timestamp", "asc").onSnapshot(snap => {
+            let html = "";
+            snap.forEach(doc => {
+                let data = doc.data();
+                html += `
+                    <tr>
+                        <td><div style="font-weight:800;">${data.name}</div><div style="font-size:11px; color:#888;">ID: ${data.userId}</div></td>
+                        <td>${data.taskId}</td>
+                        <td style="color:#007AFF; font-weight:800;">${data.reward} CP</td>
+                        <td><img src="${data.proofUrl}" class="proof-img" onclick="viewImage('${data.proofUrl}')"></td>
+                        <td>
+                            <div style="display:flex; gap:8px;">
+                                <button class="btn btn-green" onclick="handleProof('${doc.id}', '${data.userId}', ${data.reward}, 'approved')"><i class="fa-solid fa-check"></i></button>
+                                <button class="btn btn-red" onclick="handleProof('${doc.id}', '${data.userId}', 0, 'rejected')"><i class="fa-solid fa-xmark"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+            document.getElementById("table-proofs").innerHTML = html || '<tr><td colspan="5" style="text-align:center;">No pending submissions.</td></tr>';
+        });
+
+        async function handleProof(docId, userId, reward, status) {
+            let action = status === 'approved' ? 'Approve & Pay User' : 'Reject Task';
+            if(!confirm(`Are you sure you want to ${action}?`)) return;
+            try {
+                await db.collection("task_submissions").doc(docId).update({ status: status });
+                if (status === 'approved') {
+                    await db.collection("users").doc(userId).update({ cp: firebase.firestore.FieldValue.increment(reward) });
+                }
+            } catch(e) { alert("Error: " + e.message); }
+        }
+
+        // ==========================================
+        // MANAGE TASKS LOGIC (Full CRUD)
+        // ==========================================
+        function resetTaskForm() {
+            document.getElementById("task-id").value = "";
+            document.getElementById("task-title").value = "";
+            document.getElementById("task-link").value = "";
+            document.getElementById("task-reward").value = "";
+            document.getElementById("task-icon").value = "fa-brands fa-telegram";
+            document.getElementById("task-type").value = "premium";
+            document.getElementById("form-task-heading").innerText = "Add New Task";
+            document.getElementById("btn-save-task").innerText = "Publish Task";
+            document.getElementById("btn-cancel-task").style.display = "none";
+        }
+
+        async function saveTask() {
+            let id = document.getElementById("task-id").value;
             let title = document.getElementById("task-title").value;
-            let reward = document.getElementById("task-reward").value;
             let link = document.getElementById("task-link").value;
+            let reward = parseInt(document.getElementById("task-reward").value);
             let icon = document.getElementById("task-icon").value;
             let type = document.getElementById("task-type").value;
 
-            if(!title || !reward || !link) { alert("Please fill all fields!"); return; }
+            if(!title || !link || !reward) { alert("Please fill all fields!"); return; }
+
+            let taskData = { title, link, reward, icon, type, timestamp: firebase.firestore.FieldValue.serverTimestamp() };
 
             try {
-                await db.collection("app_tasks").add({
-                    title: title,
-                    reward: parseInt(reward),
-                    link: link,
-                    icon: icon,
-                    type: type,
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                });
-                alert("Task Added Successfully!");
-                document.getElementById("task-title").value = "";
-                document.getElementById("task-reward").value = "";
-                document.getElementById("task-link").value = "";
-                fetchTasks();
-            } catch(e) { console.error(e); alert("Error adding task!"); }
+                if(id) { await db.collection("app_tasks").doc(id).update(taskData); alert("Task Updated!"); } 
+                else { await db.collection("app_tasks").add(taskData); alert("Task Created!"); }
+                resetTaskForm();
+            } catch(e) { alert("Error: " + e.message); }
         }
 
-        function fetchTasks() {
-            db.collection("app_tasks").orderBy("timestamp", "desc").onSnapshot((snapshot) => {
-                let html = "";
-                snapshot.forEach(doc => {
-                    let task = doc.data();
-                    html += `
-                    <div class="task-list-item">
-                        <div>
-                            <strong style="color: #00F5D4;">${task.title}</strong><br>
-                            <small>Reward: ${task.reward} CP | Type: ${task.type}</small>
-                        </div>
-                        <button class="btn-delete" onclick="deleteTask('${doc.id}')"><i class="fa-solid fa-trash"></i> Delete</button>
-                    </div>`;
-                });
-                document.getElementById("active-tasks").innerHTML = html || "No tasks available.";
+        db.collection("app_tasks").orderBy("timestamp", "desc").onSnapshot(snap => {
+            let html = "";
+            snap.forEach(doc => {
+                let data = doc.data();
+                let typeBadge = data.type === 'premium' ? '<span style="color:#F5A623; background:rgba(245,166,35,0.1); padding:4px 8px; border-radius:10px;">Pro Task</span>' : '<span style="color:#00C7B5; background:rgba(0,199,181,0.1); padding:4px 8px; border-radius:10px;">Social</span>';
+                html += `
+                    <tr>
+                        <td style="font-size:24px; color:#007AFF;"><i class="${data.icon}"></i></td>
+                        <td>${data.title}</td>
+                        <td>${typeBadge}</td>
+                        <td style="color:#FF8C42; font-weight:800;">${data.reward} CP</td>
+                        <td>
+                            <div style="display:flex; gap:8px;">
+                                <button class="btn btn-blue" onclick="editTask('${doc.id}', '${data.title.replace(/'/g, "\\'")}', '${data.link}', ${data.reward}, '${data.icon}', '${data.type}')"><i class="fa-solid fa-pen"></i></button>
+                                <button class="btn btn-red" onclick="deleteTask('${doc.id}')"><i class="fa-solid fa-trash"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
             });
+            document.getElementById("table-tasks").innerHTML = html || '<tr><td colspan="5" style="text-align:center;">No Tasks Found.</td></tr>';
+        });
+
+        function editTask(id, title, link, reward, icon, type) {
+            document.getElementById("task-id").value = id;
+            document.getElementById("task-title").value = title;
+            document.getElementById("task-link").value = link;
+            document.getElementById("task-reward").value = reward;
+            document.getElementById("task-icon").value = icon;
+            document.getElementById("task-type").value = type;
+            
+            document.getElementById("form-task-heading").innerText = "Edit Task";
+            document.getElementById("btn-save-task").innerText = "Update Task";
+            document.getElementById("btn-cancel-task").style.display = "inline-block";
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         async function deleteTask(id) {
-            if(confirm("Are you sure you want to delete this task?")) {
+            if(confirm("Delete this task permanently?")) {
                 await db.collection("app_tasks").doc(id).delete();
             }
+        }
+
+        // ==========================================
+        // WITHDRAWALS LOGIC
+        // ==========================================
+        db.collection("withdraw_requests").orderBy("timestamp", "desc").onSnapshot(snap => {
+            let html = "";
+            snap.forEach(doc => {
+                let data = doc.data();
+                let statusColor = data.status === 'Pending' ? '#FF8C42' : '#34C759';
+                html += `
+                    <tr>
+                        <td><div style="font-weight:800;">${data.name}</div><div style="font-size:11px; color:#888;">ID: ${data.userId}</div></td>
+                        <td style="font-weight:800; font-size:16px;">$${data.amountUSDT}</td>
+                        <td style="font-family:monospace; font-size:12px;">${data.walletAddress}</td>
+                        <td style="color:${statusColor}; font-weight:800;">${data.status}</td>
+                        <td>
+                            ${data.status === 'Pending' ? `<button class="btn btn-green" onclick="payWithdraw('${doc.id}')">Mark Paid</button>` : `<i class="fa-solid fa-check-circle" style="color:#34C759; font-size:24px;"></i>`}
+                        </td>
+                    </tr>
+                `;
+            });
+            document.getElementById("table-withdraws").innerHTML = html || '<tr><td colspan="5" style="text-align:center;">No withdrawal requests.</td></tr>';
+        });
+
+        async function payWithdraw(docId) {
+            if(confirm("Confirm you have sent the USDT to this user?")) {
+                await db.collection("withdraw_requests").doc(docId).update({ status: "Paid" });
+            }
+        }
+
+        // ==========================================
+        // UTILS (Image Viewer)
+        // ==========================================
+        function viewImage(url) {
+            document.getElementById("full-image").src = url;
+            document.getElementById("image-modal").style.display = "flex";
+        }
+        function closeImage() {
+            document.getElementById("image-modal").style.display = "none";
         }
     </script>
 </body>
