@@ -114,6 +114,7 @@
         #ad-wait-modal .timer { font-size: 35px; color: #FF8C42; font-weight: 800; }
     </style>
 
+    <!-- Adsgram Official Script -->
     <script src="https://adsgram.ai/js/adsgram.js"></script>
 </head>
 <body>
@@ -194,6 +195,7 @@
                 </div>
             </div>
 
+            <!-- Adsterra Banner (already here) -->
             <div style="display:flex; justify-content:center; align-items:center; margin-bottom: 20px;">
                 <script> atOptions = { 'key' : '8f2c282d7a133448b994b2f0b53de617', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} }; </script>
                 <script src="https://www.highrevenueformat.com/8f2c282d7a133448b994b2f0b53de617/invoke.js"></script>
@@ -333,7 +335,7 @@
         const adLinks = {
             adsterra: "https://www.profitableratecpmnetwork.com/qqm7unbp9c?key=e6068fd32853ac21e39371c87bd3ec2d",
             monetag: "https://omg10.com/4/11678700",
-            adsgram: "45124" // <--- YOUR NEW ADSGRAM BLOCK ID
+            adsgram: "45124" 
         };
 
         // GLOBAL APP LOGIC
@@ -345,7 +347,7 @@
         let tgUser = tg.initDataUnsafe?.user;
         let userId = tgUser?.id ? tgUser.id.toString() : "demo_user";
         
-        let userData = { name: tgUser?.first_name || "Guest User", cp: 0, referrals: 0, checkInDays: 0, lastCheckInDate: "", hasTrustBadge: false, claimedCodes: [], referredBy: null };
+        let userData = { name: tgUser?.first_name || "Guest User", cp: 0, referrals: 0, checkInDays: 0, lastCheckInDate: "", hasTrustBadge: false, claimedCodes: [], referredBy: null, watchAdCount: 0 };
         let userSubmissions = {}; 
 
         const MIN_WITHDRAW_CP = 15000;
@@ -501,6 +503,8 @@
         function loadDynamicTasks() {
             db.collection("app_tasks").orderBy("timestamp", "asc").onSnapshot((snapshot) => {
                 let premiumHtml = "", socialHtml = "";
+                let premiumIndex = 0, socialIndex = 0;
+
                 snapshot.forEach(doc => {
                     let task = doc.data(), taskId = doc.id;
                     
@@ -517,7 +521,7 @@
                                 buttonsHtml = `<button class="btn-sm" style="background:#FF3B30;width: 100%;" onclick="openProofModal('${taskId}', '${task.title.replace(/'/g, "\\'")}', ${task.reward})">🔄 Resubmit</button>`;
                             }
                         } else {
-                            buttonsHtml = `<button class="btn-sm" id="btn-${taskId}" onclick="handlePremiumTask('btn-${taskId}', '${task.link}', '${taskId}', '${task.title.replace(/'/g, "\\'")}', ${task.reward})">Do Task</button>`;
+                            buttonsHtml = `<button class="btn-sm" id="btn-${taskId}" onclick="handlePremiumTask('btn-${taskId}', '${task.link}', '${taskId}', '${task.title.replace(/'/g, "\\'")}', ${task.reward}, ${premiumIndex})">Do Task</button>`;
                         }
 
                         premiumHtml += `
@@ -530,6 +534,7 @@
                                 <div class="task-actions">${buttonsHtml}</div>
                             </div>
                         `;
+                        premiumIndex++;
                     } else {
                         socialHtml += `
                             <div class="task-item">
@@ -539,10 +544,11 @@
                                     <div class="task-reward">${task.reward} CP</div>
                                 </div>
                                 <div class="task-actions">
-                                    <button class="btn-sm" id="btn-${taskId}" onclick="handleSocialTask('btn-${taskId}', '${task.link}', ${task.reward})">Start</button>
+                                    <button class="btn-sm" id="btn-${taskId}" onclick="handleSocialTask('btn-${taskId}', '${task.link}', ${task.reward}, ${socialIndex})">Start</button>
                                 </div>
                             </div>
                         `;
+                        socialIndex++;
                     }
                 });
                 document.getElementById("dynamic-premium-tasks").innerHTML = premiumHtml || `<div style="text-align:center; color:#888; font-size:12px; font-weight: 600;">No Pro Tasks Available</div>`;
@@ -550,33 +556,34 @@
             });
         }
 
-        // --- Core Ad Trigger Logic ---
-        function triggerAdBeforeTask(btn, onSuccess) {
+        // --- Master Ad Display Logic ---
+        function showSpecificAd(network, btn, onSuccess) {
             btn.classList.add('loading');
             btn.innerText = "Wait...";
 
-            // ALWAYS TRY ADSGRAM FIRST
-            if (window.Adsgram) {
-                let AdController = window.Adsgram.init({ blockId: adLinks.adsgram });
-                AdController.show()
-                    .then(() => { 
-                        btn.classList.remove('loading'); 
-                        onSuccess(); 
-                    })
-                    .catch((err) => { 
-                        // If Adsgram fails, pick a random fallback ad
-                        let fallbackUrls = [adLinks.adsterra, adLinks.monetag];
-                        let randomFallback = fallbackUrls[Math.floor(Math.random() * fallbackUrls.length)];
-                        triggerFallbackAdOverlay(btn, randomFallback, onSuccess); 
+            if (network === 'adsgram') {
+                if (window.Adsgram) {
+                    const AdController = window.Adsgram.init({ blockId: adLinks.adsgram });
+                    AdController.show().then(() => {
+                        btn.classList.remove('loading');
+                        onSuccess();
+                    }).catch((err) => {
+                        // Fallback to monetag if adsgram fails/not available
+                        triggerFallbackAdOverlay(btn, adLinks.monetag, onSuccess);
                     });
-            } else {
+                } else {
+                    triggerFallbackAdOverlay(btn, adLinks.monetag, onSuccess);
+                }
+            } else if (network === 'monetag') {
+                triggerFallbackAdOverlay(btn, adLinks.monetag, onSuccess);
+            } else if (network === 'adsterra') {
                 triggerFallbackAdOverlay(btn, adLinks.adsterra, onSuccess);
             }
         }
 
         function triggerFallbackAdOverlay(btn, adUrl, onSuccess) {
             document.getElementById("ad-wait-modal").style.display = "flex";
-            window.open(adUrl, "_blank"); // Open Fallback Ad Link
+            window.open(adUrl, "_blank"); // Open Ad Link
 
             let timeLeft = 10;
             document.getElementById("ad-timer").innerText = timeLeft + "s";
@@ -593,10 +600,18 @@
             }, 1000);
         }
 
-        // --- Premium Task Handlers ---
-        function handlePremiumTask(btnId, targetLink, taskId, title, reward) {
+        // --- Task Ad Logic ---
+        // Tasks loop pattern: 2 Monetag -> 2 Adsgram -> 2 Adsterra -> repeat
+        function getTaskAdNetwork(index) {
+            let cycle = Math.floor(index / 2) % 3;
+            return cycle === 0 ? 'monetag' : (cycle === 1 ? 'adsgram' : 'adsterra');
+        }
+
+        function handlePremiumTask(btnId, targetLink, taskId, title, reward, index) {
             let btn = document.getElementById(btnId);
-            triggerAdBeforeTask(btn, () => {
+            let network = getTaskAdNetwork(index);
+
+            showSpecificAd(network, btn, () => {
                 window.open(targetLink, "_blank"); // Open real task after Ad
                 btn.classList.add('verify');
                 btn.innerText = "Submit";
@@ -604,10 +619,11 @@
             });
         }
 
-        // --- Social Task Handlers ---
-        function handleSocialTask(btnId, targetLink, reward) {
+        function handleSocialTask(btnId, targetLink, reward, index) {
             let btn = document.getElementById(btnId);
-            triggerAdBeforeTask(btn, () => {
+            let network = getTaskAdNetwork(index);
+
+            showSpecificAd(network, btn, () => {
                 window.open(targetLink, "_blank"); // Open real task after Ad
                 btn.classList.add('verify');
                 btn.innerText = "Verify";
@@ -636,15 +652,22 @@
             }, 1500);
         }
 
-        // --- Standard Watch Ad ---
+        // --- Watch & Earn Ad Logic ---
+        // Watch Ad loop pattern: 3 Adsgram -> 3 Monetag -> 3 Adsterra -> repeat
         let watchAdCooldown = false;
         function watchAdForCP() {
             if (watchAdCooldown) return;
             let btn = document.getElementById("btn-watch-ad");
             
-            triggerAdBeforeTask(btn, () => {
+            let currentCount = userData.watchAdCount || 0;
+            let cycle = Math.floor(currentCount / 3) % 3;
+            let network = cycle === 0 ? 'adsgram' : (cycle === 1 ? 'monetag' : 'adsterra');
+            
+            showSpecificAd(network, btn, () => {
                 let reward = 10;
                 userData.cp += reward;
+                userData.watchAdCount = currentCount + 1; // Increment tracker
+                
                 saveUserData();
                 processCommission(reward); 
                 updateUI();
@@ -755,7 +778,7 @@
             let today = new Date().toDateString();
             if(userData.lastCheckInDate !== today) {
                 let btn = document.getElementById("btn-claim");
-                triggerAdBeforeTask(btn, () => {
+                showSpecificAd('adsgram', btn, () => {
                     let currentDay = userData.checkInDays + 1;
                     let reward = (currentDay === 7 || currentDay === 14 || currentDay === 21) ? 20 : (currentDay === 30 ? 100 : 5);
                     userData.cp += reward;
@@ -806,6 +829,7 @@
         fetchUserData();
     </script>
     
+    <!-- Monetag Vignette Script -->
     <script>(function(s){s.dataset.zone='11678521',s.src='https://n6wxm.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
 </body>
 </html>
