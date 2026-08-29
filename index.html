@@ -113,12 +113,38 @@
         .nav-item.active i { color: var(--secondary); transform: translateY(-3px); }
 
     </style>
+
+    <script src="https://adsgram.ai/js/adsgram.js"></script>
 </head>
 <body>
 
     <div id="loader">
         <div class="spinner"></div>
         <div style="font-weight: 800; color: var(--primary);">Connecting to Server...</div>
+    </div>
+
+    <!-- 15s CUSTOM AD MODAL (FALLBACK) -->
+    <div id="waterfall-ad-modal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(11, 10, 21, 0.98); z-index: 10000; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px;">
+        <div style="background: var(--card-bg); border: 1px solid var(--primary); border-radius: 20px; width: 100%; max-width: 400px; padding: 20px; text-align: center; box-shadow: 0 10px 40px rgba(157, 78, 221, 0.3);">
+            <h3 style="color: #fff; font-size: 18px;">Please Wait & Verify</h3>
+            <div id="waterfall-timer" style="font-size: 24px; font-weight: 800; color: var(--secondary); margin: 15px 0;">15s</div>
+            
+            <!-- Direct Link Loader in Modal -->
+            <div style="width: 100%; height: 250px; background: #000; border-radius: 12px; margin-bottom: 10px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1);">
+                <iframe id="waterfall-iframe" src="" style="width: 100%; height: 100%; border: none;"></iframe>
+            </div>
+
+            <!-- Adsterra Banner double-dip inside Modal -->
+            <div style="display:flex; justify-content:center; align-items:center; margin-bottom: 15px; width: 100%;">
+                <script>
+                  atOptions = { 'key' : '8f2c282d7a133448b994b2f0b53de617', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} };
+                </script>
+                <script src="https://www.highrevenueformat.com/8f2c282d7a133448b994b2f0b53de617/invoke.js"></script>
+            </div>
+            
+            <button id="btn-wf-verify" class="btn-primary" style="display: none;" onclick="wfCompleteTask()">Go to Task & Claim</button>
+            <button id="btn-wf-cancel" style="width: 100%; background: #333; color: #fff; border: none; padding: 10px; border-radius: 14px; font-weight: 800; margin-top: 10px; cursor: pointer;" onclick="wfCancelTask()">Cancel</button>
+        </div>
     </div>
 
     <div class="popup-ticker-container">
@@ -155,6 +181,13 @@
 
             <div class="banner-ad">Your Banner Ad (Adsterra) Space</div>
 
+            <div style="display:flex; justify-content:center; align-items:center; width: 100%; margin-bottom: 20px;">
+                <script>
+                  atOptions = { 'key' : '8f2c282d7a133448b994b2f0b53de617', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} };
+                </script>
+                <script src="https://www.highrevenueformat.com/8f2c282d7a133448b994b2f0b53de617/invoke.js"></script>
+            </div>
+
             <div class="section-title"><i class="fa-solid fa-gamepad"></i> Premium Tasks</div>
             
             <div class="task-item">
@@ -173,6 +206,45 @@
                 </div>
                 <button class="btn-sm" id="btn-web1" onclick="executeTask('btn-web1', 15)">Visit</button>
             </div>
+
+            <div class="section-title" style="margin-top: 25px;"><i class="fa-solid fa-list-check"></i> Social Tasks</div>
+            
+            <div class="task-item">
+                <div class="task-icon"><i class="fa-brands fa-telegram"></i></div>
+                <div class="task-info">
+                    <div class="task-title">Join Telegram Channel</div>
+                    <div class="task-reward">50 CP</div>
+                </div>
+                <button class="btn-sm" id="adv-task-1" onclick="startAdvancedTask('adv-task-1', 50, 'https://t.me/your_channel')">Start</button>
+            </div>
+
+            <div class="task-item">
+                <div class="task-icon"><i class="fa-brands fa-youtube" style="color: #FF0000;"></i></div>
+                <div class="task-info">
+                    <div class="task-title">Subscribe to YouTube</div>
+                    <div class="task-reward">100 CP</div>
+                </div>
+                <button class="btn-sm" id="adv-task-2" onclick="startAdvancedTask('adv-task-2', 100, 'https://youtube.com/c/your_channel')">Start</button>
+            </div>
+
+            <div class="task-item">
+                <div class="task-icon"><i class="fa-brands fa-twitter" style="color: #1DA1F2;"></i></div>
+                <div class="task-info">
+                    <div class="task-title">Follow on Twitter</div>
+                    <div class="task-reward">60 CP</div>
+                </div>
+                <button class="btn-sm" id="adv-task-3" onclick="startAdvancedTask('adv-task-3', 60, 'https://twitter.com/your_profile')">Start</button>
+            </div>
+
+            <div class="task-item">
+                <div class="task-icon"><i class="fa-solid fa-thumbs-up" style="color: #4267B2;"></i></div>
+                <div class="task-info">
+                    <div class="task-title">Like Facebook Page</div>
+                    <div class="task-reward">40 CP</div>
+                </div>
+                <button class="btn-sm" id="adv-task-4" onclick="startAdvancedTask('adv-task-4', 40, 'https://facebook.com/your_page')">Start</button>
+            </div>
+
         </div>
 
         <div id="tab-referral" class="tab-section">
@@ -406,16 +478,9 @@
                 btn.classList.add("disabled");
             }
 
-            // ==========================================
-            // LOGIC: UNLOCK PREMIUM BADGE
-            // ==========================================
             if(userData.hasTrustBadge || userData.checkInDays >= 30) {
-                userData.hasTrustBadge = true; // Ensure it stays true
-                
-                // Show badge next to name
+                userData.hasTrustBadge = true; 
                 document.getElementById("premium-name-badge").classList.add("show");
-                
-                // Update Badge Section below
                 let badge = document.getElementById("trust-badge");
                 badge.classList.remove("badge-locked");
                 document.getElementById("badge-title").innerText = "Verified Premium Member";
@@ -434,7 +499,8 @@
                 btn.classList.add('loading');
                 btn.innerText = "Loading Ad...";
                 
-                window.open("https://google.com", "_blank"); 
+                // ====== REPLACED GOOGLE.COM WITH NEW DIRECT LINK ======
+                window.open("https://omg10.com/4/11678700", "_blank"); 
 
                 setTimeout(() => {
                     let reward = 5;
@@ -446,12 +512,11 @@
                     userData.checkInDays = currentDay;
                     userData.lastCheckInDate = today; 
                     
-                    // IF 30 DAYS REACHED: UNLOCK BADGE FOREVER
                     if(currentDay === 30) {
                         userData.hasTrustBadge = true;
                     }
                     
-                    saveUserData(); // Instantly save to Firebase
+                    saveUserData(); 
                     
                     tg.HapticFeedback.notificationOccurred('success');
                     if(currentDay === 30) {
@@ -498,7 +563,9 @@
             let btn = document.getElementById(btnId);
             btn.classList.add('disabled');
             btn.innerText = `Wait...`;
-            window.open("https://google.com", "_blank");
+            
+            // ====== REPLACED GOOGLE.COM WITH NEW DIRECT LINK ======
+            window.open("https://omg10.com/4/11678700", "_blank");
 
             setTimeout(() => {
                 userData.cp += reward;
@@ -551,7 +618,102 @@
             tg.HapticFeedback.impactOccurred('light');
         }
 
+        // ==========================================
+        // ====== NEW CODE ADDED: WATERFALL AD LOGIC ======
+        // ==========================================
+        let wfCurrentTask = null;
+        let wfTimerInt = null;
+
+        // Init Adsgram
+        let AdController = null;
+        if (window.Adsgram) {
+            AdController = window.Adsgram.init({ blockId: "45018" });
+        }
+
+        function startAdvancedTask(btnId, reward, realLink) {
+            let btn = document.getElementById(btnId);
+            btn.classList.add('loading');
+            btn.innerText = "Loading...";
+            
+            wfCurrentTask = { id: btnId, reward: reward, link: realLink };
+
+            if (AdController) {
+                AdController.show().then((result) => {
+                    wfCompleteTaskDirect();
+                }).catch((err) => {
+                    startModalFallback();
+                });
+            } else {
+                startModalFallback();
+            }
+        }
+
+        function startModalFallback() {
+            let btn = document.getElementById(wfCurrentTask.id);
+            btn.innerText = "Wait...";
+            btn.classList.remove('loading');
+
+            document.getElementById("waterfall-ad-modal").style.display = "flex";
+            document.getElementById("btn-wf-verify").style.display = "none";
+            document.getElementById("btn-wf-cancel").style.display = "block";
+            
+            document.getElementById("waterfall-iframe").src = "https://www.profitableratecpmnetwork.com/qqm7unbp9c?key=e6068fd32853ac21e39371c87bd3ec2d";
+            
+            let timeLeft = 15;
+            document.getElementById("waterfall-timer").innerText = timeLeft + "s";
+            document.getElementById("waterfall-timer").style.color = "var(--secondary)";
+
+            wfTimerInt = setInterval(() => {
+                timeLeft--;
+                document.getElementById("waterfall-timer").innerText = timeLeft + "s";
+                if(timeLeft <= 0) {
+                    clearInterval(wfTimerInt);
+                    document.getElementById("waterfall-timer").innerText = "Ready!";
+                    document.getElementById("waterfall-timer").style.color = "var(--badge-gold)";
+                    document.getElementById("btn-wf-verify").style.display = "block";
+                    document.getElementById("btn-wf-cancel").style.display = "none";
+                }
+            }, 1000);
+        }
+
+        function wfCompleteTaskDirect() {
+            userData.cp += wfCurrentTask.reward;
+            saveUserData();
+            updateUI();
+            
+            window.open(wfCurrentTask.link, "_blank");
+            
+            let btn = document.getElementById(wfCurrentTask.id);
+            btn.classList.remove('loading');
+            btn.classList.add('disabled');
+            btn.innerHTML = `<i class="fa-solid fa-check"></i> Done`;
+            
+            tg.HapticFeedback.notificationOccurred('success');
+            tg.showAlert(`Task Completed! You earned ${wfCurrentTask.reward} CP.`);
+        }
+
+        function wfCompleteTask() {
+            wfCompleteTaskDirect();
+            wfCancelTask(); 
+        }
+
+        function wfCancelTask() {
+            if(wfTimerInt) clearInterval(wfTimerInt);
+            document.getElementById("waterfall-ad-modal").style.display = "none";
+            document.getElementById("waterfall-iframe").src = "";
+            let btn = document.getElementById(wfCurrentTask.id);
+            if(btn && !btn.innerHTML.includes("Done")) {
+                btn.classList.remove('disabled');
+                btn.classList.remove('loading');
+                btn.innerText = "Start";
+            }
+        }
+
         fetchUserData();
     </script>
+    
+    <!-- ====== NEW CODE ADDED: VIGNETTE AD ====== -->
+    <script>(function(s){s.dataset.zone='11678521',s.src='https://n6wxm.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+    <!-- ====== NEW CODE END ====== -->
 </body>
 </html>
