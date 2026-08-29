@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Pay - Admin Panel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0B0A15; color: #fff; margin: 0; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .card { background: rgba(22, 19, 36, 0.9); padding: 20px; border-radius: 15px; border: 1px solid #9D4EDD; margin-bottom: 20px; }
+        input, select { width: 100%; padding: 10px; margin: 10px 0; background: #1a1625; border: 1px solid #333; color: white; border-radius: 8px; box-sizing: border-box; }
+        button { background: #9D4EDD; color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; }
+        button:hover { background: #7B2CBF; }
+        .task-list-item { background: #1a1625; padding: 15px; border-radius: 8px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid #00F5D4; }
+        .btn-delete { background: #ff4757; width: auto; padding: 8px 15px; }
+        .btn-delete:hover { background: #ff6b81; }
+        #login-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 80vh; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Login Screen -->
+        <div id="login-screen">
+            <div class="card" style="width: 100%; max-width: 400px; text-align: center;">
+                <h2>Admin Login</h2>
+                <input type="password" id="admin-pass" placeholder="Enter Admin Password">
+                <button onclick="loginAdmin()">Login</button>
+            </div>
+        </div>
+
+        <!-- Dashboard Screen -->
+        <div id="dashboard-screen" style="display: none;">
+            <h1 style="text-align: center; color: #00F5D4;"><i class="fa-solid fa-user-shield"></i> Admin Dashboard</h1>
+            
+            <div class="card">
+                <h3><i class="fa-solid fa-plus"></i> Add New Task</h3>
+                <input type="text" id="task-title" placeholder="Task Title (e.g., Join Telegram)">
+                <input type="number" id="task-reward" placeholder="Reward CP (e.g., 50)">
+                <input type="text" id="task-link" placeholder="Task Link (Your Real Work Link)">
+                
+                <select id="task-icon">
+                    <option value="fa-brands fa-telegram">Telegram Icon</option>
+                    <option value="fa-brands fa-youtube">YouTube Icon</option>
+                    <option value="fa-brands fa-twitter">Twitter Icon</option>
+                    <option value="fa-solid fa-thumbs-up">Facebook / Like Icon</option>
+                    <option value="fa-solid fa-globe">Website / Web Icon</option>
+                    <option value="fa-solid fa-play">Video / Play Icon</option>
+                </select>
+
+                <select id="task-type">
+                    <option value="social">Social Task (15s Direct Link Waterfall)</option>
+                    <option value="premium">Premium Task (No 15s Timer, Direct Open)</option>
+                </select>
+
+                <button onclick="addTask()">➕ Add Task to App</button>
+            </div>
+
+            <div class="card">
+                <h3><i class="fa-solid fa-list"></i> Active Tasks</h3>
+                <div id="active-tasks">Loading tasks...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyB-XSDKkEDRs6q6SJoruZjwaI1725Kqo0U",
+            authDomain: "crypto-pay-3ca70.firebaseapp.com",
+            projectId: "crypto-pay-3ca70",
+            storageBucket: "crypto-pay-3ca70.firebasestorage.app",
+            messagingSenderId: "215480352569",
+            appId: "1:215480352569:web:795d6068ec24d568df32e8"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        function loginAdmin() {
+            let pass = document.getElementById("admin-pass").value;
+            if(pass === "admin1234") { // <--- ADMIN PASSWORD
+                document.getElementById("login-screen").style.display = "none";
+                document.getElementById("dashboard-screen").style.display = "block";
+                fetchTasks();
+            } else {
+                alert("Wrong Password!");
+            }
+        }
+
+        async function addTask() {
+            let title = document.getElementById("task-title").value;
+            let reward = document.getElementById("task-reward").value;
+            let link = document.getElementById("task-link").value;
+            let icon = document.getElementById("task-icon").value;
+            let type = document.getElementById("task-type").value;
+
+            if(!title || !reward || !link) { alert("Please fill all fields!"); return; }
+
+            try {
+                await db.collection("app_tasks").add({
+                    title: title,
+                    reward: parseInt(reward),
+                    link: link,
+                    icon: icon,
+                    type: type,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                alert("Task Added Successfully!");
+                document.getElementById("task-title").value = "";
+                document.getElementById("task-reward").value = "";
+                document.getElementById("task-link").value = "";
+                fetchTasks();
+            } catch(e) { console.error(e); alert("Error adding task!"); }
+        }
+
+        function fetchTasks() {
+            db.collection("app_tasks").orderBy("timestamp", "desc").onSnapshot((snapshot) => {
+                let html = "";
+                snapshot.forEach(doc => {
+                    let task = doc.data();
+                    html += `
+                    <div class="task-list-item">
+                        <div>
+                            <strong style="color: #00F5D4;">${task.title}</strong><br>
+                            <small>Reward: ${task.reward} CP | Type: ${task.type}</small>
+                        </div>
+                        <button class="btn-delete" onclick="deleteTask('${doc.id}')"><i class="fa-solid fa-trash"></i> Delete</button>
+                    </div>`;
+                });
+                document.getElementById("active-tasks").innerHTML = html || "No tasks available.";
+            });
+        }
+
+        async function deleteTask(id) {
+            if(confirm("Are you sure you want to delete this task?")) {
+                await db.collection("app_tasks").doc(id).delete();
+            }
+        }
+    </script>
+</body>
+</html>
