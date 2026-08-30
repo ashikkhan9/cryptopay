@@ -11,6 +11,9 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
 
+    <!-- Adsterra Popunder Script (Optimized to not block UX) -->
+    <script src="https://pl31095185.profitableratecpmnetwork.com/bc/67/11/bc6711569a1f04f1939a3a567c120641.js"></script>
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
         
@@ -34,6 +37,39 @@
         #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-color); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; }
         .spinner { width: 50px; height: 50px; border: 5px solid rgba(0, 122, 255, 0.2); border-top-color: #007AFF; border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px; }
         @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* NEW ANIMATIONS ADDED HERE */
+        @keyframes float-icon {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+        .float-anim { animation: float-icon 3s ease-in-out infinite; display: inline-block; }
+
+        @keyframes game-bounce {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-8px) scale(1.1); filter: drop-shadow(0 10px 15px rgba(255, 140, 66, 0.6)); }
+        }
+        .game-bounce { animation: game-bounce 2s infinite ease-in-out; display: inline-block; }
+
+        @keyframes pulse-btn {
+            0% { box-shadow: 0 0 0 0 rgba(255, 140, 66, 0.5); }
+            70% { box-shadow: 0 0 0 15px rgba(255, 140, 66, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 140, 66, 0); }
+        }
+        .pulse-btn { animation: pulse-btn 2s infinite; }
+
+        @keyframes gradient-shift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        @keyframes rotate-glow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .premium-game-card:active { transform: scale(0.96); }
+        /* END NEW ANIMATIONS */
 
         .glow-1 { position: absolute; top: -10%; left: -10%; width: 350px; height: 350px; background: radial-gradient(circle, rgba(255,122,0,0.15) 0%, transparent 70%); filter: blur(40px); z-index: -1; }
         .glow-2 { position: absolute; bottom: 10%; right: -10%; width: 300px; height: 300px; background: radial-gradient(circle, rgba(0,198,255,0.15) 0%, transparent 70%); filter: blur(40px); z-index: -1; }
@@ -64,7 +100,8 @@
         .progress-fill { height: 100%; background: var(--btn-blue); border-radius: 10px; width: 0%; transition: 0.5s; box-shadow: 0 0 10px rgba(0, 122, 255, 0.5); }
         .streak-reward-box { background: rgba(255,255,255,0.5); padding: 12px 15px; border-radius: 16px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(255,255,255,0.8); box-shadow: inset 0 2px 5px rgba(255,255,255,1); }
 
-        .task-item { display: flex; align-items: center; background: rgba(255,255,255,0.5); padding: 12px; border-radius: 20px; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.8); box-shadow: 0 5px 15px rgba(0,0,0,0.03), inset 0 2px 4px rgba(255,255,255,0.9); }
+        .task-item { display: flex; align-items: center; background: rgba(255,255,255,0.5); padding: 12px; border-radius: 20px; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.8); box-shadow: 0 5px 15px rgba(0,0,0,0.03), inset 0 2px 4px rgba(255,255,255,0.9); transition: transform 0.2s; }
+        .task-item:hover { transform: translateY(-2px); }
         .task-icon { width: 45px; height: 45px; border-radius: 14px; display: flex; justify-content: center; align-items: center; font-size: 20px; background: linear-gradient(135deg, #E2E8F0, #FFFFFF); box-shadow: 0 2px 5px rgba(0,0,0,0.05); color: #007AFF; min-width: 45px; }
         .task-info { flex: 1; margin-left: 12px; padding-right: 10px; }
         .task-title { font-size: 14px; font-weight: 800; color: #1D1D1F; line-height: 1.2; }
@@ -109,9 +146,9 @@
         .modal-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(230, 234, 239, 0.85); backdrop-filter:blur(10px); z-index:10001; justify-content:center; align-items:center; padding: 20px; }
         
         /* Clean Waiting Modal */
-        #ad-wait-modal { flex-direction: column; text-align: center; }
-        #ad-wait-modal h2 { color: #1D1D1F; font-size: 22px; font-weight: 800; margin-bottom: 10px; }
-        #ad-wait-modal .timer { font-size: 35px; color: #FF8C42; font-weight: 800; }
+        #ad-wait-modal, #task-flow-modal { flex-direction: column; text-align: center; }
+        #ad-wait-modal h2, #task-flow-modal h2 { color: #1D1D1F; font-size: 22px; font-weight: 800; margin-bottom: 10px; }
+        #ad-wait-modal .timer, #task-flow-modal .timer { font-size: 35px; color: #FF8C42; font-weight: 800; }
     </style>
 
     <!-- Adsgram Official Script -->
@@ -124,7 +161,7 @@
         <div style="font-weight: 800; color: #007AFF;">Connecting securely...</div>
     </div>
 
-    <!-- Ad Waiting Overlay -->
+    <!-- Ad Waiting Overlay For Watch & Earn -->
     <div id="ad-wait-modal" class="modal-overlay">
         <div class="glass-card" style="width: 100%; max-width: 350px;">
             <h2>Please Wait...</h2>
@@ -133,10 +170,21 @@
         </div>
     </div>
 
+    <!-- Task Execution Modal (Mandatory 15s Timer) -->
+    <div id="task-flow-modal" class="modal-overlay">
+        <div class="glass-card" style="width: 100%; max-width: 350px; text-align: center;">
+            <h2 id="task-modal-title">Unlocking Task</h2>
+            <p id="task-modal-desc" style="font-size: 13px; color: var(--text-muted); font-weight: 600;">Please watch the ad to unlock the task.</p>
+            <div class="timer" id="task-modal-timer">15s</div>
+            <button id="task-modal-action-btn" class="btn-primary" style="display: none; margin-top: 15px;">Go to Task</button>
+            <button class="btn-sm" style="width: 100%; background: rgba(0,0,0,0.05); color: #1D1D1F; border: 1px solid rgba(0,0,0,0.1); padding: 12px; box-shadow: none; margin-top: 10px;" onclick="closeTaskFlowModal()">Cancel</button>
+        </div>
+    </div>
+
     <!-- Proof Submit Modal -->
     <div id="proof-modal" class="modal-overlay">
         <div class="glass-card" style="width:100%; max-width:400px; text-align:center; padding: 30px 20px;">
-            <div style="font-size: 35px; margin-bottom: 15px;">📸</div>
+            <div style="font-size: 35px; margin-bottom: 15px;" class="float-anim">📸</div>
             <h3 id="proof-task-title" style="font-size: 18px; font-weight: 800; margin-bottom: 5px;">Submit Proof</h3>
             <p style="font-size:13px; color:var(--text-muted); font-weight: 600; margin-bottom:20px;">Upload a screenshot showing you completed this task.</p>
             
@@ -161,7 +209,7 @@
             <div class="balance-amount" id="top-cp">0 <span style="font-size: 18px; color: #007AFF;">CP</span></div>
             <div class="balance-usdt">≈ $<span id="top-usdt">0.0000</span></div>
         </div>
-        <img id="user-pic" src="https://via.placeholder.com/100/ffffff/007AFF?text=U" class="user-mini-pic">
+        <img id="user-pic" src="https://via.placeholder.com/100/ffffff/007AFF?text=U" class="user-mini-pic float-anim">
     </div>
 
     <div class="main-content">
@@ -179,7 +227,7 @@
                         <div style="font-size: 11px; color: var(--text-muted); font-weight: 600;">Today's Reward</div>
                         <div style="font-size: 16px; font-weight: 800; color: #FF8C42;" id="today-reward">5 CP</div>
                     </div>
-                    <button class="btn-sm orange" id="btn-claim" onclick="claimDailyWithAd()"><i class="fa-solid fa-play" style="font-size: 10px; margin-right: 3px;"></i> Check-In</button>
+                    <button class="btn-sm orange pulse-btn" id="btn-claim" onclick="claimDailyWithAd()"><i class="fa-solid fa-play" style="font-size: 10px; margin-right: 3px;"></i> Check-In</button>
                 </div>
             </div>
 
@@ -201,6 +249,19 @@
                 <script src="https://www.highrevenueformat.com/8f2c282d7a133448b994b2f0b53de617/invoke.js"></script>
             </div>
 
+            <!-- 🎮 PREMIUM PLAY & EARN BANNER -->
+            <div class="glass-card premium-game-card" style="background: linear-gradient(135deg, rgba(255, 215, 0, 0.25), rgba(255, 140, 66, 0.15)); border: 1.5px solid rgba(255, 215, 0, 0.6); box-shadow: 0 15px 35px rgba(255, 140, 66, 0.15), inset 0 2px 10px rgba(255, 255, 255, 1); text-align: center; padding: 25px 20px; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer; position: relative; overflow: hidden;" onclick="window.location.href='game.html'">
+                <div class="game-glow" style="position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(255,215,0,0.3) 0%, transparent 60%); animation: rotate-glow 10s linear infinite; z-index: 0; pointer-events: none;"></div>
+                <div style="position: relative; z-index: 1;">
+                    <div style="font-size: 45px; margin-bottom: 5px; filter: drop-shadow(0 10px 15px rgba(255, 140, 66, 0.4));" class="game-bounce">🎮</div>
+                    <h2 style="font-size: 22px; font-weight: 800; background: linear-gradient(90deg, #F5A623, #FF3B30, #F5A623); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 5px; animation: gradient-shift 3s infinite linear;">Play Games & Earn</h2>
+                    <p style="font-size: 13px; color: #1D1D1F; font-weight: 800; margin-bottom: 15px;">Unlock massive CP rewards with premium challenges!</p>
+                    <button class="btn-primary pulse-btn" style="background: linear-gradient(180deg, #F5A623, #FF8C42); box-shadow: 0 10px 20px rgba(255, 140, 66, 0.4), inset 0 2px 4px rgba(255,255,255,0.6); border: 1px solid rgba(255,255,255,0.8); width: auto; padding: 12px 35px; font-size: 15px; border-radius: 30px; pointer-events: none;">
+                        <i class="fa-solid fa-gamepad" style="margin-right: 5px;"></i> Start Playing
+                    </button>
+                </div>
+            </div>
+
             <div class="section-title" style="margin-top: 25px;"><i class="fa-solid fa-users" style="color: #00C7B5;"></i> Social Tasks</div>
             <div id="dynamic-social-tasks"><div style="text-align: center; color: #888; font-size: 12px; font-weight: 600;">Loading...</div></div>
         </div>
@@ -217,13 +278,13 @@
         <!-- REFERRAL TAB -->
         <div id="tab-referral" class="tab-section">
             <div class="glass-card" style="text-align: center;">
-                <div style="font-size: 45px; margin-bottom: 10px; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1));">🎁</div>
+                <div style="font-size: 45px; margin-bottom: 10px; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1));" class="float-anim">🎁</div>
                 <h2 style="font-size: 22px; font-weight: 800; margin-bottom: 10px; color: #1D1D1F;">Invite & Earn Lifetime</h2>
                 <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5; margin-bottom: 20px; font-weight: 600;">
                     Earn <span style="color: #FF8C42; font-weight: 800;">100 CP</span> per invite + <span style="color: #007AFF; font-weight: 800;">10% lifetime commission</span> on all their earnings!
                 </p>
                 <div style="font-size: 28px; font-weight: 800; margin-bottom: 20px; color: #1D1D1F;"><span id="ref-count">0</span> <span style="font-size:12px; color:var(--text-muted);">Friends</span></div>
-                <button class="btn-primary" onclick="copyRefLink()" style="background: var(--btn-orange); box-shadow: 0 10px 20px var(--orange-glow);">Copy Invite Link</button>
+                <button class="btn-primary pulse-btn" onclick="copyRefLink()" style="background: var(--btn-orange); box-shadow: 0 10px 20px var(--orange-glow);">Copy Invite Link</button>
             </div>
         </div>
 
@@ -331,11 +392,11 @@
         const db = firebase.firestore();
         const storage = firebase.storage();
 
-        // AD LINKS (Update Adsgram Block ID)
+        // UPDATED AD LINKS
         const adLinks = {
             adsterra: "https://www.profitableratecpmnetwork.com/qqm7unbp9c?key=e6068fd32853ac21e39371c87bd3ec2d",
             monetag: "https://omg10.com/4/11678700",
-            adsgram: "45161" 
+            adsgram: "45228" 
         };
 
         // GLOBAL APP LOGIC
@@ -347,7 +408,7 @@
         let tgUser = tg.initDataUnsafe?.user;
         let userId = tgUser?.id ? tgUser.id.toString() : "demo_user";
         
-        let userData = { name: tgUser?.first_name || "Guest User", cp: 0, referrals: 0, checkInDays: 0, lastCheckInDate: "", hasTrustBadge: false, claimedCodes: [], referredBy: null, watchAdCount: 0 };
+        let userData = { name: tgUser?.first_name || "Guest User", cp: 0, referrals: 0, checkInDays: 0, lastCheckInDate: "", hasTrustBadge: false, claimedCodes: [], referredBy: null, watchAdCount: 0, taskAdCount: 0 };
         let userSubmissions = {}; 
 
         const MIN_WITHDRAW_CP = 15000;
@@ -499,8 +560,9 @@
         }
 
         // ==========================================
-        // DYNAMIC TASKS AND AD LOGIC
+        // DYNAMIC TASKS AND ROTATION LOGIC
         // ==========================================
+        
         function fetchSubmissions() {
             db.collection("task_submissions").where("userId", "==", userId).onSnapshot((snap) => {
                 userSubmissions = {};
@@ -512,25 +574,23 @@
         function loadDynamicTasks() {
             db.collection("app_tasks").orderBy("timestamp", "asc").onSnapshot((snapshot) => {
                 let premiumHtml = "", socialHtml = "";
-                let premiumIndex = 0, socialIndex = 0;
 
                 snapshot.forEach(doc => {
                     let task = doc.data(), taskId = doc.id;
+                    let sub = userSubmissions[taskId];
+
+                    // Hide tasks that are completely finished (approved, pending, or completed)
+                    if (sub && (sub.status === 'completed' || sub.status === 'pending' || sub.status === 'approved')) {
+                        return; // Skip rendering
+                    }
                     
                     if (task.type === "premium") {
-                        let sub = userSubmissions[taskId];
                         let buttonsHtml = "";
                         
-                        if(sub) {
-                            if(sub.status === 'pending') {
-                                buttonsHtml = `<button class="btn-sm disabled" style="width: 100%;">⏳ Pending</button>`;
-                            } else if (sub.status === 'approved') {
-                                buttonsHtml = `<button class="btn-sm disabled" style="background:#4CAF50!important;color:#fff!important;width: 100%;"><i class="fa-solid fa-check"></i> Paid</button>`;
-                            } else if (sub.status === 'rejected') {
-                                buttonsHtml = `<button class="btn-sm" style="background:#FF3B30;width: 100%;" onclick="openProofModal('${taskId}', '${task.title.replace(/'/g, "\\'")}', ${task.reward})">🔄 Resubmit</button>`;
-                            }
+                        if (sub && sub.status === 'rejected') {
+                            buttonsHtml = `<button class="btn-sm" style="background:#FF3B30;width: 100%;" onclick="startTaskFlow('${taskId}', 'premium', '${task.title.replace(/'/g, "\\'")}', ${task.reward}, '${task.link}')">🔄 Resubmit</button>`;
                         } else {
-                            buttonsHtml = `<button class="btn-sm" id="btn-${taskId}" onclick="handlePremiumTask('btn-${taskId}', '${task.link}', '${taskId}', '${task.title.replace(/'/g, "\\'")}', ${task.reward}, ${premiumIndex})">Do Task</button>`;
+                            buttonsHtml = `<button class="btn-sm" onclick="startTaskFlow('${taskId}', 'premium', '${task.title.replace(/'/g, "\\'")}', ${task.reward}, '${task.link}')">Do Task</button>`;
                         }
 
                         premiumHtml += `
@@ -543,7 +603,6 @@
                                 <div class="task-actions">${buttonsHtml}</div>
                             </div>
                         `;
-                        premiumIndex++;
                     } else {
                         socialHtml += `
                             <div class="task-item">
@@ -553,11 +612,10 @@
                                     <div class="task-reward">${task.reward} CP</div>
                                 </div>
                                 <div class="task-actions">
-                                    <button class="btn-sm" id="btn-${taskId}" onclick="handleSocialTask('btn-${taskId}', '${task.link}', ${task.reward}, ${socialIndex})">Start</button>
+                                    <button class="btn-sm" onclick="startTaskFlow('${taskId}', 'social', '${task.title.replace(/'/g, "\\'")}', ${task.reward}, '${task.link}')">Start</button>
                                 </div>
                             </div>
                         `;
-                        socialIndex++;
                     }
                 });
                 document.getElementById("dynamic-premium-tasks").innerHTML = premiumHtml || `<div style="text-align:center; color:#888; font-size:12px; font-weight: 600;">No Pro Tasks Available</div>`;
@@ -565,105 +623,127 @@
             });
         }
 
-        // --- Master Ad Display Logic ---
-        function showSpecificAd(network, btn, onSuccess) {
-            btn.classList.add('loading');
-            btn.innerText = "Wait...";
+        // --- Task Ad Rotation Cycle ---
+        // Cycle: 0,1 (Adsgram) -> 2,3 (Monetag) -> 4,5 (Adsterra) -> repeat
+        function getNextAdNetwork() {
+            let cycle = Math.floor((userData.taskAdCount || 0) / 2) % 3;
+            return cycle === 0 ? 'adsgram' : (cycle === 1 ? 'monetag' : 'adsterra');
+        }
 
+        // --- Core Task & 15s Timer Flow ---
+        let currentTaskFlow = {}; 
+
+        function startTaskFlow(taskId, type, title, reward, targetLink) {
+            currentTaskFlow = { taskId, type, title, reward, targetLink };
+            let network = getNextAdNetwork();
+            
+            // Increment rotation tracker
+            userData.taskAdCount = (userData.taskAdCount || 0) + 1;
+            saveUserData();
+
+            // Setup 15s modal UI
+            document.getElementById("task-flow-modal").style.display = "flex";
+            document.getElementById("task-modal-title").innerText = "Unlocking Task";
+            document.getElementById("task-modal-desc").innerText = "Please watch the ad for 15 seconds to unlock.";
+            document.getElementById("task-modal-timer").style.display = "block";
+            document.getElementById("task-modal-action-btn").style.display = "none";
+            document.getElementById("task-modal-timer").innerText = "15s";
+
+            // Network Routing
             if (network === 'adsgram') {
                 if (window.Adsgram) {
                     const AdController = window.Adsgram.init({ blockId: adLinks.adsgram });
                     AdController.show().then(() => {
-                        btn.classList.remove('loading');
-                        onSuccess();
-                    }).catch((err) => {
-                        // Silent fallback to Monetag if Adsgram fails to load an ad
-                        triggerFallbackAdOverlay(btn, adLinks.monetag, onSuccess);
+                        unlockTaskLink(); // Adsgram handles its own internal video duration
+                    }).catch(() => {
+                        triggerDirectLinkAd(adLinks.monetag); // Fallback if Adsgram fails
                     });
                 } else {
-                    triggerFallbackAdOverlay(btn, adLinks.monetag, onSuccess);
+                    triggerDirectLinkAd(adLinks.monetag);
                 }
             } else if (network === 'monetag') {
-                triggerFallbackAdOverlay(btn, adLinks.monetag, onSuccess);
+                triggerDirectLinkAd(adLinks.monetag);
             } else if (network === 'adsterra') {
-                triggerFallbackAdOverlay(btn, adLinks.adsterra, onSuccess);
+                triggerDirectLinkAd(adLinks.adsterra); // Opens direct link while popunder runs passively
             }
         }
 
-        function triggerFallbackAdOverlay(btn, adUrl, onSuccess) {
-            document.getElementById("ad-wait-modal").style.display = "flex";
-            window.open(adUrl, "_blank"); // Open Ad Link
-
-            let timeLeft = 10;
-            document.getElementById("ad-timer").innerText = timeLeft + "s";
+        function triggerDirectLinkAd(url) {
+            window.open(url, "_blank"); // Open Ad Link Tab
+            let timeLeft = 15; // Mandatory 15 seconds
+            document.getElementById("task-modal-timer").innerText = timeLeft + "s";
             
             let timerInt = setInterval(() => {
                 timeLeft--;
-                document.getElementById("ad-timer").innerText = timeLeft + "s";
+                document.getElementById("task-modal-timer").innerText = timeLeft + "s";
                 if(timeLeft <= 0) {
                     clearInterval(timerInt);
-                    document.getElementById("ad-wait-modal").style.display = "none";
-                    btn.classList.remove('loading');
-                    onSuccess();
+                    unlockTaskLink(); // Allow user to do task after 15s
                 }
             }, 1000);
+            currentTaskFlow.timerInt = timerInt;
         }
 
-        // --- Task Ad Logic (2 Monetag -> 2 Adsgram -> 2 Adsterra) ---
-        function getTaskAdNetwork(index) {
-            let cycle = Math.floor(index / 2) % 3;
-            // index 0,1 (cycle 0) -> Monetag
-            // index 2,3 (cycle 1) -> Adsgram
-            // index 4,5 (cycle 2) -> Adsterra
-            return cycle === 0 ? 'monetag' : (cycle === 1 ? 'adsgram' : 'adsterra');
+        function unlockTaskLink() {
+            document.getElementById("task-modal-timer").style.display = "none";
+            document.getElementById("task-modal-desc").innerText = "Ad Complete! Now you can do the actual task.";
+            
+            let btn = document.getElementById("task-modal-action-btn");
+            btn.style.display = "block";
+            btn.innerText = "Go to Task";
+            btn.onclick = () => {
+                // Open real task link
+                window.open(currentTaskFlow.targetLink, "_blank");
+                
+                // Change Modal to Verification State
+                if (currentTaskFlow.type === 'social') {
+                    btn.innerText = "Verify Task";
+                    document.getElementById("task-modal-desc").innerText = "Click verify ONLY after completing the task. Otherwise you will not get rewarded.";
+                    btn.onclick = () => verifyAndCompleteSocialTask();
+                } else {
+                    btn.innerText = "Submit Proof";
+                    document.getElementById("task-modal-desc").innerText = "Capture a screenshot and submit your proof.";
+                    btn.onclick = () => {
+                        closeTaskFlowModal();
+                        openProofModal(currentTaskFlow.taskId, currentTaskFlow.title, currentTaskFlow.reward);
+                    }
+                }
+            };
         }
 
-        function handlePremiumTask(btnId, targetLink, taskId, title, reward, index) {
-            let btn = document.getElementById(btnId);
-            let network = getTaskAdNetwork(index);
-
-            showSpecificAd(network, btn, () => {
-                window.open(targetLink, "_blank"); 
-                btn.classList.add('verify');
-                btn.innerText = "Submit";
-                btn.onclick = () => openProofModal(taskId, title, reward);
-            });
+        function closeTaskFlowModal() {
+            document.getElementById("task-flow-modal").style.display = "none";
+            if (currentTaskFlow.timerInt) clearInterval(currentTaskFlow.timerInt);
+            currentTaskFlow = {};
         }
 
-        function handleSocialTask(btnId, targetLink, reward, index) {
-            let btn = document.getElementById(btnId);
-            let network = getTaskAdNetwork(index);
-
-            showSpecificAd(network, btn, () => {
-                window.open(targetLink, "_blank"); 
-                btn.classList.add('verify');
-                btn.innerText = "Verify";
-                btn.onclick = () => verifySocialTask(btnId, reward);
-            });
-        }
-
-        function verifySocialTask(btnId, reward) {
-            let btn = document.getElementById(btnId);
-            btn.innerText = "Checking...";
+        function verifyAndCompleteSocialTask() {
+            let btn = document.getElementById("task-modal-action-btn");
+            btn.innerText = "Verifying...";
             btn.classList.add('loading');
-            btn.classList.remove('verify');
             
             setTimeout(() => {
-                userData.cp += reward;
+                // Save complete state to Firebase so it hides forever
+                db.collection("task_submissions").add({
+                    userId: userId,
+                    taskId: currentTaskFlow.taskId,
+                    status: "completed",
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                
+                userData.cp += currentTaskFlow.reward;
                 saveUserData();
-                processCommission(reward);
+                processCommission(currentTaskFlow.reward);
                 updateUI();
                 playCoinDropAnimation();
-                btn.classList.remove('loading');
-                btn.classList.add('disabled');
-                btn.innerHTML = `<i class="fa-solid fa-check"></i> Done`;
-                btn.style.background = "rgba(0,0,0,0.1)";
-                btn.style.color = "#888";
                 tg.HapticFeedback.notificationOccurred('success');
-            }, 1500);
+                
+                closeTaskFlowModal();
+            }, 2000);
         }
 
-        // --- Watch & Earn Ad Logic (3 Adsgram -> 3 Monetag -> 3 Adsterra) ---
+
+        // --- Watch & Earn Ad Logic (Kept mostly as is) ---
         let watchAdCooldown = false;
         function watchAdForCP() {
             if (watchAdCooldown) return;
@@ -671,17 +751,15 @@
             
             let currentCount = userData.watchAdCount || 0;
             let cycle = Math.floor(currentCount / 3) % 3;
-            
-            // Count 0,1,2 (cycle 0) -> Adsgram
-            // Count 3,4,5 (cycle 1) -> Monetag
-            // Count 6,7,8 (cycle 2) -> Adsterra
             let network = cycle === 0 ? 'adsgram' : (cycle === 1 ? 'monetag' : 'adsterra');
             
-            showSpecificAd(network, btn, () => {
+            btn.classList.add('loading');
+            btn.innerText = "Wait...";
+
+            const onSuccess = () => {
                 let reward = 10;
                 userData.cp += reward;
-                userData.watchAdCount = currentCount + 1; // Increment tracker
-                
+                userData.watchAdCount = currentCount + 1; 
                 saveUserData();
                 processCommission(reward); 
                 updateUI();
@@ -703,8 +781,38 @@
                         btn.innerHTML = `<i class="fa-solid fa-play" style="margin-right: 3px;"></i> +10 CP`;
                     }
                 }, 1000);
-            });
+            };
+
+            if (network === 'adsgram') {
+                if (window.Adsgram) {
+                    const AdController = window.Adsgram.init({ blockId: adLinks.adsgram });
+                    AdController.show().then(() => { btn.classList.remove('loading'); onSuccess(); })
+                    .catch(() => triggerWatchDirectAd(adLinks.monetag, btn, onSuccess));
+                } else triggerWatchDirectAd(adLinks.monetag, btn, onSuccess);
+            } else if (network === 'monetag') {
+                triggerWatchDirectAd(adLinks.monetag, btn, onSuccess);
+            } else {
+                triggerWatchDirectAd(adLinks.adsterra, btn, onSuccess);
+            }
         }
+
+        function triggerWatchDirectAd(url, btn, onSuccess) {
+            document.getElementById("ad-wait-modal").style.display = "flex";
+            window.open(url, "_blank"); 
+            let timeLeft = 10;
+            document.getElementById("ad-timer").innerText = timeLeft + "s";
+            let timerInt = setInterval(() => {
+                timeLeft--;
+                document.getElementById("ad-timer").innerText = timeLeft + "s";
+                if(timeLeft <= 0) {
+                    clearInterval(timerInt);
+                    document.getElementById("ad-wait-modal").style.display = "none";
+                    btn.classList.remove('loading');
+                    onSuccess();
+                }
+            }, 1000);
+        }
+
 
         // --- Proof Submit Logic ---
         let currentUploadTaskId = null;
@@ -792,7 +900,9 @@
             let today = new Date().toDateString();
             if(userData.lastCheckInDate !== today) {
                 let btn = document.getElementById("btn-claim");
-                showSpecificAd('adsgram', btn, () => {
+                
+                // Using existing WatchDirectAd setup for Check-in Ad logic
+                triggerWatchDirectAd(adLinks.monetag, btn, () => {
                     let currentDay = userData.checkInDays + 1;
                     let reward = (currentDay === 7 || currentDay === 14 || currentDay === 21) ? 20 : (currentDay === 30 ? 100 : 5);
                     userData.cp += reward;
