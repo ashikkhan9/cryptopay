@@ -390,15 +390,20 @@
                 try {
                     const docRef = db.collection("users").doc(userId);
                     const docSnap = await docRef.get();
-                    if (docSnap.exists) { userData = { ...userData, ...docSnap.data() }; } 
-                    else {
+                    if (docSnap.exists) { 
+                        userData = { ...userData, ...docSnap.data() }; 
+                    } else {
                         let startParam = tg.initDataUnsafe?.start_param;
-                        if(startParam && startParam !== userId) { userData.referredBy = startParam; }
+                        if(startParam && startParam !== userId) { 
+                            userData.referredBy = startParam; 
+                        }
                         await saveUserData();
-                        if(userData.referredBy) { processReferral(userData.referredBy); }
+                        if(userData.referredBy) { 
+                            await processReferral(userData.referredBy); 
+                        }
                     }
                     fetchSubmissions();
-                } catch(e) {}
+                } catch(e) { console.error(e); }
             }
             document.getElementById("loader").style.display = "none";
             updateUI();
@@ -411,17 +416,21 @@
         async function processReferral(referrerId) {
             try {
                 const refDoc = db.collection("users").doc(referrerId);
-                await refDoc.update({ 
+                await refDoc.set({ 
                     cp: firebase.firestore.FieldValue.increment(100),
                     referrals: firebase.firestore.FieldValue.increment(1)
-                });
-            } catch(e) {}
+                }, { merge: true });
+            } catch(e) { console.error(e); }
         }
 
         async function processCommission(amountEarned) {
             if (userData.referredBy && amountEarned > 0) {
                 let commission = amountEarned * 0.10; 
-                try { await db.collection("users").doc(userData.referredBy).update({ cp: firebase.firestore.FieldValue.increment(commission) }); } catch(e) {}
+                try { 
+                    await db.collection("users").doc(userData.referredBy).set({ 
+                        cp: firebase.firestore.FieldValue.increment(commission) 
+                    }, { merge: true }); 
+                } catch(e) { console.error(e); }
             }
         }
 
@@ -801,9 +810,14 @@
         }
 
         function copyRefLink() {
-            let refId = tgUser?.id || "demo";
+            let refId = tgUser?.id || userId;
+            if(refId === "demo_user") {
+                tg.showAlert("⚠️ Open the app inside Telegram to copy your real link!");
+                return;
+            }
             navigator.clipboard.writeText(`https://t.me/${BOT_USERNAME.replace('@','')}/app?startapp=${refId}`);
-            tg.HapticFeedback.impactOccurred('medium'); tg.showAlert("Referral link copied!");
+            tg.HapticFeedback.impactOccurred('medium'); 
+            tg.showAlert("✅ Invite link copied! You will get 100 CP + 10% commission active.");
         }
 
         async function sendSupportMessage() {
