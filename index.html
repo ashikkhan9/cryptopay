@@ -11,8 +11,8 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
 
-    <!-- Adsterra Popunder Script (Optimized to not block UX) -->
-    <script src="https://pl31095185.profitableratecpmnetwork.com/bc/67/11/bc6711569a1f04f1939a3a567c120641.js"></script>
+    <!-- Adsgram Official Script -->
+    <script src="https://adsgram.ai/js/adsgram.js"></script>
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
@@ -38,38 +38,19 @@
         .spinner { width: 50px; height: 50px; border: 5px solid rgba(0, 122, 255, 0.2); border-top-color: #007AFF; border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* NEW ANIMATIONS ADDED HERE */
-        @keyframes float-icon {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-6px); }
-        }
+        @keyframes float-icon { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
         .float-anim { animation: float-icon 3s ease-in-out infinite; display: inline-block; }
 
-        @keyframes game-bounce {
-            0%, 100% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-8px) scale(1.1); filter: drop-shadow(0 10px 15px rgba(255, 140, 66, 0.6)); }
-        }
+        @keyframes game-bounce { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-8px) scale(1.1); filter: drop-shadow(0 10px 15px rgba(255, 140, 66, 0.6)); } }
         .game-bounce { animation: game-bounce 2s infinite ease-in-out; display: inline-block; }
 
-        @keyframes pulse-btn {
-            0% { box-shadow: 0 0 0 0 rgba(255, 140, 66, 0.5); }
-            70% { box-shadow: 0 0 0 15px rgba(255, 140, 66, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(255, 140, 66, 0); }
-        }
+        @keyframes pulse-btn { 0% { box-shadow: 0 0 0 0 rgba(255, 140, 66, 0.5); } 70% { box-shadow: 0 0 0 15px rgba(255, 140, 66, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 140, 66, 0); } }
         .pulse-btn { animation: pulse-btn 2s infinite; }
 
-        @keyframes gradient-shift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        @keyframes rotate-glow {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+        @keyframes gradient-shift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        @keyframes rotate-glow { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         .premium-game-card:active { transform: scale(0.96); }
-        /* END NEW ANIMATIONS */
 
         .glow-1 { position: absolute; top: -10%; left: -10%; width: 350px; height: 350px; background: radial-gradient(circle, rgba(255,122,0,0.15) 0%, transparent 70%); filter: blur(40px); z-index: -1; }
         .glow-2 { position: absolute; bottom: 10%; right: -10%; width: 300px; height: 300px; background: radial-gradient(circle, rgba(0,198,255,0.15) 0%, transparent 70%); filter: blur(40px); z-index: -1; }
@@ -87,7 +68,8 @@
         .balance-usdt { font-size: 13px; color: #007AFF; font-weight: 800; background: rgba(0, 122, 255, 0.1); padding: 4px 12px; border-radius: 12px; margin-top: 5px; display: inline-block; border: 1px solid rgba(255,255,255,0.5); box-shadow: inset 0 1px 2px rgba(255,255,255,0.8); }
         .user-mini-pic { width: 45px; height: 45px; border-radius: 16px; border: 2px solid #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.1); object-fit: cover; }
 
-        .main-content { height: calc(100vh - 120px); overflow-y: auto; padding: 0 20px 100px 20px; }
+        /* SCROLLING FIX ADDED HERE */
+        .main-content { height: calc(100vh - 120px); overflow-y: auto; padding: 0 20px 100px 20px; -webkit-overflow-scrolling: touch; overscroll-behavior-y: contain; position: relative; z-index: 10; }
         .main-content::-webkit-scrollbar { display: none; }
         .tab-section { display: none; animation: fadeUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
         .tab-section.active { display: block; }
@@ -110,6 +92,10 @@
 
         .btn-sm { background: var(--btn-blue); color: #fff; border: none; padding: 8px 15px; border-radius: 20px; font-weight: 800; font-size: 12px; cursor: pointer; transition: 0.2s; box-shadow: 0 6px 12px var(--primary-glow), inset 0 2px 4px rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.2); }
         .btn-sm.orange { background: var(--btn-orange); box-shadow: 0 6px 12px var(--orange-glow), inset 0 2px 4px rgba(255,255,255,0.5); }
+        
+        /* NEW GOLDEN TASK BUTTON */
+        .btn-sm.task-btn-gold { background: linear-gradient(180deg, #FAD961, #FF8C42); box-shadow: 0 6px 12px rgba(255, 140, 66, 0.3), inset 0 2px 4px rgba(255,255,255,0.6); color: #fff; border: 1px solid rgba(255,255,255,0.4); }
+        
         .btn-sm.disabled { background: rgba(0,0,0,0.1) !important; color: #888 !important; box-shadow: none !important; border: 1px solid rgba(0,0,0,0.05) !important; pointer-events: none; }
         .btn-sm.loading { background: #A0AEC0; box-shadow: inset 0 2px 4px rgba(255,255,255,0.4); pointer-events: none; }
         .btn-sm.verify { background: linear-gradient(180deg, #FAD961, #F76B1C); box-shadow: 0 6px 12px rgba(247, 107, 28, 0.3), inset 0 2px 4px rgba(255,255,255,0.6); color: #fff; }
@@ -150,9 +136,6 @@
         #ad-wait-modal h2, #task-flow-modal h2 { color: #1D1D1F; font-size: 22px; font-weight: 800; margin-bottom: 10px; }
         #ad-wait-modal .timer, #task-flow-modal .timer { font-size: 35px; color: #FF8C42; font-weight: 800; }
     </style>
-
-    <!-- Adsgram Official Script -->
-    <script src="https://adsgram.ai/js/adsgram.js"></script>
 </head>
 <body>
 
@@ -590,7 +573,7 @@
                         if (sub && sub.status === 'rejected') {
                             buttonsHtml = `<button class="btn-sm" style="background:#FF3B30;width: 100%;" onclick="startTaskFlow('${taskId}', 'premium', '${task.title.replace(/'/g, "\\'")}', ${task.reward}, '${task.link}')">🔄 Resubmit</button>`;
                         } else {
-                            buttonsHtml = `<button class="btn-sm" onclick="startTaskFlow('${taskId}', 'premium', '${task.title.replace(/'/g, "\\'")}', ${task.reward}, '${task.link}')">Do Task</button>`;
+                            buttonsHtml = `<button class="btn-sm task-btn-gold" onclick="startTaskFlow('${taskId}', 'premium', '${task.title.replace(/'/g, "\\'")}', ${task.reward}, '${task.link}')">Do Task</button>`;
                         }
 
                         premiumHtml += `
@@ -612,7 +595,7 @@
                                     <div class="task-reward">${task.reward} CP</div>
                                 </div>
                                 <div class="task-actions">
-                                    <button class="btn-sm" onclick="startTaskFlow('${taskId}', 'social', '${task.title.replace(/'/g, "\\'")}', ${task.reward}, '${task.link}')">Start</button>
+                                    <button class="btn-sm task-btn-gold" onclick="startTaskFlow('${taskId}', 'social', '${task.title.replace(/'/g, "\\'")}', ${task.reward}, '${task.link}')">Start</button>
                                 </div>
                             </div>
                         `;
@@ -957,8 +940,21 @@
 
         fetchUserData();
     </script>
-    
-    <!-- Monetag Vignette Script -->
-    <script>(function(s){s.dataset.zone='11678521',s.src='https://n6wxm.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+
+    <!-- Delayed Ads Loading to Fix Scroll Lag -->
+    <script>
+        setTimeout(() => {
+            // Adsterra Popunder
+            let adsterra = document.createElement('script');
+            adsterra.src = "https://pl31095185.profitableratecpmnetwork.com/bc/67/11/bc6711569a1f04f1939a3a567c120641.js";
+            document.body.appendChild(adsterra);
+            
+            // Monetag Vignette
+            let monetag = document.createElement('script');
+            monetag.dataset.zone = '11678521';
+            monetag.src = 'https://n6wxm.com/vignette.min.js';
+            document.body.appendChild(monetag);
+        }, 3000); 
+    </script>
 </body>
 </html>
