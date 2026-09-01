@@ -11,9 +11,6 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
 
-    <!-- Adsgram Official Script -->
-    <script src="https://adsgram.ai/js/adsgram.js"></script>
-
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
         
@@ -68,7 +65,6 @@
         .balance-usdt { font-size: 13px; color: #007AFF; font-weight: 800; background: rgba(0, 122, 255, 0.1); padding: 4px 12px; border-radius: 12px; margin-top: 5px; display: inline-block; border: 1px solid rgba(255,255,255,0.5); box-shadow: inset 0 1px 2px rgba(255,255,255,0.8); }
         .user-mini-pic { width: 45px; height: 45px; border-radius: 16px; border: 2px solid #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.1); object-fit: cover; }
 
-        /* SCROLLING FIX ADDED HERE */
         .main-content { height: calc(100vh - 120px); overflow-y: auto; padding: 0 20px 100px 20px; -webkit-overflow-scrolling: touch; overscroll-behavior-y: contain; position: relative; z-index: 10; }
         .main-content::-webkit-scrollbar { display: none; }
         .tab-section { display: none; animation: fadeUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
@@ -93,7 +89,6 @@
         .btn-sm { background: var(--btn-blue); color: #fff; border: none; padding: 8px 15px; border-radius: 20px; font-weight: 800; font-size: 12px; cursor: pointer; transition: 0.2s; box-shadow: 0 6px 12px var(--primary-glow), inset 0 2px 4px rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.2); }
         .btn-sm.orange { background: var(--btn-orange); box-shadow: 0 6px 12px var(--orange-glow), inset 0 2px 4px rgba(255,255,255,0.5); }
         
-        /* NEW GOLDEN TASK BUTTON */
         .btn-sm.task-btn-gold { background: linear-gradient(180deg, #FAD961, #FF8C42); box-shadow: 0 6px 12px rgba(255, 140, 66, 0.3), inset 0 2px 4px rgba(255,255,255,0.6); color: #fff; border: 1px solid rgba(255,255,255,0.4); }
         
         .btn-sm.disabled { background: rgba(0,0,0,0.1) !important; color: #888 !important; box-shadow: none !important; border: 1px solid rgba(0,0,0,0.05) !important; pointer-events: none; }
@@ -131,7 +126,6 @@
 
         .modal-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(230, 234, 239, 0.85); backdrop-filter:blur(10px); z-index:10001; justify-content:center; align-items:center; padding: 20px; }
         
-        /* Clean Waiting Modal */
         #ad-wait-modal, #task-flow-modal { flex-direction: column; text-align: center; }
         #ad-wait-modal h2, #task-flow-modal h2 { color: #1D1D1F; font-size: 22px; font-weight: 800; margin-bottom: 10px; }
         #ad-wait-modal .timer, #task-flow-modal .timer { font-size: 35px; color: #FF8C42; font-weight: 800; }
@@ -175,6 +169,17 @@
             
             <button class="btn-primary" id="btn-submit-proof" onclick="submitTaskProof()" style="margin-bottom: 10px;">Upload & Submit</button>
             <button class="btn-sm" style="width: 100%; background: rgba(0,0,0,0.05); color: #1D1D1F; border: 1px solid rgba(0,0,0,0.1); padding: 12px; box-shadow: none;" onclick="document.getElementById('proof-modal').style.display='none'">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Information / Legal Modal for AdSense Readiness -->
+    <div id="info-modal" class="modal-overlay">
+        <div class="glass-card" style="width:100%; max-width:400px; max-height: 80vh; overflow-y: auto; text-align:left; padding: 25px 20px;">
+            <h3 id="info-title" style="font-size: 20px; font-weight: 800; margin-bottom: 15px; color: #1D1D1F;">Title</h3>
+            <div id="info-content" style="font-size: 13px; color: var(--text-muted); font-weight: 600; line-height: 1.6; margin-bottom: 20px;">
+                Content...
+            </div>
+            <button class="btn-primary" onclick="document.getElementById('info-modal').style.display='none'">Close</button>
         </div>
     </div>
 
@@ -226,31 +231,33 @@
                 </div>
             </div>
 
-            <!-- Adsterra Banner -->
+            <!-- Adsterra Banner (Home) -->
             <div style="display:flex; justify-content:center; align-items:center; margin-bottom: 20px;">
                 <script> atOptions = { 'key' : '8f2c282d7a133448b994b2f0b53de617', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} }; </script>
                 <script src="https://www.highrevenueformat.com/8f2c282d7a133448b994b2f0b53de617/invoke.js"></script>
             </div>
 
-            <!-- 🎮 PREMIUM PLAY & EARN BANNER -->
-            <div class="glass-card premium-game-card" style="background: linear-gradient(135deg, rgba(255, 215, 0, 0.25), rgba(255, 140, 66, 0.15)); border: 1.5px solid rgba(255, 215, 0, 0.6); box-shadow: 0 15px 35px rgba(255, 140, 66, 0.15), inset 0 2px 10px rgba(255, 255, 255, 1); text-align: center; padding: 25px 20px; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer; position: relative; overflow: hidden;" onclick="window.location.href='game.html'">
-                <div class="game-glow" style="position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(255,215,0,0.3) 0%, transparent 60%); animation: rotate-glow 10s linear infinite; z-index: 0; pointer-events: none;"></div>
-                <div style="position: relative; z-index: 1;">
-                    <div style="font-size: 45px; margin-bottom: 5px; filter: drop-shadow(0 10px 15px rgba(255, 140, 66, 0.4));" class="game-bounce">🎮</div>
-                    <h2 style="font-size: 22px; font-weight: 800; background: linear-gradient(90deg, #F5A623, #FF3B30, #F5A623); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 5px; animation: gradient-shift 3s infinite linear;">Play Games & Earn</h2>
-                    <p style="font-size: 13px; color: #1D1D1F; font-weight: 800; margin-bottom: 15px;">Unlock massive CP rewards with premium challenges!</p>
-                    <button class="btn-primary pulse-btn" style="background: linear-gradient(180deg, #F5A623, #FF8C42); box-shadow: 0 10px 20px rgba(255, 140, 66, 0.4), inset 0 2px 4px rgba(255,255,255,0.6); border: 1px solid rgba(255,255,255,0.8); width: auto; padding: 12px 35px; font-size: 15px; border-radius: 30px; pointer-events: none;">
-                        <i class="fa-solid fa-gamepad" style="margin-right: 5px;"></i> Start Playing
-                    </button>
-                </div>
-            </div>
-
             <div class="section-title" style="margin-top: 25px;"><i class="fa-solid fa-users" style="color: #00C7B5;"></i> Social Tasks</div>
             <div id="dynamic-social-tasks"><div style="text-align: center; color: #888; font-size: 12px; font-weight: 600;">Loading...</div></div>
+
+            <!-- Essential legal footer for ad reviewers (Minimal styling) -->
+            <div style="text-align: center; margin-top: 25px; margin-bottom: 25px; font-size: 12px; color: var(--text-muted); font-weight: 600; line-height: 2;">
+                <span onclick="openInfoModal('about')" style="cursor: pointer;">About</span> • 
+                <span onclick="openInfoModal('how')" style="cursor: pointer;">How It Works</span> • 
+                <span onclick="openInfoModal('privacy')" style="cursor: pointer;">Privacy Policy</span><br>
+                <span onclick="openInfoModal('terms')" style="cursor: pointer;">Terms of Service</span> • 
+                <span onclick="openInfoModal('contact')" style="cursor: pointer;">Contact</span>
+            </div>
         </div>
 
         <!-- PREMIUM TASKS TAB -->
         <div id="tab-premium" class="tab-section">
+            <!-- Adsterra Banner (Premium Tasks) -->
+            <div style="display:flex; justify-content:center; align-items:center; margin-bottom: 20px;">
+                <script> atOptions = { 'key' : '8f2c282d7a133448b994b2f0b53de617', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} }; </script>
+                <script src="https://www.highrevenueformat.com/8f2c282d7a133448b994b2f0b53de617/invoke.js"></script>
+            </div>
+            
             <div class="glass-card">
                 <h2 style="font-size: 18px; font-weight: 800; color: #1D1D1F; margin-bottom: 5px;"><i class="fa-solid fa-star" style="color: #F5A623;"></i> Pro Tasks</h2>
                 <p style="font-size: 12px; color: var(--text-muted); font-weight: 600; margin-bottom: 15px;">Complete tasks as instructed and upload screenshot proof. Rewards will be added after admin verification.</p>
@@ -260,6 +267,12 @@
 
         <!-- REFERRAL TAB -->
         <div id="tab-referral" class="tab-section">
+            <!-- Adsterra Banner (Referral) -->
+            <div style="display:flex; justify-content:center; align-items:center; margin-bottom: 20px;">
+                <script> atOptions = { 'key' : '8f2c282d7a133448b994b2f0b53de617', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} }; </script>
+                <script src="https://www.highrevenueformat.com/8f2c282d7a133448b994b2f0b53de617/invoke.js"></script>
+            </div>
+            
             <div class="glass-card" style="text-align: center;">
                 <div style="font-size: 45px; margin-bottom: 10px; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1));" class="float-anim">🎁</div>
                 <h2 style="font-size: 22px; font-weight: 800; margin-bottom: 10px; color: #1D1D1F;">Invite & Earn Lifetime</h2>
@@ -273,6 +286,12 @@
 
         <!-- WALLET TAB -->
         <div id="tab-wallet" class="tab-section">
+            <!-- Adsterra Banner (Wallet) -->
+            <div style="display:flex; justify-content:center; align-items:center; margin-bottom: 20px;">
+                <script> atOptions = { 'key' : '8f2c282d7a133448b994b2f0b53de617', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} }; </script>
+                <script src="https://www.highrevenueformat.com/8f2c282d7a133448b994b2f0b53de617/invoke.js"></script>
+            </div>
+            
             <div class="glass-card">
                 <div style="text-align: center; margin-bottom: 20px;">
                     <div style="font-size: 12px; font-weight: 800; color: var(--text-muted);">Available for Withdrawal</div>
@@ -287,6 +306,12 @@
 
         <!-- PROFILE TAB -->
         <div id="tab-profile" class="tab-section">
+            <!-- Adsterra Banner (Profile) -->
+            <div style="display:flex; justify-content:center; align-items:center; margin-bottom: 20px;">
+                <script> atOptions = { 'key' : '8f2c282d7a133448b994b2f0b53de617', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} }; </script>
+                <script src="https://www.highrevenueformat.com/8f2c282d7a133448b994b2f0b53de617/invoke.js"></script>
+            </div>
+            
             <div class="glass-card" style="position: relative;">
                 
                 <div style="position: absolute; top: 15px; right: 15px; display: flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.8); border: 1px solid var(--glass-border-light); padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: 800; color: #888; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.05);" onclick="showBadgeInfo()">
@@ -325,6 +350,17 @@
                     <div class="profile-action-btn" onclick="switchTab('tab-wallet', document.querySelectorAll('.nav-item')[3])">
                         <i class="fa-solid fa-money-bill-transfer" style="color:#FF8C42;"></i> Withdraw
                     </div>
+                </div>
+            </div>
+
+            <!-- Information & Legal Glass Card in Profile -->
+            <div class="glass-card">
+                <div class="section-title" style="font-size: 15px; margin-bottom: 15px;"><i class="fa-solid fa-circle-info" style="color:#007AFF;"></i> Information & Legal</div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <button class="btn-sm" style="background: rgba(255,255,255,0.6); color: #1D1D1F;" onclick="openInfoModal('about')">About Us</button>
+                    <button class="btn-sm" style="background: rgba(255,255,255,0.6); color: #1D1D1F;" onclick="openInfoModal('how')">How It Works</button>
+                    <button class="btn-sm" style="background: rgba(255,255,255,0.6); color: #1D1D1F;" onclick="openInfoModal('privacy')">Privacy Policy</button>
+                    <button class="btn-sm" style="background: rgba(255,255,255,0.6); color: #1D1D1F;" onclick="openInfoModal('terms')">Terms of Service</button>
                 </div>
             </div>
 
@@ -378,8 +414,7 @@
         // UPDATED AD LINKS
         const adLinks = {
             adsterra: "https://www.profitableratecpmnetwork.com/qqm7unbp9c?key=e6068fd32853ac21e39371c87bd3ec2d",
-            monetag: "https://omg10.com/4/11678700",
-            adsgram: "45228" 
+            monetag: "https://omg10.com/4/11678700"
         };
 
         // GLOBAL APP LOGIC
@@ -562,11 +597,12 @@
                     let task = doc.data(), taskId = doc.id;
                     let sub = userSubmissions[taskId];
 
-                    // Hide tasks that are completely finished (approved, pending, or completed)
                     if (sub && (sub.status === 'completed' || sub.status === 'pending' || sub.status === 'approved')) {
-                        return; // Skip rendering
+                        return;
                     }
                     
+                    let taskDescHtml = task.description ? `<div style="font-size: 11px; color: var(--text-muted); font-weight: 500; margin-top: 3px; line-height: 1.3;">${task.description}</div>` : "";
+
                     if (task.type === "premium") {
                         let buttonsHtml = "";
                         
@@ -581,6 +617,7 @@
                                 <div class="task-icon"><i class="${task.icon}"></i></div>
                                 <div class="task-info">
                                     <div class="task-title">${task.title}</div>
+                                    ${taskDescHtml}
                                     <div class="task-reward">${task.reward} CP</div>
                                 </div>
                                 <div class="task-actions">${buttonsHtml}</div>
@@ -592,6 +629,7 @@
                                 <div class="task-icon"><i class="${task.icon}"></i></div>
                                 <div class="task-info">
                                     <div class="task-title">${task.title}</div>
+                                    ${taskDescHtml}
                                     <div class="task-reward">${task.reward} CP</div>
                                 </div>
                                 <div class="task-actions">
@@ -606,25 +644,20 @@
             });
         }
 
-        // --- Task Ad Rotation Cycle ---
-        // Cycle: 0,1 (Adsgram) -> 2,3 (Monetag) -> 4,5 (Adsterra) -> repeat
         function getNextAdNetwork() {
-            let cycle = Math.floor((userData.taskAdCount || 0) / 2) % 3;
-            return cycle === 0 ? 'adsgram' : (cycle === 1 ? 'monetag' : 'adsterra');
+            let cycle = (userData.taskAdCount || 0) % 2;
+            return cycle === 0 ? 'monetag' : 'adsterra';
         }
 
-        // --- Core Task & 15s Timer Flow ---
         let currentTaskFlow = {}; 
 
         function startTaskFlow(taskId, type, title, reward, targetLink) {
             currentTaskFlow = { taskId, type, title, reward, targetLink };
             let network = getNextAdNetwork();
             
-            // Increment rotation tracker
             userData.taskAdCount = (userData.taskAdCount || 0) + 1;
             saveUserData();
 
-            // Setup 15s modal UI
             document.getElementById("task-flow-modal").style.display = "flex";
             document.getElementById("task-modal-title").innerText = "Unlocking Task";
             document.getElementById("task-modal-desc").innerText = "Please watch the ad for 15 seconds to unlock.";
@@ -632,28 +665,16 @@
             document.getElementById("task-modal-action-btn").style.display = "none";
             document.getElementById("task-modal-timer").innerText = "15s";
 
-            // Network Routing
-            if (network === 'adsgram') {
-                if (window.Adsgram) {
-                    const AdController = window.Adsgram.init({ blockId: adLinks.adsgram });
-                    AdController.show().then(() => {
-                        unlockTaskLink(); // Adsgram handles its own internal video duration
-                    }).catch(() => {
-                        triggerDirectLinkAd(adLinks.monetag); // Fallback if Adsgram fails
-                    });
-                } else {
-                    triggerDirectLinkAd(adLinks.monetag);
-                }
-            } else if (network === 'monetag') {
+            if (network === 'monetag') {
                 triggerDirectLinkAd(adLinks.monetag);
-            } else if (network === 'adsterra') {
-                triggerDirectLinkAd(adLinks.adsterra); // Opens direct link while popunder runs passively
+            } else {
+                triggerDirectLinkAd(adLinks.adsterra); 
             }
         }
 
         function triggerDirectLinkAd(url) {
-            window.open(url, "_blank"); // Open Ad Link Tab
-            let timeLeft = 15; // Mandatory 15 seconds
+            window.open(url, "_blank"); 
+            let timeLeft = 15; 
             document.getElementById("task-modal-timer").innerText = timeLeft + "s";
             
             let timerInt = setInterval(() => {
@@ -661,7 +682,7 @@
                 document.getElementById("task-modal-timer").innerText = timeLeft + "s";
                 if(timeLeft <= 0) {
                     clearInterval(timerInt);
-                    unlockTaskLink(); // Allow user to do task after 15s
+                    unlockTaskLink(); 
                 }
             }, 1000);
             currentTaskFlow.timerInt = timerInt;
@@ -675,10 +696,8 @@
             btn.style.display = "block";
             btn.innerText = "Go to Task";
             btn.onclick = () => {
-                // Open real task link
                 window.open(currentTaskFlow.targetLink, "_blank");
                 
-                // Change Modal to Verification State
                 if (currentTaskFlow.type === 'social') {
                     btn.innerText = "Verify Task";
                     document.getElementById("task-modal-desc").innerText = "Click verify ONLY after completing the task. Otherwise you will not get rewarded.";
@@ -706,7 +725,6 @@
             btn.classList.add('loading');
             
             setTimeout(() => {
-                // Save complete state to Firebase so it hides forever
                 db.collection("task_submissions").add({
                     userId: userId,
                     taskId: currentTaskFlow.taskId,
@@ -725,16 +743,13 @@
             }, 2000);
         }
 
-
-        // --- Watch & Earn Ad Logic (Kept mostly as is) ---
         let watchAdCooldown = false;
         function watchAdForCP() {
             if (watchAdCooldown) return;
             let btn = document.getElementById("btn-watch-ad");
             
             let currentCount = userData.watchAdCount || 0;
-            let cycle = Math.floor(currentCount / 3) % 3;
-            let network = cycle === 0 ? 'adsgram' : (cycle === 1 ? 'monetag' : 'adsterra');
+            let network = currentCount % 2 === 0 ? 'monetag' : 'adsterra';
             
             btn.classList.add('loading');
             btn.innerText = "Wait...";
@@ -766,13 +781,7 @@
                 }, 1000);
             };
 
-            if (network === 'adsgram') {
-                if (window.Adsgram) {
-                    const AdController = window.Adsgram.init({ blockId: adLinks.adsgram });
-                    AdController.show().then(() => { btn.classList.remove('loading'); onSuccess(); })
-                    .catch(() => triggerWatchDirectAd(adLinks.monetag, btn, onSuccess));
-                } else triggerWatchDirectAd(adLinks.monetag, btn, onSuccess);
-            } else if (network === 'monetag') {
+            if (network === 'monetag') {
                 triggerWatchDirectAd(adLinks.monetag, btn, onSuccess);
             } else {
                 triggerWatchDirectAd(adLinks.adsterra, btn, onSuccess);
@@ -837,16 +846,49 @@
                 tg.showAlert("✅ Proof submitted successfully! Please wait for admin verification.");
                 document.getElementById('proof-modal').style.display = "none";
             } catch (error) {
-                tg.showAlert("❌ Upload Failed. " + error.message);
+                tg.showAlert("❌ Upload Failed! (Please check Firebase Storage Rules): " + error.message);
+                console.error("Upload Error: ", error);
+            } finally {
+                btn.innerText = "Upload & Submit";
+                btn.classList.remove('loading');
             }
-            
-            btn.innerText = "Upload & Submit";
-            btn.classList.remove('loading');
         }
 
         // ==========================================
-        // LIVE PAYOUT TICKER & UTILS
+        // LEGAL / INFO MODAL LOGIC
         // ==========================================
+        const infoData = {
+            'about': {
+                title: "About Crypto Pay",
+                content: "Crypto Pay is a mobile-first rewards platform integrated with Telegram. We provide users the ability to earn CP (Crypto Pay points) by interacting with sponsored content, completing casual tasks, and participating in our daily check-in program. We partner with established advertising networks to share ad revenue directly with our active community members."
+            },
+            'how': {
+                title: "How It Works",
+                content: "<b>1. Daily Check-in:</b> Open the app daily and watch a quick ad to claim your streak reward.<br><br><b>2. Watch & Earn:</b> Instantly earn CP by watching short sponsored video advertisements.<br><br><b>3. Pro Tasks:</b> Complete specific actions and upload a screenshot for admin verification to earn large amounts of CP.<br><br><b>4. Withdraw:</b> Convert your CP to real cryptocurrency (USDT) once you reach the minimum balance threshold."
+            },
+            'privacy': {
+                title: "Privacy Policy",
+                content: "<b>Data Collection:</b> We collect basic public Telegram profile information (Name, User ID, Profile Picture) strictly to authenticate and secure your account. We do not collect passwords or sensitive private data.<br><br><b>Advertising:</b> We use third-party advertising networks (such as Adsterra, and Monetag). These partners may use cookies or similar device-tracking technologies to deliver relevant advertisements and measure campaign performance.<br><br><b>Data Usage:</b> Your data is used exclusively for account management, processing rewards, and fraud prevention. We do not sell your personal data to third parties."
+            },
+            'terms': {
+                title: "Terms of Service",
+                content: "<b>1. Acceptance:</b> By using Crypto Pay, you agree to adhere to these terms and conditions.<br><br><b>2. Prohibited Conduct:</b> Users must NOT use bots, VPNs, scripts, auto-clickers, or automated software to generate fraudulent ad views or complete tasks. Creating multiple accounts per user is strictly prohibited.<br><br><b>3. Account Termination:</b> We reserve the right to immediately suspend or permanently ban any account found violating these rules. Banned accounts forfeit all pending CP balances.<br><br><b>4. Payouts:</b> All withdrawal requests are subject to manual review to ensure full compliance with our anti-fraud policies."
+            },
+            'contact': {
+                title: "Contact & Support",
+                content: "If you need assistance, have a reward dispute, or general questions, please use the <b>Support Box</b> located in the Profile tab.<br><br>For business inquiries, advertising partnerships, or legal notices, please reach out to our admin team via our official Telegram community.<br><br><i>Please allow up to 48 hours for a support response.</i>"
+            }
+        };
+
+        function openInfoModal(section) {
+            const data = infoData[section];
+            if(data) {
+                document.getElementById('info-title').innerText = data.title;
+                document.getElementById('info-content').innerHTML = data.content;
+                document.getElementById('info-modal').style.display = 'flex';
+            }
+        }
+
         const nameList = ["A***n", "S***h", "M***e", "E***a", "A***i", "F***a", "D***d", "A***a", "V***m", "N***a", "O***r", "S***a", "L***s", "M***a", "Z***n", "C***e", "L***m", "H***n", "K***a", "D***o"];
         let currentActiveTabId = 'tab-home'; 
         const tickerContainer = document.getElementById("ticker-container");
@@ -875,7 +917,9 @@
             document.querySelectorAll('.tab-section').forEach(tab => tab.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
-            element.classList.add('active');
+            if (element) {
+                element.classList.add('active');
+            }
             tg.HapticFeedback.impactOccurred('light');
         }
 
@@ -884,7 +928,6 @@
             if(userData.lastCheckInDate !== today) {
                 let btn = document.getElementById("btn-claim");
                 
-                // Using existing WatchDirectAd setup for Check-in Ad logic
                 triggerWatchDirectAd(adLinks.monetag, btn, () => {
                     let currentDay = userData.checkInDays + 1;
                     let reward = (currentDay === 7 || currentDay === 14 || currentDay === 21) ? 20 : (currentDay === 30 ? 100 : 5);
@@ -944,12 +987,10 @@
     <!-- Delayed Ads Loading to Fix Scroll Lag -->
     <script>
         setTimeout(() => {
-            // Adsterra Popunder
             let adsterra = document.createElement('script');
             adsterra.src = "https://pl31095185.profitableratecpmnetwork.com/bc/67/11/bc6711569a1f04f1939a3a567c120641.js";
             document.body.appendChild(adsterra);
             
-            // Monetag Vignette
             let monetag = document.createElement('script');
             monetag.dataset.zone = '11678521';
             monetag.src = 'https://n6wxm.com/vignette.min.js';
