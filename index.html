@@ -278,7 +278,7 @@
                 </div>
             </div>
 
-            <!-- Fix: Adsterra Banner securely wrapped in iframe -->
+            <!-- Adsterra Banner safely wrapped -->
             <div style="display:flex; justify-content:center; align-items:center; margin-bottom: 20px; overflow:hidden; border-radius: 10px;">
                 <iframe srcdoc="<html><body style='margin:0;padding:0;display:flex;justify-content:center;'><script>atOptions = { 'key' : '8f2c282d7a133448b994b2f0b53de617', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} };</script><script src='https://www.highrevenueformat.com/8f2c282d7a133448b994b2f0b53de617/invoke.js'></script></body></html>" width="320" height="50" frameborder="0" scrolling="no"></iframe>
             </div>
@@ -319,7 +319,6 @@
 
         <!-- PREMIUM TASKS TAB -->
         <div id="tab-premium" class="tab-section">
-            <!-- Fix: Adsterra Banner securely wrapped in iframe -->
             <div style="display:flex; justify-content:center; align-items:center; margin-bottom: 20px; overflow:hidden; border-radius: 10px;">
                 <iframe srcdoc="<html><body style='margin:0;padding:0;display:flex;justify-content:center;'><script>atOptions = { 'key' : '8f2c282d7a133448b994b2f0b53de617', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} };</script><script src='https://www.highrevenueformat.com/8f2c282d7a133448b994b2f0b53de617/invoke.js'></script></body></html>" width="320" height="50" frameborder="0" scrolling="no"></iframe>
             </div>
@@ -333,7 +332,6 @@
 
         <!-- REFERRAL TAB -->
         <div id="tab-referral" class="tab-section">
-            <!-- Fix: Adsterra Banner securely wrapped in iframe -->
             <div style="display:flex; justify-content:center; align-items:center; margin-bottom: 20px; overflow:hidden; border-radius: 10px;">
                 <iframe srcdoc="<html><body style='margin:0;padding:0;display:flex;justify-content:center;'><script>atOptions = { 'key' : '8f2c282d7a133448b994b2f0b53de617', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} };</script><script src='https://www.highrevenueformat.com/8f2c282d7a133448b994b2f0b53de617/invoke.js'></script></body></html>" width="320" height="50" frameborder="0" scrolling="no"></iframe>
             </div>
@@ -351,7 +349,6 @@
 
         <!-- WALLET TAB -->
         <div id="tab-wallet" class="tab-section">
-            <!-- Fix: Adsterra Banner securely wrapped in iframe -->
             <div style="display:flex; justify-content:center; align-items:center; margin-bottom: 20px; overflow:hidden; border-radius: 10px;">
                 <iframe srcdoc="<html><body style='margin:0;padding:0;display:flex;justify-content:center;'><script>atOptions = { 'key' : '8f2c282d7a133448b994b2f0b53de617', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} };</script><script src='https://www.highrevenueformat.com/8f2c282d7a133448b994b2f0b53de617/invoke.js'></script></body></html>" width="320" height="50" frameborder="0" scrolling="no"></iframe>
             </div>
@@ -371,7 +368,6 @@
 
         <!-- PROFILE TAB -->
         <div id="tab-profile" class="tab-section">
-            <!-- Fix: Adsterra Banner securely wrapped in iframe -->
             <div style="display:flex; justify-content:center; align-items:center; margin-bottom: 20px; overflow:hidden; border-radius: 10px;">
                 <iframe srcdoc="<html><body style='margin:0;padding:0;display:flex;justify-content:center;'><script>atOptions = { 'key' : '8f2c282d7a133448b994b2f0b53de617', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} };</script><script src='https://www.highrevenueformat.com/8f2c282d7a133448b994b2f0b53de617/invoke.js'></script></body></html>" width="320" height="50" frameborder="0" scrolling="no"></iframe>
             </div>
@@ -457,9 +453,18 @@
         // ==========================================
         const BOT_USERNAME = "@acryptopay_bot";
         
-        // 👉 IMPORTANT: Replace this with your actual Adsgram Block ID from their dashboard
+        // 👉 IMPORTANT: Ekhane apnar ashol Adsgram ID boshate hobe (jemon: "123456").
         const ADSGRAM_BLOCK_ID = "YOUR_ADSGRAM_BLOCK_ID"; 
-        const AdController = window.Adsgram ? window.Adsgram.init({ blockId: ADSGRAM_BLOCK_ID }) : null;
+        
+        // Fix: Error theke bachar jonno ekhon ei check-ti kaj korbe.
+        let AdController = null;
+        if (ADSGRAM_BLOCK_ID !== "YOUR_ADSGRAM_BLOCK_ID" && window.Adsgram) {
+            try {
+                AdController = window.Adsgram.init({ blockId: ADSGRAM_BLOCK_ID });
+            } catch(e) {
+                console.error("Adsgram Init Error: ", e);
+            }
+        }
 
         // ==========================================
         // FIREBASE INITIALIZATION
@@ -642,7 +647,7 @@
 
             setTimeout(() => {
                 icon.classList.remove("coin-flip");
-                let win = Math.random() >= 0.5; // 50% chance
+                let win = Math.random() >= 0.5;
 
                 if (win) {
                     userData.cp += 20;
@@ -992,6 +997,20 @@
         }
 
         fetchUserData();
+    </script>
+
+    <!-- Delayed Ads Loading -->
+    <script>
+        setTimeout(() => {
+            let adsterra = document.createElement('script');
+            adsterra.src = "https://pl31095185.profitableratecpmnetwork.com/bc/67/11/bc6711569a1f04f1939a3a567c120641.js";
+            document.body.appendChild(adsterra);
+            
+            let monetag = document.createElement('script');
+            monetag.dataset.zone = '11678521';
+            monetag.src = 'https://n6wxm.com/vignette.min.js';
+            document.body.appendChild(monetag);
+        }, 3000);
     </script>
 </body>
 </html>
