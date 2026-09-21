@@ -147,9 +147,9 @@
         #task-flow-modal { flex-direction: column; text-align: center; }
         #task-flow-modal h2 { color: #1D1D1F; font-size: 22px; font-weight: 800; margin-bottom: 10px; }
         
-        /* PREMIUM SPIN WHEEL STYLING (Bigger & Professional) */
+        /* STABLE & SMOOTH WHEEL DESIGN (NO LAG) */
         .wheel-box {
-            background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(245, 166, 35, 0.15));
+            background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(245, 166, 35, 0.1));
             border: 1.5px solid rgba(245, 166, 35, 0.4);
             border-radius: 24px;
             padding: 20px;
@@ -160,15 +160,15 @@
         }
         .wheel-container {
             position: relative;
-            width: 180px;
-            height: 180px;
+            width: 200px;
+            height: 200px;
             margin: 15px auto;
         }
         .wheel {
             width: 100%;
             height: 100%;
             border-radius: 50%;
-            border: 5px solid #F5A623;
+            border: 6px solid #F5A623;
             background: conic-gradient(
                 #FF3B30 0deg 72deg, 
                 #FF8C42 72deg 144deg, 
@@ -177,19 +177,20 @@
                 #AF52DE 288deg 360deg
             );
             position: relative;
+            transform: rotate(0deg);
             transition: transform 4s cubic-bezier(0.15, 1, 0.2, 1);
             box-shadow: 0 8px 20px rgba(0,0,0,0.15);
         }
         .wheel-pointer {
             position: absolute;
-            top: -10px;
+            top: -12px;
             left: 50%;
             transform: translateX(-50%);
             width: 0;
             height: 0;
             border-left: 10px solid transparent;
             border-right: 10px solid transparent;
-            border-top: 20px solid #1D1D1F;
+            border-top: 22px solid #1D1D1F;
             z-index: 10;
         }
         .wheel-center-btn {
@@ -197,8 +198,8 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 45px;
-            height: 45px;
+            width: 50px;
+            height: 50px;
             background: #fff;
             border-radius: 50%;
             border: 3px solid #F5A623;
@@ -305,7 +306,7 @@
                 <iframe srcdoc="<html><body style='margin:0;padding:0;display:flex;justify-content:center;'><script>atOptions = { 'key' : '8f2c282d7a133448b994b2f0b53de617', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} };</script><script src='https://www.highrevenueformat.com/8f2c282d7a133448b994b2f0b53de617/invoke.js'></script></body></html>" width="320" height="50" frameborder="0" scrolling="no"></iframe>
             </div>
 
-            <!-- PREMIUM LUCKY SPIN WHEEL (NO LOSS SYSTEM) -->
+            <!-- PREMIUM LUCKY SPIN WHEEL (NO LOSS) -->
             <div class="wheel-box">
                 <div style="font-size: 18px; font-weight: 800; color: #1D1D1F;">
                     <i class="fa-solid fa-rotate" style="color: #F5A623; margin-right: 6px;"></i> Lucky Spin & Win
@@ -315,11 +316,11 @@
                 <div class="wheel-container">
                     <div class="wheel-pointer"></div>
                     <div class="wheel" id="spin-wheel"></div>
-                    <div class="wheel-center-btn">SPIN</div>
+                    <div class="wheel-center-btn">WIN</div>
                 </div>
 
                 <div>
-                    <button class="btn-sm task-btn-gold" id="btn-spin" onclick="spinWheel()" style="padding: 12px 25px; font-size: 14px;">
+                    <button class="btn-sm task-btn-gold" id="btn-spin" onclick="spinWheel()" style="padding: 12px 30px; font-size: 14px;">
                         Spin Now (10 CP)
                     </button>
                 </div>
@@ -668,7 +669,7 @@
             document.getElementById("withdraw-btn").disabled = userData.cp < MIN_WITHDRAW_CP;
         }
 
-        // NO LOSS LUCKY SPIN WHEEL LOGIC
+        // NO LOSS LUCKY SPIN WHEEL LOGIC (SMOOTH & SECURE)
         let isSpinning = false;
         function spinWheel() {
             if (isSpinning) return;
@@ -691,12 +692,10 @@
             let rewards = [10, 15, 20, 30, 50];
             let winningReward = rewards[Math.floor(Math.random() * rewards.length)];
             
-            // Map rewards to degrees on the wheel (5 sections = 72 deg each)
             let rewardDegrees = { 10: 36, 15: 108, 20: 180, 30: 252, 50: 324 };
             let targetDegree = rewardDegrees[winningReward];
             
-            // Random full rotations (5 to 8 turns) + target offset
-            let extraTurns = (Math.floor(Math.random() * 4) + 5) * 360;
+            let extraTurns = (Math.floor(Math.random() * 4) + 6) * 360;
             let totalDegrees = extraTurns + (360 - targetDegree);
 
             wheel.style.transform = `rotate(${totalDegrees}deg)`;
