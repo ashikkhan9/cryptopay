@@ -33,56 +33,26 @@
             --badge-gold: #F5A623;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Outfit', sans-serif;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
 
         body {
-            background: var(--bg-color);
-            color: var(--text-main);
-            overflow: hidden;
-            width: 100vw;
-            height: 100vh;
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
+            background: var(--bg-color); color: var(--text-main); overflow: hidden;
+            width: 100vw; height: 100vh; user-select: none; -webkit-tap-highlight-color: transparent;
         }
 
         #loader {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: var(--bg-color);
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-color);
+            z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center;
         }
 
         .spinner {
-            width: 50px; height: 50px;
-            border: 5px solid rgba(0, 122, 255, 0.2);
-            border-top-color: #007AFF;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 20px;
+            width: 50px; height: 50px; border: 5px solid rgba(0, 122, 255, 0.2);
+            border-top-color: #007AFF; border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px;
         }
 
         @keyframes spin { to { transform: rotate(360deg); } }
-        @keyframes float-icon {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-6px); }
-        }
+        @keyframes float-icon { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
         .float-anim { animation: float-icon 3s ease-in-out infinite; display: inline-block; }
-
-        @keyframes game-bounce {
-            0%, 100% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-8px) scale(1.1); filter: drop-shadow(0 10px 15px rgba(255, 140, 66, 0.6)); }
-        }
-        .game-bounce { animation: game-bounce 2s infinite ease-in-out; display: inline-block; }
 
         .pulse-btn { animation: pulse-btn 2s infinite; }
         @keyframes pulse-btn {
@@ -96,18 +66,11 @@
         .glow-3 { position: absolute; top: 40%; left: 30%; width: 250px; height: 250px; background: radial-gradient(circle, rgba(157,78,221,0.1) 0%, transparent 70%); filter: blur(40px); z-index: -1; }
 
         .glass-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border-top: 1.5px solid var(--glass-border-light);
-            border-left: 1.5px solid var(--glass-border-light);
-            border-bottom: 1px solid var(--glass-border-dark);
-            border-right: 1px solid var(--glass-border-dark);
-            border-radius: 24px;
-            padding: 20px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.05), inset 0 2px 5px rgba(255,255,255,0.8);
-            margin-bottom: 20px;
-            position: relative;
+            background: var(--glass-bg); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+            border-top: 1.5px solid var(--glass-border-light); border-left: 1.5px solid var(--glass-border-light);
+            border-bottom: 1px solid var(--glass-border-dark); border-right: 1px solid var(--glass-border-dark);
+            border-radius: 24px; padding: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.05), inset 0 2px 5px rgba(255,255,255,0.8);
+            margin-bottom: 20px; position: relative;
         }
 
         .popup-ticker-container { position: fixed; top: 25px; left: 50%; transform: translateX(-50%); z-index: 10000; pointer-events: none; display: flex; justify-content: center; width: max-content; }
@@ -121,24 +84,15 @@
         .user-mini-pic { width: 45px; height: 45px; border-radius: 16px; border: 2px solid #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.1); object-fit: cover; }
 
         .main-content { 
-            height: calc(100vh - 120px); 
-            overflow-y: auto; 
-            padding: 0 20px 100px 20px; 
-            -webkit-overflow-scrolling: touch; 
-            touch-action: pan-y;
-            overscroll-behavior-y: contain; 
-            position: relative; 
-            z-index: 10; 
+            height: calc(100vh - 120px); overflow-y: auto; padding: 0 20px 100px 20px; 
+            -webkit-overflow-scrolling: touch; touch-action: pan-y; overscroll-behavior-y: contain; position: relative; z-index: 10; 
         }
         .main-content::-webkit-scrollbar { display: none; }
 
         .tab-section { display: none; animation: fadeUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
         .tab-section.active { display: block; }
 
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
         .section-title { font-size: 16px; font-weight: 800; margin: 0 0 15px 5px; display: flex; align-items: center; gap: 8px; color: #1D1D1F; }
         .streak-header { display: flex; justify-content: space-between; font-size: 13px; font-weight: 800; margin-bottom: 8px; color: #1D1D1F; }
@@ -159,6 +113,8 @@
         .btn-sm.task-btn-gold { background: linear-gradient(180deg, #FAD961, #FF8C42); box-shadow: 0 6px 12px rgba(255, 140, 66, 0.3), inset 0 2px 4px rgba(255,255,255,0.6); color: #fff; border: 1px solid rgba(255,255,255,0.4); }
         .btn-sm.disabled { background: rgba(0,0,0,0.1) !important; color: #888 !important; box-shadow: none !important; border: 1px solid rgba(0,0,0,0.05) !important; pointer-events: none; }
         .btn-sm.loading { background: #A0AEC0; box-shadow: inset 0 2px 4px rgba(255,255,255,0.4); pointer-events: none; }
+        .btn-sm.green { background: linear-gradient(180deg, #34C759, #30A44A); box-shadow: 0 6px 12px rgba(52, 199, 89, 0.3), inset 0 2px 4px rgba(255,255,255,0.4); }
+        .btn-sm.red { background: linear-gradient(180deg, #FF3B30, #D32F2F); box-shadow: 0 6px 12px rgba(255, 59, 48, 0.3), inset 0 2px 4px rgba(255,255,255,0.4); }
 
         .btn-primary { width: 100%; background: var(--btn-blue); color: #fff; border: 1px solid rgba(255,255,255,0.3); padding: 15px; border-radius: 24px; font-size: 16px; font-weight: 800; cursor: pointer; transition: 0.2s; box-shadow: 0 10px 20px var(--primary-glow), inset 0 2px 4px rgba(255,255,255,0.5); }
         .btn-primary:active { transform: scale(0.97); box-shadow: 0 4px 10px var(--primary-glow), inset 0 4px 6px rgba(0,0,0,0.1); }
@@ -190,19 +146,11 @@
         .stat-col.mid { border-left: 1px solid rgba(0,0,0,0.05); border-right: 1px solid rgba(0,0,0,0.05); }
 
         .modal-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(230, 234, 239, 0.85); backdrop-filter:blur(10px); z-index:10001; justify-content:center; align-items:center; padding: 20px; }
-        #task-flow-modal { flex-direction: column; text-align: center; }
-        #task-flow-modal h2 { color: #1D1D1F; font-size: 22px; font-weight: 800; margin-bottom: 10px; }
         
-        .game-box {
-            background: linear-gradient(135deg, rgba(255,255,255,0.8), rgba(255, 140, 66, 0.1));
-            border: 1px solid rgba(255, 140, 66, 0.3);
-            border-radius: 20px;
-            padding: 15px;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .coin-animation { font-size: 50px; margin: 10px 0; display: inline-block; transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1); }
-        .coin-flip { transform: rotateY(1080deg) scale(1.2); }
+        /* NEW: Game Box Styling for BTC Predictor */
+        .game-box { background: linear-gradient(135deg, rgba(255,255,255,0.8), rgba(0, 122, 255, 0.05)); border: 1px solid rgba(0, 122, 255, 0.2); border-radius: 20px; padding: 15px; text-align: center; margin-bottom: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.02); }
+        .btc-price { font-size: 32px; font-weight: 800; color: #1D1D1F; margin: 10px 0; letter-spacing: -1px; transition: color 0.3s; }
+        .btn-row { display: flex; gap: 10px; justify-content: center; }
     </style>
 </head>
 <body>
@@ -212,12 +160,22 @@
         <div style="font-weight: 800; color: #007AFF;">Connecting securely...</div>
     </div>
 
+    <!-- Ad Waiting Modal -->
+    <div id="ad-wait-modal" class="modal-overlay">
+        <div class="glass-card" style="width: 100%; max-width: 350px; text-align: center;">
+            <h2 style="color: #1D1D1F; font-size: 22px; font-weight: 800; margin-bottom: 10px;">Please Wait...</h2>
+            <p style="font-size: 13px; color: var(--text-muted); font-weight: 600;">Ad is processing</p>
+            <div class="timer" id="ad-timer" style="font-size: 35px; color: #FF8C42; font-weight: 800; margin: 10px 0;">10s</div>
+        </div>
+    </div>
+
     <!-- Task Action Modal -->
     <div id="task-flow-modal" class="modal-overlay">
         <div class="glass-card" style="width: 100%; max-width: 350px; text-align: center;">
-            <h2 id="task-modal-title">Task Unlocked!</h2>
-            <p id="task-modal-desc" style="font-size: 13px; color: var(--text-muted); font-weight: 600;">You can now proceed to complete the task.</p>
-            <button id="task-modal-action-btn" class="btn-primary" style="margin-top: 15px;">Go to Task</button>
+            <h2 id="task-modal-title" style="color: #1D1D1F; font-size: 22px; font-weight: 800; margin-bottom: 10px;">Unlocking Task</h2>
+            <p id="task-modal-desc" style="font-size: 13px; color: var(--text-muted); font-weight: 600;">Please watch the ad to unlock the task.</p>
+            <div class="timer" id="task-modal-timer" style="font-size: 35px; color: #FF8C42; font-weight: 800; display:none; margin: 10px 0;">15s</div>
+            <button id="task-modal-action-btn" class="btn-primary" style="display: none; margin-top: 15px;">Go to Task</button>
             <button class="btn-sm" style="width: 100%; background: rgba(0,0,0,0.05); color: #1D1D1F; border: 1px solid rgba(0,0,0,0.1); padding: 12px; box-shadow: none; margin-top: 10px;" onclick="closeTaskFlowModal()">Cancel</button>
         </div>
     </div>
@@ -247,9 +205,7 @@
         <div id="live-ticker" class="popup-ticker hide"></div>
     </div>
 
-    <div class="glow-1"></div>
-    <div class="glow-2"></div>
-    <div class="glow-3"></div>
+    <div class="glow-1"></div><div class="glow-2"></div><div class="glow-3"></div>
 
     <div class="header-top">
         <div>
@@ -278,18 +234,28 @@
                 </div>
             </div>
 
-            <!-- Adsterra Banner securely wrapped -->
             <div style="display:flex; justify-content:center; align-items:center; margin-bottom: 20px; overflow:hidden; border-radius: 10px;">
                 <iframe srcdoc="<html><body style='margin:0;padding:0;display:flex;justify-content:center;'><script>atOptions = { 'key' : '8f2c282d7a133448b994b2f0b53de617', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} };</script><script src='https://www.highrevenueformat.com/8f2c282d7a133448b994b2f0b53de617/invoke.js'></script></body></html>" width="320" height="50" frameborder="0" scrolling="no"></iframe>
             </div>
 
-            <!-- Mini Game Section -->
+            <!-- NEW PREMIUM MINI GAME: BTC PREDICTOR -->
             <div class="game-box">
-                <div style="font-size: 16px; font-weight: 800; color: #1D1D1F;"><i class="fa-solid fa-gamepad" style="color: #FF8C42;"></i> Mini Game: Coin Flip</div>
-                <div style="font-size: 11px; color: var(--text-muted); margin-top: 3px; font-weight: 600;">Bet 10 CP for a 50% chance to win 20 CP!</div>
-                <div class="coin-animation" id="flip-coin-icon">🪙</div>
-                <div>
-                    <button class="btn-sm task-btn-gold" id="btn-play-game" onclick="playCoinFlip()">Bet 10 CP & Flip</button>
+                <div style="font-size: 16px; font-weight: 800; color: #1D1D1F;">
+                    <i class="fa-brands fa-bitcoin" style="color: #F5A623; margin-right: 5px;"></i> BTC Price Predictor
+                </div>
+                <div style="font-size: 11px; color: var(--text-muted); margin-top: 3px; font-weight: 600;">Bet 10 CP. Will BTC go UP or DOWN in 5s?</div>
+                
+                <!-- Live Price Display -->
+                <div class="btc-price" id="btc-live-price">$64,250</div>
+                
+                <!-- Prediction Buttons -->
+                <div class="btn-row" id="btc-buttons">
+                    <button class="btn-sm green" style="flex: 1; padding: 12px; font-size: 13px;" onclick="playBtcPredict('up')">
+                        <i class="fa-solid fa-arrow-trend-up"></i> UP
+                    </button>
+                    <button class="btn-sm red" style="flex: 1; padding: 12px; font-size: 13px;" onclick="playBtcPredict('down')">
+                        <i class="fa-solid fa-arrow-trend-down"></i> DOWN
+                    </button>
                 </div>
             </div>
 
@@ -456,12 +422,17 @@
         
         let AdController = null;
         if (ADSGRAM_BLOCK_ID !== "YOUR_ADSGRAM_BLOCK_ID" && window.Adsgram) {
-            try {
-                AdController = window.Adsgram.init({ blockId: ADSGRAM_BLOCK_ID });
-            } catch(e) {
-                console.error("Adsgram Init Error: ", e);
-            }
+            try { AdController = window.Adsgram.init({ blockId: ADSGRAM_BLOCK_ID }); } 
+            catch(e) { console.error("Adsgram Init Error: ", e); }
         }
+
+        // ==========================================
+        // ADSTERRA / MONETAG FALLBACK LINKS
+        // ==========================================
+        const adLinks = {
+            adsterra: "https://www.profitableratecpmnetwork.com/qqm7unbp9c?key=e6068fd32853ac21e39371c87bd3ec2d",
+            monetag: "https://omg10.com/4/11678700"
+        };
 
         // ==========================================
         // FIREBASE INITIALIZATION
@@ -488,14 +459,9 @@
         let userId = tgUser?.id ? tgUser.id.toString() : "demo_user";
 
         let userData = {
-            name: tgUser?.first_name || "Guest User",
-            cp: 0,
-            referrals: 0,
-            checkInDays: 0,
-            lastCheckInDate: "",
-            hasTrustBadge: false,
-            claimedCodes: [],
-            referredBy: null
+            name: tgUser?.first_name || "Guest User", cp: 0, referrals: 0, checkInDays: 0,
+            lastCheckInDate: "", hasTrustBadge: false, claimedCodes: [], referredBy: null,
+            taskAdCount: 0, watchAdCount: 0
         };
         let userSubmissions = {};
         const MIN_WITHDRAW_CP = 15000;
@@ -511,8 +477,7 @@
         function playCoinDropAnimation() {
             for(let i=0; i<15; i++) {
                 let coin = document.createElement("div");
-                coin.innerHTML = "🪙";
-                coin.className = "falling-coin";
+                coin.innerHTML = "🪙"; coin.className = "falling-coin";
                 coin.style.left = (Math.random() * 90) + 5 + "vw";
                 coin.style.fontSize = (Math.random() * 15 + 15) + "px";
                 document.body.appendChild(coin);
@@ -536,17 +501,12 @@
                 try {
                     const docRef = db.collection("users").doc(userId);
                     const docSnap = await docRef.get();
-                    if (docSnap.exists) {
-                        userData = { ...userData, ...docSnap.data() };
-                    } else {
+                    if (docSnap.exists) { userData = { ...userData, ...docSnap.data() }; } 
+                    else {
                         let startParam = tg.initDataUnsafe?.start_param;
-                        if(startParam && startParam !== userId) {
-                            userData.referredBy = startParam;
-                        }
+                        if(startParam && startParam !== userId) { userData.referredBy = startParam; }
                         await saveUserData();
-                        if(userData.referredBy) {
-                            await processReferral(userData.referredBy);
-                        }
+                        if(userData.referredBy) { await processReferral(userData.referredBy); }
                     }
                     fetchSubmissions();
                 } catch(e) { console.error(e); }
@@ -557,8 +517,7 @@
 
         async function saveUserData() {
             if(userId !== "demo_user") {
-                try { await db.collection("users").doc(userId).set(userData, {merge: true}); } 
-                catch(e) {}
+                try { await db.collection("users").doc(userId).set(userData, {merge: true}); } catch(e) {}
             }
         }
 
@@ -583,7 +542,6 @@
             document.getElementById("top-cp").innerHTML = `${formattedCP} <span style="font-size: 18px; color: #007AFF;">CP</span>`;
             document.getElementById("top-usdt").innerText = (userData.cp / 10000).toFixed(4);
             document.getElementById("wallet-usdt").innerText = (userData.cp / 10000).toFixed(4);
-            
             document.getElementById("ref-count").innerText = userData.referrals;
             document.getElementById("profile-balance").innerText = formattedCP;
             document.getElementById("profile-refs").innerText = userData.referrals;
@@ -610,8 +568,7 @@
                 userData.hasTrustBadge = true;
                 document.getElementById("premium-name-badge").classList.add("show");
                 let b = document.getElementById("badge-title-mini");
-                b.innerText = "Verified Premium";
-                b.style.color = "#F5A623";
+                b.innerText = "Verified Premium"; b.style.color = "#F5A623";
                 document.getElementById("badge-icon-mini").style.color = "#F5A623";
                 b.parentElement.style.borderColor = "rgba(245, 166, 35, 0.5)";
                 b.parentElement.style.background = "rgba(245, 166, 35, 0.1)";
@@ -619,34 +576,56 @@
             document.getElementById("withdraw-btn").disabled = userData.cp < MIN_WITHDRAW_CP;
         }
 
-        function playCoinFlip() {
-            let btn = document.getElementById("btn-play-game");
-            let icon = document.getElementById("flip-coin-icon");
+        // NEW: Bitcoin Price Predictor Game Logic
+        function playBtcPredict(choice) {
             if (userData.cp < 10) { tg.showAlert("Not enough CP! You need 10 CP to play."); return; }
-
+            
             userData.cp -= 10;
             updateUI();
-            btn.classList.add("disabled");
-            btn.innerText = "Flipping...";
-            icon.classList.add("coin-flip");
-
-            setTimeout(() => {
-                icon.classList.remove("coin-flip");
-                let win = Math.random() >= 0.5;
-                if (win) {
-                    userData.cp += 20;
-                    tg.HapticFeedback.notificationOccurred('success');
-                    tg.showAlert("🎉 You won 20 CP!");
-                    playCoinDropAnimation();
-                } else {
-                    tg.HapticFeedback.notificationOccurred('error');
-                    tg.showAlert("😢 You lost this time. Try again!");
+            
+            let btnBox = document.getElementById("btc-buttons");
+            let priceText = document.getElementById("btc-live-price");
+            
+            btnBox.style.display = "none";
+            priceText.style.color = "#FF8C42";
+            
+            let startPrice = 64250 + Math.floor(Math.random() * 1000);
+            priceText.innerText = "$" + startPrice.toLocaleString();
+            
+            let ticks = 0;
+            let interval = setInterval(() => {
+                let tempPrice = startPrice + (Math.floor(Math.random() * 500) - 250);
+                priceText.innerText = "$" + tempPrice.toLocaleString();
+                ticks++;
+                if(ticks >= 10) {
+                    clearInterval(interval);
+                    let isUp = Math.random() >= 0.5; // 50/50 Chance
+                    let finalPrice = isUp ? startPrice + Math.floor(Math.random() * 500 + 50) : startPrice - Math.floor(Math.random() * 500 + 50);
+                    
+                    priceText.innerText = "$" + finalPrice.toLocaleString();
+                    priceText.style.color = isUp ? "#34C759" : "#FF3B30";
+                    
+                    let win = (choice === 'up' && isUp) || (choice === 'down' && !isUp);
+                    
+                    if(win) {
+                        userData.cp += 20;
+                        tg.HapticFeedback.notificationOccurred('success');
+                        tg.showAlert("🎉 BTC went " + (isUp ? "UP" : "DOWN") + "! You won 20 CP.");
+                        playCoinDropAnimation();
+                    } else {
+                        tg.HapticFeedback.notificationOccurred('error');
+                        tg.showAlert("😢 BTC went " + (isUp ? "UP" : "DOWN") + ". You lost this time!");
+                    }
+                    
+                    saveUserData();
+                    updateUI();
+                    
+                    setTimeout(() => {
+                        btnBox.style.display = "flex";
+                        priceText.style.color = "#1D1D1F";
+                    }, 2000);
                 }
-                saveUserData();
-                updateUI();
-                btn.classList.remove("disabled");
-                btn.innerText = "Bet 10 CP & Flip";
-            }, 800);
+            }, 300); // 300ms * 10 ticks = 3 seconds total animation
         }
 
         const activePromoCodes = { "WELCOME": 20, "PROMO50": 50 };
@@ -658,18 +637,12 @@
             if(userData.claimedCodes.includes(input)) { tg.showAlert("⚠️ You already claimed this Code!"); return; }
             if(activePromoCodes[input]) {
                 let reward = activePromoCodes[input];
-                userData.cp += reward;
-                userData.claimedCodes.push(input);
-                saveUserData();
-                processCommission(reward);
-                updateUI();
-                playCoinDropAnimation();
+                userData.cp += reward; userData.claimedCodes.push(input);
+                saveUserData(); processCommission(reward); updateUI(); playCoinDropAnimation();
                 tg.HapticFeedback.notificationOccurred('success');
                 tg.showAlert(`🎉 Success! You earned ${reward} CP.`);
                 document.getElementById("promo-input").value = "";
-            } else {
-                tg.showAlert("❌ Invalid Code.");
-            }
+            } else { tg.showAlert("❌ Invalid Code."); }
         }
 
         function fetchSubmissions() {
@@ -680,13 +653,8 @@
             });
         }
 
-        // ==========================================
-        // AUTO ICON DETECTOR ENGINE (UPDATED)
-        // ==========================================
         function getAutoIcon(title, desc) {
             let text = ((title || "") + " " + (desc || "")).toLowerCase();
-            
-            // Socials
             if (text.includes("telegram") || text.includes("t.me")) return "fa-brands fa-telegram";
             if (text.includes("youtube") || text.includes("subscribe") || text.includes("tube")) return "fa-brands fa-youtube";
             if (text.includes("facebook") || text.includes("fb")) return "fa-brands fa-facebook";
@@ -694,16 +662,12 @@
             if (text.includes("twitter") || text.includes(" x ") || text.includes("tweet")) return "fa-brands fa-twitter";
             if (text.includes("tiktok") || text.includes("tik tok")) return "fa-brands fa-tiktok";
             if (text.includes("discord")) return "fa-brands fa-discord";
-            
-            // Actions
             if (text.includes("bot") || text.includes("start bot")) return "fa-solid fa-robot";
             if (text.includes("download") || text.includes("install") || text.includes("app")) return "fa-solid fa-cloud-arrow-down";
             if (text.includes("website") || text.includes("visit") || text.includes("site") || text.includes("register") || text.includes("sign up")) return "fa-solid fa-globe";
             if (text.includes("video") || text.includes("watch")) return "fa-solid fa-circle-play";
             if (text.includes("review") || text.includes("rate") || text.includes("star")) return "fa-solid fa-star";
             if (text.includes("join") || text.includes("channel") || text.includes("group")) return "fa-solid fa-users";
-            
-            // Default Ultimate Fallback
             return "fa-solid fa-list-check";
         }
 
@@ -715,54 +679,21 @@
                     let sub = userSubmissions[taskId];
                     if (sub && (sub.status === 'completed' || sub.status === 'pending' || sub.status === 'approved')) return;
                     
-                    // FIX: Force Auto-Icon to work perfectly regardless of what is in the database
                     let iconClass = getAutoIcon(task.title, task.description);
-                    
-                    // Only use custom database icon IF it genuinely contains "fa-" (FontAwesome syntax)
-                    if (task.icon && typeof task.icon === 'string' && task.icon.includes("fa-")) {
-                        iconClass = task.icon;
-                    }
+                    if (task.icon && typeof task.icon === 'string' && task.icon.includes("fa-")) { iconClass = task.icon; }
 
                     let taskDescHtml = task.description ? `<div style="font-size: 11px; color: var(--text-muted); font-weight: 500; margin-top: 3px; line-height: 1.3;">${task.description}</div>` : "";
                     
                     if (task.type === "premium") {
                         let buttonsHtml = "";
                         if (sub && sub.status === 'rejected') {
-                            buttonsHtml = `
-                            <button class="btn-sm" style="background:#FF3B30;width: 100%;" onclick="startTaskFlow('${taskId}', 'premium', '${task.title.replace(/'/g, "\\'")}', ${task.reward}, '${task.link}')">
-                                🔄 Resubmit
-                            </button>`;
+                            buttonsHtml = `<button class="btn-sm" style="background:#FF3B30;width: 100%;" onclick="startTaskFlow('${taskId}', 'premium', '${task.title.replace(/'/g, "\\'")}', ${task.reward}, '${task.link}')">🔄 Resubmit</button>`;
                         } else {
-                            buttonsHtml = `
-                            <button class="btn-sm task-btn-gold" onclick="startTaskFlow('${taskId}', 'premium', '${task.title.replace(/'/g, "\\'")}', ${task.reward}, '${task.link}')">
-                                Do Task
-                            </button>`;
+                            buttonsHtml = `<button class="btn-sm task-btn-gold" onclick="startTaskFlow('${taskId}', 'premium', '${task.title.replace(/'/g, "\\'")}', ${task.reward}, '${task.link}')">Do Task</button>`;
                         }
-                        premiumHtml += `
-                        <div class="task-item">
-                            <div class="task-icon"><i class="${iconClass}"></i></div>
-                            <div class="task-info">
-                                <div class="task-title">${task.title}</div>
-                                ${taskDescHtml}
-                                <div class="task-reward">${task.reward} CP</div>
-                            </div>
-                            <div class="task-actions">${buttonsHtml}</div>
-                        </div>`;
+                        premiumHtml += `<div class="task-item"><div class="task-icon"><i class="${iconClass}"></i></div><div class="task-info"><div class="task-title">${task.title}</div>${taskDescHtml}<div class="task-reward">${task.reward} CP</div></div><div class="task-actions">${buttonsHtml}</div></div>`;
                     } else {
-                        socialHtml += `
-                        <div class="task-item">
-                            <div class="task-icon"><i class="${iconClass}"></i></div>
-                            <div class="task-info">
-                                <div class="task-title">${task.title}</div>
-                                ${taskDescHtml}
-                                <div class="task-reward">${task.reward} CP</div>
-                            </div>
-                            <div class="task-actions">
-                                <button class="btn-sm task-btn-gold" onclick="startTaskFlow('${taskId}', 'social', '${task.title.replace(/'/g, "\\'")}', ${task.reward}, '${task.link}')">
-                                    Start
-                                </button>
-                            </div>
-                        </div>`;
+                        socialHtml += `<div class="task-item"><div class="task-icon"><i class="${iconClass}"></i></div><div class="task-info"><div class="task-title">${task.title}</div>${taskDescHtml}<div class="task-reward">${task.reward} CP</div></div><div class="task-actions"><button class="btn-sm task-btn-gold" onclick="startTaskFlow('${taskId}', 'social', '${task.title.replace(/'/g, "\\'")}', ${task.reward}, '${task.link}')">Start</button></div></div>`;
                     }
                 });
                 document.getElementById("dynamic-premium-tasks").innerHTML = premiumHtml || `<div style="text-align:center; color:#888; font-size:12px; font-weight: 600;">No Pro Tasks Available</div>`;
@@ -774,13 +705,54 @@
 
         function startTaskFlow(taskId, type, title, reward, targetLink) {
             currentTaskFlow = { taskId, type, title, reward, targetLink };
-            if (!AdController) { tg.showAlert("Adsgram is not initialized. Please set your Block ID."); return; }
-            AdController.show().then((result) => { unlockTaskLink(); }).catch((result) => { tg.showAlert("You must watch the full ad to unlock this task."); });
+
+            if (AdController) {
+                AdController.show().then((result) => {
+                    unlockTaskLink();
+                }).catch((result) => {
+                    tg.showAlert("You must watch the full ad to unlock this task.");
+                });
+            } else {
+                userData.taskAdCount = (userData.taskAdCount || 0) + 1;
+                saveUserData();
+                let network = (userData.taskAdCount % 2 === 0) ? 'monetag' : 'adsterra';
+
+                document.getElementById("task-flow-modal").style.display = "flex";
+                document.getElementById("task-modal-title").innerText = "Unlocking Task";
+                document.getElementById("task-modal-desc").innerText = "Please watch the ad for 15 seconds to unlock.";
+                document.getElementById("task-modal-timer").style.display = "block";
+                document.getElementById("task-modal-action-btn").style.display = "none";
+                document.getElementById("task-modal-timer").innerText = "15s";
+
+                triggerDirectLinkAd(network === 'monetag' ? adLinks.monetag : adLinks.adsterra);
+            }
+        }
+
+        function triggerDirectLinkAd(url) {
+            window.open(url, "_blank");
+            let timeLeft = 15;
+            document.getElementById("task-modal-timer").innerText = timeLeft + "s";
+            let timerInt = setInterval(() => {
+                timeLeft--;
+                document.getElementById("task-modal-timer").innerText = timeLeft + "s";
+                if(timeLeft <= 0) {
+                    clearInterval(timerInt);
+                    unlockTaskLink();
+                }
+            }, 1000);
+            currentTaskFlow.timerInt = timerInt;
         }
 
         function unlockTaskLink() {
             document.getElementById("task-flow-modal").style.display = "flex";
+            document.getElementById("task-modal-title").innerText = "Task Unlocked!";
+            document.getElementById("task-modal-desc").innerText = "You can now proceed to complete the task.";
+            
+            let timerElem = document.getElementById("task-modal-timer");
+            if(timerElem) timerElem.style.display = "none";
+            
             let btn = document.getElementById("task-modal-action-btn");
+            btn.style.display = "block";
             btn.onclick = () => {
                 window.open(currentTaskFlow.targetLink, "_blank");
                 if (currentTaskFlow.type === 'social') {
@@ -795,6 +767,7 @@
 
         function closeTaskFlowModal() {
             document.getElementById("task-flow-modal").style.display = "none";
+            if(currentTaskFlow.timerInt) clearInterval(currentTaskFlow.timerInt);
             currentTaskFlow = {};
         }
 
@@ -818,67 +791,79 @@
         function watchAdForCP() {
             if (watchAdCooldown) return;
             let btn = document.getElementById("btn-watch-ad");
-            if (!AdController) { tg.showAlert("Adsgram is not initialized."); return; }
-
-            btn.classList.add('loading');
-            btn.innerText = "Loading...";
-
-            AdController.show().then((result) => {
+            
+            const onSuccess = () => {
                 let reward = 10;
-                userData.cp += reward;
-                saveUserData();
-                processCommission(reward);
-                updateUI();
-                playCoinDropAnimation();
+                userData.cp += reward; saveUserData(); processCommission(reward); updateUI(); playCoinDropAnimation();
                 tg.HapticFeedback.notificationOccurred('success');
-                
-                watchAdCooldown = true;
-                btn.classList.add('disabled');
-                let cdTime = 60;
-                btn.innerText = `Wait ${cdTime}s`;
+                watchAdCooldown = true; btn.classList.add('disabled');
+                let cdTime = 60; btn.innerText = `Wait ${cdTime}s`;
                 let cdInterval = setInterval(() => {
-                    cdTime--;
-                    btn.innerText = `Wait ${cdTime}s`;
+                    cdTime--; btn.innerText = `Wait ${cdTime}s`;
                     if(cdTime <= 0) {
-                        clearInterval(cdInterval);
-                        watchAdCooldown = false;
-                        btn.classList.remove('disabled');
-                        btn.innerHTML = `<i class="fa-solid fa-play" style="margin-right: 3px;"></i> +10 CP`;
+                        clearInterval(cdInterval); watchAdCooldown = false;
+                        btn.classList.remove('disabled'); btn.innerHTML = `<i class="fa-solid fa-play" style="margin-right: 3px;"></i> +10 CP`;
                     }
                 }, 1000);
-            }).catch((result) => {
-                btn.classList.remove('loading');
-                btn.innerHTML = `<i class="fa-solid fa-play" style="margin-right: 3px;"></i> +10 CP`;
-                tg.showAlert("Ad was closed or failed to load. Try again.");
-            });
+            };
+
+            if (AdController) {
+                btn.classList.add('loading'); btn.innerText = "Loading...";
+                AdController.show().then((result) => { onSuccess(); })
+                .catch((result) => {
+                    btn.classList.remove('loading'); btn.innerHTML = `<i class="fa-solid fa-play" style="margin-right: 3px;"></i> +10 CP`;
+                    tg.showAlert("Ad was closed or failed to load. Try again.");
+                });
+            } else {
+                let currentCount = userData.watchAdCount || 0;
+                let network = currentCount % 2 === 0 ? 'monetag' : 'adsterra';
+                userData.watchAdCount = currentCount + 1; saveUserData();
+                triggerWatchDirectAd(network === 'monetag' ? adLinks.monetag : adLinks.adsterra, btn, onSuccess);
+            }
+        }
+
+        function triggerWatchDirectAd(url, btn, onSuccess) {
+            document.getElementById("ad-wait-modal").style.display = "flex";
+            window.open(url, "_blank");
+            let timeLeft = 10;
+            document.getElementById("ad-timer").innerText = timeLeft + "s";
+            let timerInt = setInterval(() => {
+                timeLeft--;
+                document.getElementById("ad-timer").innerText = timeLeft + "s";
+                if(timeLeft <= 0) {
+                    clearInterval(timerInt);
+                    document.getElementById("ad-wait-modal").style.display = "none";
+                    btn.classList.remove('loading');
+                    onSuccess();
+                }
+            }, 1000);
         }
 
         function claimDailyWithAd() {
             let today = new Date().toDateString();
             if(userData.lastCheckInDate !== today) {
-                if (!AdController) { tg.showAlert("Adsgram is not initialized."); return; }
-                AdController.show().then((result) => {
+                let btn = document.getElementById("btn-claim");
+                const onSuccess = () => {
                     let currentDay = userData.checkInDays + 1;
                     let reward = (currentDay === 7 || currentDay === 14 || currentDay === 21) ? 20 : (currentDay === 30 ? 100 : 5);
-                    userData.cp += reward;
-                    userData.checkInDays = currentDay;
-                    userData.lastCheckInDate = today;
+                    userData.cp += reward; userData.checkInDays = currentDay; userData.lastCheckInDate = today;
                     if(currentDay === 30) userData.hasTrustBadge = true;
-                    saveUserData();
-                    processCommission(reward);
-                    updateUI();
-                    playCoinDropAnimation();
+                    saveUserData(); processCommission(reward); updateUI(); playCoinDropAnimation();
                     tg.HapticFeedback.notificationOccurred('success');
-                }).catch(() => { tg.showAlert("You must watch the ad to claim daily reward."); });
+                };
+
+                if (AdController) {
+                    AdController.show().then((result) => { onSuccess(); }).catch(() => { tg.showAlert("You must watch the ad to claim daily reward."); });
+                } else {
+                    triggerWatchDirectAd(adLinks.monetag, btn, onSuccess);
+                }
             }
         }
 
         let currentUploadTaskId = null;
         let currentUploadReward = 0;
-        
         function openProofModal(taskId, title, reward) {
-            currentUploadTaskId = taskId;
-            currentUploadReward = reward;
+            currentUploadTaskId = taskId; currentUploadReward = reward;
             document.getElementById('proof-task-title').innerText = title;
             document.getElementById('proof-file').value = "";
             document.getElementById('proof-modal').style.display = "flex";
@@ -889,8 +874,7 @@
             if (!fileInput.files.length) { tg.showAlert("⚠️ Please select a screenshot to upload."); return; }
             let file = fileInput.files[0];
             let btn = document.getElementById('btn-submit-proof');
-            btn.innerText = "Uploading...";
-            btn.classList.add('loading');
+            btn.innerText = "Uploading..."; btn.classList.add('loading');
             
             try {
                 let storageRef = storage.ref(`proofs/${userId}/${currentUploadTaskId}_${Date.now()}`);
@@ -906,19 +890,17 @@
                 document.getElementById('proof-modal').style.display = "none";
             } catch (error) {
                 tg.showAlert("❌ Upload Failed! (Please check Firebase Storage Rules): " + error.message);
-                console.error("Upload Error: ", error);
             } finally {
-                btn.innerText = "Upload & Submit";
-                btn.classList.remove('loading');
+                btn.innerText = "Upload & Submit"; btn.classList.remove('loading');
             }
         }
 
         const infoData = {
-            'about': { title: "About Crypto Pay", content: "Crypto Pay is a mobile-first rewards platform integrated with Telegram. We provide users the ability to earn CP (Crypto Pay points) by interacting with sponsored content, completing casual tasks, and participating in our daily check-in program." },
-            'how': { title: "How It Works", content: "<b>1. Daily Check-in:</b> Open the app daily and watch a quick ad to claim your streak reward.<br><br><b>2. Watch & Earn:</b> Instantly earn CP by watching short sponsored video advertisements.<br><br><b>3. Pro Tasks:</b> Complete specific actions and upload a screenshot for admin verification to earn large amounts of CP.<br><br><b>4. Withdraw:</b> Convert your CP to real cryptocurrency (USDT) once you reach the minimum balance threshold." },
-            'privacy': { title: "Privacy Policy", content: "<b>Data Collection:</b> We collect basic public Telegram profile information (Name, User ID, Profile Picture) strictly to authenticate and secure your account.<br><br><b>Advertising:</b> We use third-party advertising networks (such as Adsgram). These partners may use cookies to deliver relevant advertisements.<br><br><b>Data Usage:</b> Your data is used exclusively for account management, processing rewards, and fraud prevention." },
-            'terms': { title: "Terms of Service", content: "<b>1. Acceptance:</b> By using Crypto Pay, you agree to adhere to these terms and conditions.<br><br><b>2. Prohibited Conduct:</b> Users must NOT use bots, VPNs, scripts, auto-clickers, or automated software to generate fraudulent ad views or complete tasks.<br><br><b>3. Account Termination:</b> We reserve the right to immediately suspend or permanently ban any account found violating these rules.<br><br><b>4. Payouts:</b> All withdrawal requests are subject to manual review to ensure full compliance with our anti-fraud policies." },
-            'contact': { title: "Contact & Support", content: "If you need assistance, have a reward dispute, or general questions, please use the <b>Support Box</b> located in the Profile tab.<br><br>For business inquiries, advertising partnerships, or legal notices, please reach out to our admin team via our official Telegram community." }
+            'about': { title: "About Crypto Pay", content: "Crypto Pay is a mobile-first rewards platform integrated with Telegram." },
+            'how': { title: "How It Works", content: "<b>1. Daily Check-in:</b> Open the app daily and watch a quick ad to claim your streak reward.<br><br><b>2. Watch & Earn:</b> Instantly earn CP by watching short sponsored video advertisements.<br><br><b>3. Pro Tasks:</b> Complete specific actions and upload a screenshot for admin verification to earn large amounts of CP.<br><br><b>4. Withdraw:</b> Convert your CP to real cryptocurrency (USDT)." },
+            'privacy': { title: "Privacy Policy", content: "<b>Data Collection:</b> We collect basic public Telegram profile information strictly to authenticate and secure your account.<br><br><b>Advertising:</b> We use third-party advertising networks. These partners may use cookies to deliver relevant advertisements.<br><br><b>Data Usage:</b> Your data is used exclusively for account management." },
+            'terms': { title: "Terms of Service", content: "<b>1. Acceptance:</b> By using Crypto Pay, you agree to adhere to these terms.<br><br><b>2. Prohibited Conduct:</b> Users must NOT use bots, VPNs, or auto-clickers.<br><br><b>3. Account Termination:</b> We reserve the right to ban any account found violating these rules.<br><br><b>4. Payouts:</b> All requests are subject to manual review." },
+            'contact': { title: "Contact & Support", content: "If you need assistance, please use the <b>Support Box</b> located in the Profile tab." }
         };
 
         function openInfoModal(section) {
@@ -940,11 +922,9 @@
             let randomName = nameList[Math.floor(Math.random() * nameList.length)];
             let randomAmount = (Math.random() * (15.00 - 1.50) + 1.50).toFixed(2);
             tickerElement.innerHTML = `<i class="fa-solid fa-circle-check" style="color:#FF8C42;"></i> ${randomName} withdrew $${randomAmount}`;
-            tickerElement.classList.remove("hide");
-            tickerElement.classList.add("show");
+            tickerElement.classList.remove("hide"); tickerElement.classList.add("show");
             setTimeout(() => {
-                tickerElement.classList.remove("show");
-                tickerElement.classList.add("hide");
+                tickerElement.classList.remove("show"); tickerElement.classList.add("hide");
                 setTimeout(() => { tickerElement.classList.remove("hide"); }, 600);
             }, 3000);
         }
@@ -974,9 +954,7 @@
             if(msgInput.value.length < 10) { tg.showAlert("Please write at least 10 characters."); return; }
             try {
                 await db.collection("support_tickets").add({ userId: userId, name: userData.name, message: msgInput.value, timestamp: firebase.firestore.FieldValue.serverTimestamp() });
-                tg.showAlert("✅ Sent to Admin safely.");
-                msgInput.value = "";
-                tg.HapticFeedback.notificationOccurred('success');
+                tg.showAlert("✅ Sent to Admin safely."); msgInput.value = ""; tg.HapticFeedback.notificationOccurred('success');
             } catch(e) {}
         }
 
@@ -989,9 +967,7 @@
             
             db.collection("withdraw_requests").add({ userId: userId, name: userData.name, amountUSDT: (userData.cp / 10000).toFixed(4), walletAddress: address, status: "Pending", timestamp: firebase.firestore.FieldValue.serverTimestamp() });
             tg.showAlert(`Success! Withdrawing $${(userData.cp / 10000).toFixed(4)} USDT.`);
-            userData.cp = 0;
-            saveUserData();
-            updateUI();
+            userData.cp = 0; saveUserData(); updateUI();
         }
 
         fetchUserData();
