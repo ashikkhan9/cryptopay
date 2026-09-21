@@ -278,7 +278,7 @@
                 </div>
             </div>
 
-            <!-- Adsterra Banner safely wrapped -->
+            <!-- Adsterra Banner securely wrapped -->
             <div style="display:flex; justify-content:center; align-items:center; margin-bottom: 20px; overflow:hidden; border-radius: 10px;">
                 <iframe srcdoc="<html><body style='margin:0;padding:0;display:flex;justify-content:center;'><script>atOptions = { 'key' : '8f2c282d7a133448b994b2f0b53de617', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} };</script><script src='https://www.highrevenueformat.com/8f2c282d7a133448b994b2f0b53de617/invoke.js'></script></body></html>" width="320" height="50" frameborder="0" scrolling="no"></iframe>
             </div>
@@ -452,11 +452,8 @@
         // CONFIGURATION & ADSGRAM SETUP
         // ==========================================
         const BOT_USERNAME = "@acryptopay_bot";
-        
-        // 👉 IMPORTANT: Ekhane apnar ashol Adsgram ID boshate hobe (jemon: "123456").
         const ADSGRAM_BLOCK_ID = "YOUR_ADSGRAM_BLOCK_ID"; 
         
-        // Fix: Error theke bachar jonno ekhon ei check-ti kaj korbe.
         let AdController = null;
         if (ADSGRAM_BLOCK_ID !== "YOUR_ADSGRAM_BLOCK_ID" && window.Adsgram) {
             try {
@@ -484,7 +481,6 @@
         const tg = window.Telegram.WebApp;
         tg.expand();
         tg.ready(); 
-        
         tg.setHeaderColor('#E6EAEF');
         tg.setBackgroundColor('#E6EAEF');
 
@@ -569,10 +565,7 @@
         async function processReferral(referrerId) {
             try {
                 const refDoc = db.collection("users").doc(referrerId);
-                await refDoc.set({
-                    cp: firebase.firestore.FieldValue.increment(100),
-                    referrals: firebase.firestore.FieldValue.increment(1)
-                }, { merge: true });
+                await refDoc.set({ cp: firebase.firestore.FieldValue.increment(100), referrals: firebase.firestore.FieldValue.increment(1) }, { merge: true });
             } catch(e) { console.error(e); }
         }
 
@@ -580,9 +573,7 @@
             if (userData.referredBy && amountEarned > 0) {
                 let commission = amountEarned * 0.10;
                 try {
-                    await db.collection("users").doc(userData.referredBy).set({
-                        cp: firebase.firestore.FieldValue.increment(commission)
-                    }, { merge: true });
+                    await db.collection("users").doc(userData.referredBy).set({ cp: firebase.firestore.FieldValue.increment(commission) }, { merge: true });
                 } catch(e) { console.error(e); }
             }
         }
@@ -628,19 +619,13 @@
             document.getElementById("withdraw-btn").disabled = userData.cp < MIN_WITHDRAW_CP;
         }
 
-        // Game Logic
         function playCoinFlip() {
             let btn = document.getElementById("btn-play-game");
             let icon = document.getElementById("flip-coin-icon");
-            
-            if (userData.cp < 10) {
-                tg.showAlert("Not enough CP! You need 10 CP to play.");
-                return;
-            }
+            if (userData.cp < 10) { tg.showAlert("Not enough CP! You need 10 CP to play."); return; }
 
             userData.cp -= 10;
             updateUI();
-            
             btn.classList.add("disabled");
             btn.innerText = "Flipping...";
             icon.classList.add("coin-flip");
@@ -648,7 +633,6 @@
             setTimeout(() => {
                 icon.classList.remove("coin-flip");
                 let win = Math.random() >= 0.5;
-
                 if (win) {
                     userData.cp += 20;
                     tg.HapticFeedback.notificationOccurred('success');
@@ -658,7 +642,6 @@
                     tg.HapticFeedback.notificationOccurred('error');
                     tg.showAlert("😢 You lost this time. Try again!");
                 }
-                
                 saveUserData();
                 updateUI();
                 btn.classList.remove("disabled");
@@ -672,10 +655,7 @@
             if(!input) return;
             if(!userData.claimedCodes) userData.claimedCodes = [];
             
-            if(userData.claimedCodes.includes(input)) {
-                tg.showAlert("⚠️ You already claimed this Code!");
-                return;
-            }
+            if(userData.claimedCodes.includes(input)) { tg.showAlert("⚠️ You already claimed this Code!"); return; }
             if(activePromoCodes[input]) {
                 let reward = activePromoCodes[input];
                 userData.cp += reward;
@@ -700,19 +680,30 @@
             });
         }
 
+        // ==========================================
+        // AUTO ICON DETECTOR ENGINE (UPDATED)
+        // ==========================================
         function getAutoIcon(title, desc) {
             let text = ((title || "") + " " + (desc || "")).toLowerCase();
+            
+            // Socials
             if (text.includes("telegram") || text.includes("t.me")) return "fa-brands fa-telegram";
-            if (text.includes("youtube") || text.includes("subscribe")) return "fa-brands fa-youtube";
+            if (text.includes("youtube") || text.includes("subscribe") || text.includes("tube")) return "fa-brands fa-youtube";
             if (text.includes("facebook") || text.includes("fb")) return "fa-brands fa-facebook";
             if (text.includes("instagram") || text.includes("insta")) return "fa-brands fa-instagram";
             if (text.includes("twitter") || text.includes(" x ") || text.includes("tweet")) return "fa-brands fa-twitter";
-            if (text.includes("tiktok")) return "fa-brands fa-tiktok";
+            if (text.includes("tiktok") || text.includes("tik tok")) return "fa-brands fa-tiktok";
             if (text.includes("discord")) return "fa-brands fa-discord";
+            
+            // Actions
+            if (text.includes("bot") || text.includes("start bot")) return "fa-solid fa-robot";
             if (text.includes("download") || text.includes("install") || text.includes("app")) return "fa-solid fa-cloud-arrow-down";
-            if (text.includes("website") || text.includes("visit") || text.includes("site") || text.includes("register")) return "fa-solid fa-globe";
+            if (text.includes("website") || text.includes("visit") || text.includes("site") || text.includes("register") || text.includes("sign up")) return "fa-solid fa-globe";
             if (text.includes("video") || text.includes("watch")) return "fa-solid fa-circle-play";
             if (text.includes("review") || text.includes("rate") || text.includes("star")) return "fa-solid fa-star";
+            if (text.includes("join") || text.includes("channel") || text.includes("group")) return "fa-solid fa-users";
+            
+            // Default Ultimate Fallback
             return "fa-solid fa-list-check";
         }
 
@@ -724,7 +715,14 @@
                     let sub = userSubmissions[taskId];
                     if (sub && (sub.status === 'completed' || sub.status === 'pending' || sub.status === 'approved')) return;
                     
-                    let iconClass = (task.icon && task.icon.trim() !== "") ? task.icon : getAutoIcon(task.title, task.description);
+                    // FIX: Force Auto-Icon to work perfectly regardless of what is in the database
+                    let iconClass = getAutoIcon(task.title, task.description);
+                    
+                    // Only use custom database icon IF it genuinely contains "fa-" (FontAwesome syntax)
+                    if (task.icon && typeof task.icon === 'string' && task.icon.includes("fa-")) {
+                        iconClass = task.icon;
+                    }
+
                     let taskDescHtml = task.description ? `<div style="font-size: 11px; color: var(--text-muted); font-weight: 500; margin-top: 3px; line-height: 1.3;">${task.description}</div>` : "";
                     
                     if (task.type === "premium") {
