@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Crypto Pay</title>
 
+    <!-- Telegram Web App JS -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
     <!-- Firebase Compat SDKs -->
@@ -144,74 +147,12 @@
         .stat-col.mid { border-left: 1px solid rgba(0,0,0,0.05); border-right: 1px solid rgba(0,0,0,0.05); }
 
         .modal-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(230, 234, 239, 0.85); backdrop-filter:blur(10px); z-index:10001; justify-content:center; align-items:center; padding: 20px; }
-        #task-flow-modal { flex-direction: column; text-align: center; }
-        #task-flow-modal h2 { color: #1D1D1F; font-size: 22px; font-weight: 800; margin-bottom: 10px; }
         
-        /* STABLE & SMOOTH WHEEL DESIGN (NO LAG) */
-        .wheel-box {
-            background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(245, 166, 35, 0.1));
-            border: 1.5px solid rgba(245, 166, 35, 0.4);
-            border-radius: 24px;
-            padding: 20px;
-            text-align: center;
-            margin-bottom: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-            position: relative;
-        }
-        .wheel-container {
-            position: relative;
-            width: 200px;
-            height: 200px;
-            margin: 15px auto;
-        }
-        .wheel {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            border: 6px solid #F5A623;
-            background: conic-gradient(
-                #FF3B30 0deg 72deg, 
-                #FF8C42 72deg 144deg, 
-                #34C759 144deg 216deg, 
-                #007AFF 216deg 288deg, 
-                #AF52DE 288deg 360deg
-            );
-            position: relative;
-            transform: rotate(0deg);
-            transition: transform 4s cubic-bezier(0.15, 1, 0.2, 1);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-        }
-        .wheel-pointer {
-            position: absolute;
-            top: -12px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 0;
-            border-left: 10px solid transparent;
-            border-right: 10px solid transparent;
-            border-top: 22px solid #1D1D1F;
-            z-index: 10;
-        }
-        .wheel-center-btn {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 50px;
-            height: 50px;
-            background: #fff;
-            border-radius: 50%;
-            border: 3px solid #F5A623;
-            font-weight: 800;
-            font-size: 11px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #1D1D1F;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            z-index: 5;
-        }
+        .wheel-box { background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(245, 166, 35, 0.1)); border: 1.5px solid rgba(245, 166, 35, 0.4); border-radius: 24px; padding: 20px; text-align: center; margin-bottom: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); position: relative; }
+        .wheel-container { position: relative; width: 200px; height: 200px; margin: 15px auto; }
+        .wheel { width: 100%; height: 100%; border-radius: 50%; border: 6px solid #F5A623; background: conic-gradient( #FF3B30 0deg 72deg, #FF8C42 72deg 144deg, #34C759 144deg 216deg, #007AFF 216deg 288deg, #AF52DE 288deg 360deg ); position: relative; transform: rotate(0deg); transition: transform 4s cubic-bezier(0.15, 1, 0.2, 1); box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
+        .wheel-pointer { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 10px solid transparent; border-right: 10px solid transparent; border-top: 22px solid #1D1D1F; z-index: 10; }
+        .wheel-center-btn { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 50px; height: 50px; background: #fff; border-radius: 50%; border: 3px solid #F5A623; font-weight: 800; font-size: 11px; display: flex; align-items: center; justify-content: center; color: #1D1D1F; box-shadow: 0 4px 10px rgba(0,0,0,0.2); z-index: 5; }
     </style>
 </head>
 <body>
@@ -301,7 +242,7 @@
                 </div>
             </div>
 
-            <!-- Adsterra Banner securely wrapped -->
+            <!-- Adsterra Banner -->
             <div style="display:flex; justify-content:center; align-items:center; margin-bottom: 20px; overflow:hidden; border-radius: 10px;">
                 <iframe srcdoc="<html><body style='margin:0;padding:0;display:flex;justify-content:center;'><script>atOptions = { 'key' : '8f2c282d7a133448b994b2f0b53de617', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} };</script><script src='https://www.highrevenueformat.com/8f2c282d7a133448b994b2f0b53de617/invoke.js'></script></body></html>" width="320" height="50" frameborder="0" scrolling="no"></iframe>
             </div>
@@ -669,7 +610,7 @@
             document.getElementById("withdraw-btn").disabled = userData.cp < MIN_WITHDRAW_CP;
         }
 
-        // NO LOSS LUCKY SPIN WHEEL LOGIC (SMOOTH & SECURE)
+        // NO LOSS LUCKY SPIN WHEEL LOGIC (ANTI-CHEAT + JACKPOT)
         let isSpinning = false;
         function spinWheel() {
             if (isSpinning) return;
@@ -678,46 +619,118 @@
                 return; 
             }
 
-            userData.cp -= 10;
-            updateUI();
-
-            isSpinning = true;
-            let btn = document.getElementById("btn-spin");
-            btn.classList.add("disabled");
-            btn.innerText = "Spinning...";
-
-            let wheel = document.getElementById("spin-wheel");
-            
-            // Rewards array (No Loss: Minimum return is 10 CP, max is 50 CP)
-            let rewards = [10, 15, 20, 30, 50];
-            let winningReward = rewards[Math.floor(Math.random() * rewards.length)];
-            
-            let rewardDegrees = { 10: 36, 15: 108, 20: 180, 30: 252, 50: 324 };
-            let targetDegree = rewardDegrees[winningReward];
-            
-            let extraTurns = (Math.floor(Math.random() * 4) + 6) * 360;
-            let totalDegrees = extraTurns + (360 - targetDegree);
-
-            wheel.style.transform = `rotate(${totalDegrees}deg)`;
-
-            setTimeout(() => {
-                userData.cp += winningReward;
-                saveUserData();
+            // ANTI-CHEAT: Check if AdController exists, if not fallback to timer
+            let runSpin = () => {
+                userData.cp -= 10;
                 updateUI();
+                
+                isSpinning = true;
+                let btn = document.getElementById("btn-spin");
+                btn.classList.add("disabled");
+                btn.innerText = "Spinning...";
 
-                if (winningReward > 10) {
-                    playCoinDropAnimation();
-                    tg.HapticFeedback.notificationOccurred('success');
-                    tg.showAlert(`🎉 Congratulations! You won ${winningReward} CP!`);
+                let wheel = document.getElementById("spin-wheel");
+                
+                // Rewards: 0.01% Chance for Jackpot (50 CP or $1 logic)
+                let isJackpot = Math.random() < 0.0001; 
+                let winningReward;
+                let targetDegree;
+                
+                if(isJackpot) {
+                    winningReward = 50; 
+                    targetDegree = 324; // 🎁 Box section
                 } else {
-                    tg.HapticFeedback.notificationOccurred('warning');
-                    tg.showAlert(`😊 You got your 10 CP back! Try again.`);
+                    let normalRewards = [10, 15, 20];
+                    winningReward = normalRewards[Math.floor(Math.random() * normalRewards.length)];
+                    let rewardDegrees = { 10: 36, 15: 108, 20: 180 };
+                    targetDegree = rewardDegrees[winningReward];
+                }
+                
+                let extraTurns = (Math.floor(Math.random() * 4) + 6) * 360;
+                let totalDegrees = extraTurns + (360 - targetDegree);
+
+                wheel.style.transform = `rotate(${totalDegrees}deg)`;
+
+                setTimeout(() => {
+                    userData.cp += winningReward;
+                    saveUserData();
+                    updateUI();
+
+                    if (isJackpot) {
+                        playCoinDropAnimation();
+                        tg.HapticFeedback.notificationOccurred('success');
+                        tg.showAlert(`🎉 JACKPOT! You won an amazing ${winningReward} CP!`);
+                    } else if (winningReward > 10) {
+                        playCoinDropAnimation();
+                        tg.HapticFeedback.notificationOccurred('success');
+                        tg.showAlert(`🎉 Congratulations! You won ${winningReward} CP!`);
+                    } else {
+                        tg.HapticFeedback.notificationOccurred('warning');
+                        tg.showAlert(`😊 You got your 10 CP back! No loss, try again.`);
+                    }
+
+                    btn.classList.remove("disabled");
+                    btn.innerText = "Spin Now (10 CP)";
+                    isSpinning = false;
+                }, 4000);
+            };
+
+            // Before spinning, force ad watch
+            if (AdController) {
+                AdController.show().then((result) => { 
+                    runSpin(); 
+                }).catch((result) => {
+                    tg.showAlert("You must watch the ad completely to spin!");
+                });
+            } else {
+                // Fallback ad mechanism before spin
+                document.getElementById("ad-wait-modal").style.display = "flex";
+                let network = (userData.watchAdCount % 2 === 0) ? adLinks.monetag : adLinks.adsterra;
+                userData.watchAdCount = (userData.watchAdCount || 0) + 1; 
+                saveUserData();
+                
+                window.open(network, "_blank");
+                let timeLeft = 10;
+                document.getElementById("ad-timer").innerText = timeLeft + "s";
+                
+                let isChecking = true;
+                let timerInt;
+
+                function handleEarlyReturn() {
+                    if (isChecking && timeLeft > 0) {
+                        clearInterval(timerInt);
+                        isChecking = false;
+                        document.getElementById("ad-wait-modal").style.display = "none";
+                        tg.showAlert("⚠️ Ad closed too early! You must watch it to spin.");
+                        removeListeners();
+                    }
+                }
+                function vis() { if(!document.hidden) handleEarlyReturn(); }
+                function foc() { handleEarlyReturn(); }
+                function removeListeners() {
+                    window.removeEventListener('visibilitychange', vis);
+                    window.removeEventListener('focus', foc);
                 }
 
-                btn.classList.remove("disabled");
-                btn.innerText = "Spin Now (10 CP)";
-                isSpinning = false;
-            }, 4000);
+                setTimeout(() => {
+                    if(isChecking) {
+                        window.addEventListener('visibilitychange', vis);
+                        window.addEventListener('focus', foc);
+                    }
+                }, 2000);
+
+                timerInt = setInterval(() => {
+                    timeLeft--;
+                    document.getElementById("ad-timer").innerText = timeLeft + "s";
+                    if(timeLeft <= 0) {
+                        clearInterval(timerInt);
+                        isChecking = false;
+                        removeListeners();
+                        document.getElementById("ad-wait-modal").style.display = "none";
+                        runSpin(); // Run spin after successful ad
+                    }
+                }, 1000);
+            }
         }
 
         const activePromoCodes = { "WELCOME": 20, "PROMO50": 50 };
@@ -853,23 +866,45 @@
                 document.getElementById("task-modal-action-btn").style.display = "none";
                 document.getElementById("task-modal-timer").innerText = "15s";
 
-                triggerDirectLinkAd(network === 'monetag' ? adLinks.monetag : adLinks.adsterra);
-            }
-        }
-
-        function triggerDirectLinkAd(url) {
-            window.open(url, "_blank");
-            let timeLeft = 15;
-            document.getElementById("task-modal-timer").innerText = timeLeft + "s";
-            let timerInt = setInterval(() => {
-                timeLeft--;
-                document.getElementById("task-modal-timer").innerText = timeLeft + "s";
-                if(timeLeft <= 0) {
-                    clearInterval(timerInt);
-                    unlockTaskLink();
+                let isChecking = true;
+                window.open(network === 'monetag' ? adLinks.monetag : adLinks.adsterra, "_blank");
+                let timeLeft = 15;
+                
+                function handleEarlyReturn() {
+                    if (isChecking && timeLeft > 0) {
+                        clearInterval(currentTaskFlow.timerInt);
+                        isChecking = false;
+                        document.getElementById("task-flow-modal").style.display = "none";
+                        tg.showAlert("⚠️ Ad closed too early! You must stay on the ad page for 15 seconds.");
+                        currentTaskFlow = {};
+                        removeListeners();
+                    }
                 }
-            }, 1000);
-            currentTaskFlow.timerInt = timerInt;
+                function vis() { if(!document.hidden) handleEarlyReturn(); }
+                function foc() { handleEarlyReturn(); }
+                function removeListeners() {
+                    window.removeEventListener('visibilitychange', vis);
+                    window.removeEventListener('focus', foc);
+                }
+
+                setTimeout(() => {
+                    if(isChecking) {
+                        window.addEventListener('visibilitychange', vis);
+                        window.addEventListener('focus', foc);
+                    }
+                }, 2000);
+
+                currentTaskFlow.timerInt = setInterval(() => {
+                    timeLeft--;
+                    document.getElementById("task-modal-timer").innerText = timeLeft + "s";
+                    if(timeLeft <= 0) {
+                        clearInterval(currentTaskFlow.timerInt);
+                        isChecking = false;
+                        removeListeners();
+                        unlockTaskLink();
+                    }
+                }, 1000);
+            }
         }
 
         function unlockTaskLink() {
@@ -962,26 +997,52 @@
                 let network = currentCount % 2 === 0 ? 'monetag' : 'adsterra';
                 userData.watchAdCount = currentCount + 1; 
                 saveUserData();
-                triggerWatchDirectAd(network === 'monetag' ? adLinks.monetag : adLinks.adsterra, btn, onSuccess);
-            }
-        }
-
-        function triggerWatchDirectAd(url, btn, onSuccess) {
-            document.getElementById("ad-wait-modal").style.display = "flex";
-            window.open(url, "_blank");
-            let timeLeft = 10;
-            document.getElementById("ad-timer").innerText = timeLeft + "s";
-            
-            let timerInt = setInterval(() => {
-                timeLeft--;
+                
+                document.getElementById("ad-wait-modal").style.display = "flex";
+                window.open(network === 'monetag' ? adLinks.monetag : adLinks.adsterra, "_blank");
+                let timeLeft = 10;
                 document.getElementById("ad-timer").innerText = timeLeft + "s";
-                if(timeLeft <= 0) {
-                    clearInterval(timerInt);
-                    document.getElementById("ad-wait-modal").style.display = "none";
-                    btn.classList.remove('loading');
-                    onSuccess();
+                
+                let isChecking = true;
+                let timerInt;
+
+                function handleEarlyReturn() {
+                    if (isChecking && timeLeft > 0) {
+                        clearInterval(timerInt);
+                        isChecking = false;
+                        document.getElementById("ad-wait-modal").style.display = "none";
+                        btn.classList.remove('loading');
+                        tg.showAlert("⚠️ Ad closed too early! You must watch it for 10 seconds.");
+                        removeListeners();
+                    }
                 }
-            }, 1000);
+                function vis() { if(!document.hidden) handleEarlyReturn(); }
+                function foc() { handleEarlyReturn(); }
+                function removeListeners() {
+                    window.removeEventListener('visibilitychange', vis);
+                    window.removeEventListener('focus', foc);
+                }
+
+                setTimeout(() => {
+                    if(isChecking) {
+                        window.addEventListener('visibilitychange', vis);
+                        window.addEventListener('focus', foc);
+                    }
+                }, 2000);
+
+                timerInt = setInterval(() => {
+                    timeLeft--;
+                    document.getElementById("ad-timer").innerText = timeLeft + "s";
+                    if(timeLeft <= 0) {
+                        clearInterval(timerInt);
+                        isChecking = false;
+                        removeListeners();
+                        document.getElementById("ad-wait-modal").style.display = "none";
+                        btn.classList.remove('loading');
+                        onSuccess();
+                    }
+                }, 1000);
+            }
         }
 
         function claimDailyWithAd() {
@@ -1009,7 +1070,48 @@
                         tg.showAlert("You must watch the ad to claim daily reward."); 
                     });
                 } else {
-                    triggerWatchDirectAd(adLinks.monetag, btn, onSuccess);
+                    document.getElementById("ad-wait-modal").style.display = "flex";
+                    window.open(adLinks.monetag, "_blank");
+                    let timeLeft = 10;
+                    document.getElementById("ad-timer").innerText = timeLeft + "s";
+                    
+                    let isChecking = true;
+                    let timerInt;
+
+                    function handleEarlyReturn() {
+                        if (isChecking && timeLeft > 0) {
+                            clearInterval(timerInt);
+                            isChecking = false;
+                            document.getElementById("ad-wait-modal").style.display = "none";
+                            tg.showAlert("⚠️ Ad closed too early! You must watch it to claim.");
+                            removeListeners();
+                        }
+                    }
+                    function vis() { if(!document.hidden) handleEarlyReturn(); }
+                    function foc() { handleEarlyReturn(); }
+                    function removeListeners() {
+                        window.removeEventListener('visibilitychange', vis);
+                        window.removeEventListener('focus', foc);
+                    }
+
+                    setTimeout(() => {
+                        if(isChecking) {
+                            window.addEventListener('visibilitychange', vis);
+                            window.addEventListener('focus', foc);
+                        }
+                    }, 2000);
+
+                    timerInt = setInterval(() => {
+                        timeLeft--;
+                        document.getElementById("ad-timer").innerText = timeLeft + "s";
+                        if(timeLeft <= 0) {
+                            clearInterval(timerInt);
+                            isChecking = false;
+                            removeListeners();
+                            document.getElementById("ad-wait-modal").style.display = "none";
+                            onSuccess();
+                        }
+                    }, 1000);
                 }
             }
         }
