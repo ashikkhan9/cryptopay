@@ -33,65 +33,28 @@
             --badge-gold: #F5A623;
         }
 
-        * { 
-            margin: 0; 
-            padding: 0; 
-            box-sizing: border-box; 
-            font-family: 'Outfit', sans-serif; 
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
 
         body {
-            background: var(--bg-color); 
-            color: var(--text-main); 
-            overflow: hidden;
-            width: 100vw; 
-            height: 100vh; 
-            user-select: none; 
-            -webkit-tap-highlight-color: transparent;
+            background: var(--bg-color); color: var(--text-main); overflow: hidden;
+            width: 100vw; height: 100vh; user-select: none; -webkit-tap-highlight-color: transparent;
         }
 
         #loader {
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100%; 
-            background: var(--bg-color);
-            z-index: 9999; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center; 
-            align-items: center;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-color);
+            z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center;
         }
 
         .spinner {
-            width: 50px; 
-            height: 50px; 
-            border: 5px solid rgba(0, 122, 255, 0.2);
-            border-top-color: #007AFF; 
-            border-radius: 50%; 
-            animation: spin 1s linear infinite; 
-            margin-bottom: 20px;
+            width: 50px; height: 50px; border: 5px solid rgba(0, 122, 255, 0.2);
+            border-top-color: #007AFF; border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px;
         }
 
-        @keyframes spin { 
-            to { transform: rotate(360deg); } 
-        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes float-icon { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+        .float-anim { animation: float-icon 3s ease-in-out infinite; display: inline-block; }
 
-        @keyframes float-icon { 
-            0%, 100% { transform: translateY(0); } 
-            50% { transform: translateY(-6px); } 
-        }
-
-        .float-anim { 
-            animation: float-icon 3s ease-in-out infinite; 
-            display: inline-block; 
-        }
-
-        .pulse-btn { 
-            animation: pulse-btn 2s infinite; 
-        }
-
+        .pulse-btn { animation: pulse-btn 2s infinite; }
         @keyframes pulse-btn {
             0% { box-shadow: 0 0 0 0 rgba(255, 140, 66, 0.5); }
             70% { box-shadow: 0 0 0 15px rgba(255, 140, 66, 0); }
@@ -103,18 +66,11 @@
         .glow-3 { position: absolute; top: 40%; left: 30%; width: 250px; height: 250px; background: radial-gradient(circle, rgba(157,78,221,0.1) 0%, transparent 70%); filter: blur(40px); z-index: -1; }
 
         .glass-card {
-            background: var(--glass-bg); 
-            backdrop-filter: blur(24px); 
-            -webkit-backdrop-filter: blur(24px);
-            border-top: 1.5px solid var(--glass-border-light); 
-            border-left: 1.5px solid var(--glass-border-light);
-            border-bottom: 1px solid var(--glass-border-dark); 
-            border-right: 1px solid var(--glass-border-dark);
-            border-radius: 24px; 
-            padding: 20px; 
-            box-shadow: 0 15px 35px rgba(0,0,0,0.05), inset 0 2px 5px rgba(255,255,255,0.8);
-            margin-bottom: 20px; 
-            position: relative;
+            background: var(--glass-bg); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+            border-top: 1.5px solid var(--glass-border-light); border-left: 1.5px solid var(--glass-border-light);
+            border-bottom: 1px solid var(--glass-border-dark); border-right: 1px solid var(--glass-border-dark);
+            border-radius: 24px; padding: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.05), inset 0 2px 5px rgba(255,255,255,0.8);
+            margin-bottom: 20px; position: relative;
         }
 
         .popup-ticker-container { position: fixed; top: 25px; left: 50%; transform: translateX(-50%); z-index: 10000; pointer-events: none; display: flex; justify-content: center; width: max-content; }
@@ -128,14 +84,8 @@
         .user-mini-pic { width: 45px; height: 45px; border-radius: 16px; border: 2px solid #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.1); object-fit: cover; }
 
         .main-content { 
-            height: calc(100vh - 120px); 
-            overflow-y: auto; 
-            padding: 0 20px 100px 20px; 
-            -webkit-overflow-scrolling: touch; 
-            touch-action: pan-y; 
-            overscroll-behavior-y: contain; 
-            position: relative; 
-            z-index: 10; 
+            height: calc(100vh - 120px); overflow-y: auto; padding: 0 20px 100px 20px; 
+            -webkit-overflow-scrolling: touch; touch-action: pan-y; overscroll-behavior-y: contain; position: relative; z-index: 10; 
         }
         .main-content::-webkit-scrollbar { display: none; }
 
@@ -547,8 +497,7 @@
             claimedCodes: [],
             referredBy: null,
             taskAdCount: 0,
-            watchAdCount: 0,
-            lastTaskNotifDate: ""
+            watchAdCount: 0
         };
         
         let userSubmissions = {};
@@ -608,15 +557,6 @@
             }
             document.getElementById("loader").style.display = "none";
             updateUI();
-
-            let todayStr = new Date().toDateString();
-            if (userData.lastTaskNotifDate !== todayStr) {
-                setTimeout(() => {
-                    tg.showAlert("🔔 Notun din, Notun Kaaj! Ajker Social Tasks abar available hoye geche. Kaj shuru korun!");
-                    userData.lastTaskNotifDate = todayStr;
-                    saveUserData();
-                }, 2000);
-            }
         }
 
         async function saveUserData() {
@@ -1138,20 +1078,6 @@
         }
 
         fetchUserData();
-    </script>
-
-    <!-- Delayed Ads Loading (Restored securely) -->
-    <script>
-        setTimeout(() => {
-            let adsterra = document.createElement('script');
-            adsterra.src = "https://pl31095185.profitableratecpmnetwork.com/bc/67/11/bc6711569a1f04f1939a3a567c120641.js";
-            document.body.appendChild(adsterra);
-            
-            let monetag = document.createElement('script');
-            monetag.dataset.zone = '11678521';
-            monetag.src = 'https://n6wxm.com/vignette.min.js';
-            document.body.appendChild(monetag);
-        }, 3000);
     </script>
 </body>
 </html>
